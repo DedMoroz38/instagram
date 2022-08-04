@@ -7,7 +7,25 @@ const MainContainer = styled.div`
   margin-right: 5px;
   width: 30vw;
   box-sizing: border-box;
-`
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: ${({ theme }) => theme.background};
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+`;
 const ContactBox = styled.div`
   display: flex;
   align-items: center;
@@ -18,7 +36,7 @@ const ContactBox = styled.div`
   &:hover {
     background: grey;
   }
-`
+`;
 const ContactValue = styled.div`
   color: ${({ theme }) => theme.color}
 `
@@ -29,9 +47,9 @@ const contacts = ["Egor", "Egor","Egor","Egor","Egor","Egor","Egor", "Egor","Ego
 export const Contacts: React.FC = () => {
   return (
     <MainContainer>
-      {contacts.map(contact => (
+      {contacts.map((contact, index) => (
         <ContactBox>
-          <ContactValue>{contact}</ContactValue>
+          <ContactValue key={index}>{contact}</ContactValue>
         </ContactBox>
       ))}
     </MainContainer>

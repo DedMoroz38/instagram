@@ -1,8 +1,8 @@
 import Dashboard from './components/Dashboard';
 import {ThemeProvider} from "styled-components";
-import { GlobalStyles } from "./components/globalStyles";
-import { lightTheme, darkTheme } from "./components/Themes";
-import  {useDarkMode} from "./components/useDarkMode";
+import { GlobalStyles } from "./components/Theme/globalStyles";
+import { lightTheme, darkTheme } from "./components/Theme/Themes";
+import  {useDarkMode} from "./hooks/useDarkMode";
 import React from 'react';
 
 export const ThemeContext = React.createContext<any>(null);
