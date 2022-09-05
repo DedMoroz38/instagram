@@ -2,6 +2,8 @@ import styled from "styled-components";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import SendIcon from '@mui/icons-material/Send';
 import React from "react";
+import userEvent from "@testing-library/user-event";
+import Friends from "../../routes/Friends";
 
 const MainContainer = styled.div`
   display: flex;
@@ -33,8 +35,10 @@ const Input = styled.input`
 const NameBox = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   height: 55px;
   width: 100%;
+  color: ${({ theme }) => theme.color};
 `;
 
 const MessagesBox = styled.div`
@@ -46,6 +50,24 @@ const MessagesBox = styled.div`
   width: 100%;
   height: 100%;
   box-shadow: inset 0 0 10px #000000;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `;
 
 const SendButton = styled.button`
@@ -55,7 +77,7 @@ const SendButton = styled.button`
   border: none;
   background: transparent;
 `;
-const MessageBox = styled.div`
+const MessageBoxUser = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -63,6 +85,16 @@ const MessageBox = styled.div`
   border-radius: 20px;
   padding: 8px;
   margin-bottom: 7px;
+  max-width: 70%;
+  white-space: normal;
+  word-break:break-all;
+  margin-left: auto;
+`;
+
+const MessageBoxFriend = styled(MessageBoxUser)`
+  margin-left: inherit;
+  margin-right: auto;
+  border: 1px solid black;
 `;
 const Message = styled.p`
   font-size: 14px;
@@ -70,29 +102,65 @@ const Message = styled.p`
 `;
 
 interface Conversations{
-  messages: string[],
+  messages: Array<{
+    [x: string]: any;
+    id?: string,
+    message: string,
+    messagefrom: string
+    messageto: string
+  }>,
+  friends: any,
   handleBlur: any,
   messagesInput: any,
   handleKeypress: any,
-  sendMessage: any
+  sendMessage: any,
+  friendName: any,
+  friendId: any,
+  bottomDiv: any
 }
 
 const ConverationPresentational: React.FC<Conversations> = ({
+    friends,
+    friendName,
+    friendId,
     messages,
     handleBlur,
     messagesInput,
     handleKeypress,
-    sendMessage
+    sendMessage,
+    bottomDiv
   }) => {
+
+  console.log(messages);
+
   return (
     <MainContainer>
-      <NameBox></NameBox>
+      <NameBox>{friendName}</NameBox>
       <MessagesBox>
-        {messages.map((message) => (
-            <MessageBox>
-              <Message>{message}</Message>
-            </MessageBox>
-          ))}
+        {/* <div ref={bottomDiv}/> */}
+        {
+          messages
+          .filter(msg => msg.messageto === friendId || msg.messagefrom === friendId)
+          .map((message, index) => (
+            message.messageto === friendId ?
+            <MessageBoxUser key={index}>
+              <Message>{message.message}</Message>
+            </MessageBoxUser> :
+            <MessageBoxFriend key={index}>
+              <Message>{message.message}</Message>
+            </MessageBoxFriend>
+          ))
+        }
+        <div ref={bottomDiv}/>
+        {/* {messages.map((message, index) => (
+          message.from === 'user' ?
+          <MessageBoxUser key={index}>
+            <Message>{message.message}</Message>
+          </MessageBoxUser> :
+          <MessageBoxFriend key={index}>
+            <Message>{message.message}</Message>
+          </MessageBoxFriend>
+        ))} */}
       </MessagesBox>
       <InputContainer>
         <AttachFileIcon style={{color: `grey`}}/>

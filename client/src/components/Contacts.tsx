@@ -1,4 +1,10 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import config from "../config.json";
+import { useAppSelector, useAppDispatch } from '../app/hooks';
+import { addFriends } from '../features/friends/friendsSlice';
 
 const MainContainer = styled.div`
   height: 100%;
@@ -26,7 +32,8 @@ const MainContainer = styled.div`
     background: #555;
   }
 `;
-const ContactBox = styled.div`
+const ContactBox = styled(NavLink)`
+  text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: start;
@@ -42,14 +49,33 @@ const ContactValue = styled.div`
 `
 
 
-const contacts = ["Egor", "Egor","Egor","Egor","Egor","Egor","Egor", "Egor","Egor","Egor","Egor","Egor","Egor","Egor", "Egor", "Egor","Egor","Egor","Egor","Egor","Egor","Egor","Egor","Egor","Egor","Egor","Egor","Egor"];
-
 export const Contacts: React.FC = () => {
+  const userFriends = useAppSelector((state) => state.userFriends);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    axios.get(`${config.serverUrl}users/getFollowings`, 
+    { 
+      withCredentials: true
+    })    
+    .then(res => {
+      if(res.status === 200){
+        dispatch(addFriends(res.data.friends));
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }, []);
+
   return (
     <MainContainer>
-      {contacts.map((contact, index) => (
-        <ContactBox>
-          <ContactValue key={index}>{contact}</ContactValue>
+      {userFriends.friends.map((friend) => (
+        <ContactBox
+          key={friend.id}
+          to={`/${friend.full_name}.${friend.id}`}
+        >
+          <ContactValue key={friend.id}>{friend.full_name}</ContactValue>
         </ContactBox>
       ))}
     </MainContainer>

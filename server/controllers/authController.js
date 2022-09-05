@@ -35,6 +35,7 @@ const createSendToken = (user, statusCode, req, res) => {
 }
 
 exports.signup = catchAsync(async (req, res) => {
+  // NOTE - make Yup validation
   const { password } = req.body;
   const passwordHash = await User.createHash(password);
   const newUser = await User.create({
@@ -80,7 +81,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   //Checks is user wasn't deleted
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  const currentUser = await User.findById(decoded.id);
+  const currentUser = await (await User.findById(decoded.id)).rows[0];
   if(!currentUser) {
       return next(new AppError('The user with this token is not longer exist!', 401));
   }
@@ -89,5 +90,6 @@ exports.protect = catchAsync(async (req, res, next) => {
       return next(new AppError('User changed his password. Please log in again!', 401));
   }
   req.user = currentUser;
-  next();0
+  
+  next();
 });

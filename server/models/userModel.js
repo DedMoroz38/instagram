@@ -58,9 +58,19 @@ exports.findByIdAndUpdate = async (userId, filteredBody) => {
   );
 }
 exports.addToFriends = async (userId, friendUName) => {
+  console.log(userId, friendUName);
 
   return await pool.query(
-    `INSERT INTO friends (sender, getter) VALUES ($1, $2)`,
+    `INSERT INTO friends
+    (
+        sender,
+        getter
+    )
+    VALUES 
+    (
+     $1,
+     (SELECT id from users WHERE user_name = $2)
+    );`,
     [userId, friendUName]
   );
 }
@@ -69,5 +79,17 @@ exports.getFriendByName = async (friendUName) => {
   return await pool.query(
     `SELECT * FROM users WHERE user_name = $1`,
     [friendUName]
+  );
+}
+
+exports.getFriendsByUserId = async (userId) => {
+  return await pool.query(
+    `
+    SELECT users.full_name, users.id
+    FROM friends, users
+    WHERE sender = $1
+    AND users.id = friends.getter
+    `,
+    [userId]
   );
 }

@@ -24,7 +24,7 @@ exports.uploadUserPhoto = upload.single('photo');
 
 exports.resizeUserPhoto = catchAsync( async (req, res, next) => {
   if(!req.file) return next();
-  const id = req.user.rows[0].id
+  const id = req.user.id
   req.file.filename = `user-${id}-${Date.now()}.jpeg`;
   
   await sharp(req.file.buffer)
@@ -38,7 +38,7 @@ exports.resizeUserPhoto = catchAsync( async (req, res, next) => {
 exports.updateUser = catchAsync( async (req, res, next) => {
   const filteredBody = {};
   // const filteredBody = filterObj(req.body, "name", "login");
-  const user = req.user.rows[0];
+  const user = req.user
   if (req.file) filteredBody.photo = req.file.filename;
   const result = await User.findByIdAndUpdate(user.id, filteredBody);
   
@@ -49,27 +49,15 @@ exports.updateUser = catchAsync( async (req, res, next) => {
 });
 
 exports.getMe = catchAsync( async (req, res, next) => {
-  const data = req.user.rows[0];
-  console.log(data);
+  const data = req.user
   data.password = null;
   data.password_confirm = null;
 
   res.status(200).json({
     status: "success",
-    data: req.user.rows[0]
+    data
   });
 });
-
-exports.addFriend = catchAsync( async (req, res, next) => {
-  const friendUName = req.body.friendName;
-  const result = await User.addToFriends(req.user.id, friendUName);
-
-  res.status(200).json({
-    status: "success",
-    data: result
-  });
-});
-
 
 exports.getFriend = catchAsync( async (req, res, next) => {
   const friendName = req.body.friendName;
@@ -80,3 +68,22 @@ exports.getFriend = catchAsync( async (req, res, next) => {
     friend
   });
 });
+
+exports.addFriend = catchAsync( async (req, res) => {
+  const friendUName = req.body.friendUName;
+  const result = await User.addToFriends(req.user.id, friendUName);
+
+  res.status(200).json({
+    status: "success",
+    data: result
+  });
+});
+
+exports.getFollowings = catchAsync( async (req, res) => {
+  const friends = await (await User.getFriendsByUserId(req.user.id)).rows;
+
+  res.status(200).json({
+    status: "success",
+    friends
+  });
+})

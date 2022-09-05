@@ -1,9 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit'
-import userReducer from '../features/user/userSlice'
+import { configureStore } from '@reduxjs/toolkit';
+import userReducer from '../features/user/userSlice';
+import friendReducer from '../features/friends/friendsSlice';
+import messagesReducer from '../features/messages/messagesSlice';
+
 
 export const store = configureStore({
   reducer: {
     userInfo: userReducer,
+    userFriends: friendReducer,
+    userMessages: messagesReducer
   },
 })
 

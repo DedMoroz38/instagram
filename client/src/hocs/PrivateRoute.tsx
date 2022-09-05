@@ -21,7 +21,7 @@ const PrivateRoute: React.FC<PrivateRouteInterface> = ({children}) => {
   const { state } = location as LocationState;
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate()
-
+  // TODO - handle needless protection after signin, login
   useEffect(() => {
     if (state === null || !state.loginStatus) {
       axios.get(`${config.serverUrl}users/me`, 

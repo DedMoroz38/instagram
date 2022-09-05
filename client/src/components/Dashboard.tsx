@@ -22,7 +22,7 @@ const Dashboard: React.FC = () => {
     <MainContainer>
       <Header />
       <Routes>
-        <Route path="/" element={
+        <Route path="/*" element={
           <PrivateRoute>
             <Messanger />
           </PrivateRoute>

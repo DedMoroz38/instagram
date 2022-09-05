@@ -2,15 +2,18 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
+  [x: string]: any;
   name: string,
   login: string,
-  photo: string
+  photo: string,
+  id: string
 }
 
 const initialState: UserState = {
   name: "",
   login: "",
-  photo: ""
+  photo: "",
+  id: ''
 }
 
   
@@ -23,6 +26,7 @@ export const userSlice = createSlice({
       state.name = action.payload.full_name;
       state.login = action.payload.login;
       state.photo = action.payload.photo;
+      state.id = action.payload.id;
     },
     updateUser: (state, action: PayloadAction<any>) => {
       state.photo = action.payload;

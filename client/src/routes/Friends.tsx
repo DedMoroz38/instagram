@@ -36,37 +36,56 @@ const Friends: React.FC = () => {
   const friendName = useRef<HTMLInputElement>(null);
 
   const searchForFriend = () => {
-      const newFriendName = friendName.current!.value;
-      if (newFriendName.length !== 0){
-        axios.post(`${config.serverUrl}users/getFriend`, 
-        {friendName: newFriendName},
-        { withCredentials: true }
-        )
-        .then(res => {
-          if(res.status === 200){
-            setNewFriend(res.data.friend.user_name);
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        })
+    const newFriendName = friendName.current!.value;
+    if (newFriendName.length !== 0){
+      axios.post(`${config.serverUrl}users/getAccount`, 
+      {friendName: newFriendName},
+      { withCredentials: true }
+      ) 
+      .then(res => {
+        if(res.status === 200){
+          setNewFriend(res.data.friend.user_name);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
     } else {
-      alert('Emty input!');
+      alert('Empty input!');
     }
   }
+
+  const addFriend = () => {
+    const newFriendName = friendName.current!.value;
+    axios.post(`${config.serverUrl}users/follow`, 
+    {friendUName: newFriendName},
+    { withCredentials: true }
+    )
+    .then(res => {
+      if(res.status === 200){
+        console.log(res.data);
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    })
+}
 
   return (
     <MainContainer>
       <h1>Friends</h1>
       <Input ref={friendName} placeholder="Friend Name..." />
-      <SendButton onClick={() => searchForFriend()}>Send</SendButton>
-      <p>
+      <SendButton onClick={() => searchForFriend()}>Search</SendButton>
+      <div style={{display: 'flex', marginTop: '20px'}}>
+        <p>
         {
           newFriend === "" ?
           "Find new friend" :
           newFriend
         }
-      </p>
+        </p>
+        <button onClick={() => addFriend()}>Follow</button>
+      </div>
     </MainContainer>
   )
 }

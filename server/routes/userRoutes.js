@@ -10,10 +10,12 @@ router.get('/logout', authController.logout);
 
 router.use(authController.protect);
 
-router.post('/getFriend', userController.getFriend);
-router.post('/addFriend', userController.addFriend);
+router.post('/getAccount', userController.getFriend);
+router.post('/follow', userController.addFriend);
+router.get('/getFollowings', userController.getFollowings);
 
 router.get("/me", userController.getMe);
+
 
 router.patch("/updateMe",
   userController.uploadUserPhoto,
