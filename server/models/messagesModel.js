@@ -11,7 +11,7 @@ exports.sendMessage = async (message) => {
 exports.getMessagesByUId = async (userId) => {
 
   return await pool.query(
-    'SELECT * FROM messages WHERE messagefrom=$1',
+    'SELECT * FROM messages WHERE messagefrom=$1 OR messageto=$1',
     [userId]
   );
 }

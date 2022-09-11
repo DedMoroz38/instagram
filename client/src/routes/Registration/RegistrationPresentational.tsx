@@ -1,14 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
 import LockIcon from '@mui/icons-material/Lock';
 import EmailIcon from '@mui/icons-material/Email';
 import PersonIcon from '@mui/icons-material/Person';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { Link } from 'react-router-dom';
-import { useAppDispatch } from '../app/hooks';
-import { createUser } from '../features/user/userSlice';
-
 import { 
   MainContainer,
   SignBox,
@@ -20,52 +15,30 @@ import {
   ButtonBox,
   SubmitButon,
   ErorrPopup
- } from './Login';
-import axios from 'axios';
-import { useNavigate } from "react-router";
-import config from '../config.json';
+ } from '../Login/LoginPresentational';
+import { Link } from 'react-router-dom';
 
-const Registration: React.FC<{}> = () =>  {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showPopup, setShowPopup] = useState<boolean>(false);
+interface Registration {
+  showPopup: boolean,
+  FullName: React.RefObject<HTMLInputElement>,
+  EmailInput: React.RefObject<HTMLInputElement>,
+  PasswordInput: React.RefObject<HTMLInputElement>,
+  showPassword: boolean,
+  setShowPassword: React.Dispatch<React.SetStateAction<boolean>>,
+  UserName: React.RefObject<HTMLInputElement>,
+  register: () => void
+}
 
-  const EmailInput = useRef<HTMLInputElement>(null);
-  const FullName = useRef<HTMLInputElement>(null);
-  const UserName = useRef<HTMLInputElement>(null);
-  const PasswordInput = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
-
-  const dispatch = useAppDispatch();
-
-  const validate = (): boolean => {
-    if (PasswordInput.current!.value.length >= 8) {
-      return true;
-    }
-    setShowPopup(true);
-    return false;
-  }
-
-  const register = (): void => {
-    if(validate()) {
-      axios.post(`${config.serverUrl}users/signup`, { 
-        full_name: FullName.current?.value,
-        user_name: UserName.current?.value,
-        login: EmailInput.current?.value,
-        password: PasswordInput.current?.value,
-      }, { withCredentials: true })
-      .then(res => {
-        console.log(res);
-        dispatch(createUser(res.data.user));
-        if(res.status === 201){
-          navigate('/');
-        }
-      })
-      .catch(err => {
-        setShowPopup(true);
-        console.log(err);
-      });
-    }
-  }
+const RegistrationPresentational: React.FC<Registration> = ({
+  showPopup,
+  FullName,
+  EmailInput,
+  PasswordInput,
+  showPassword,
+  setShowPassword,
+  UserName,
+  register
+}) =>  {
 
   return (
     <MainContainer>
@@ -148,4 +121,5 @@ const Registration: React.FC<{}> = () =>  {
     </MainContainer>
   )
 }
-export default Registration;
+
+export default RegistrationPresentational;

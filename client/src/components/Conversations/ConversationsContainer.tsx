@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import ConverationPresentational from './ConversationPresentational';
 import { useParams } from 'react-router-dom';
 import useSocketSetup from '../../hooks/useSocketSetup';
@@ -11,7 +11,6 @@ import { addMessage, addMessages } from '../../features/messages/messagesSlice';
 const ConversationsContainer: React.FC<{}> = () => {
   const { friend } = useParams();
   const dispatch = useAppDispatch();
-  const userFriends = useAppSelector((state) => state.userFriends);
   const userMessages = useAppSelector((state) => state.userMessages);
   const user = useAppSelector((state) => state.userInfo);
   const messagesInput = useRef<HTMLInputElement>(null);
@@ -29,13 +28,14 @@ const ConversationsContainer: React.FC<{}> = () => {
         messagefrom: user.id,
         messageto: friendId
       }));
-      //
+
       const message = {
         messageto: friendId,
         message: inputValue
       }
+
       socket.emit('dm', message);
-      //
+
       messagesInput.current!.value = '';
       inputFocus();
     }
@@ -67,7 +67,6 @@ const ConversationsContainer: React.FC<{}> = () => {
   }, []); 
 
   useEffect(() => {
-    console.log('Rendered!', bottomDiv.current);
     bottomDiv.current?.scrollIntoView({ block: "end", behavior: "smooth" });
   }, [userMessages]);
 
@@ -76,7 +75,6 @@ const ConversationsContainer: React.FC<{}> = () => {
       friendName={friendName}
       friendId={friendId}
       messages={userMessages.messages}
-      friends={userFriends}
       handleBlur={handleBlur}
       messagesInput={messagesInput}
       handleKeypress={handleKeypress}

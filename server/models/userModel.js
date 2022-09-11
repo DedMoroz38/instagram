@@ -1,5 +1,4 @@
 const pool = require('../db');
-const catchAsync = require("./../utils/catchAsync");
 const bcrypt = require("bcryptjs");
 
 exports.createHash = async (password) => {

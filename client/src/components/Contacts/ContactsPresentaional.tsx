@@ -1,10 +1,5 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import styled from 'styled-components';
-import config from "../config.json";
-import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { addFriends } from '../features/friends/friendsSlice';
+import { NavLink } from "react-router-dom";
+import styled from "styled-components";
 
 const MainContainer = styled.div`
   height: 100%;
@@ -46,39 +41,31 @@ const ContactBox = styled(NavLink)`
 `;
 const ContactValue = styled.div`
   color: ${({ theme }) => theme.color}
-`
+`;
 
+interface Contacts{
+  userFriends: Array<{
+    id: string,
+    full_name: string
+  }>
+}
 
-export const Contacts: React.FC = () => {
-  const userFriends = useAppSelector((state) => state.userFriends);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    axios.get(`${config.serverUrl}users/getFollowings`, 
-    { 
-      withCredentials: true
-    })    
-    .then(res => {
-      if(res.status === 200){
-        dispatch(addFriends(res.data.friends));
-      }
-    })
-    .catch(err => {
-      console.log(err);
-    })
-  }, []);
-
+export const ContactsPresentaional: React.FC<Contacts> = ({
+  userFriends
+}) => {
   return (
     <MainContainer>
-      {userFriends.friends.map((friend) => (
+      {userFriends.map((friend) => (
         <ContactBox
           key={friend.id}
-          to={`/${friend.full_name}.${friend.id}`}
+          to={`${friend.full_name}.${friend.id}`}
         >
           <ContactValue key={friend.id}>{friend.full_name}</ContactValue>
         </ContactBox>
       ))}
     </MainContainer>
   )
+
 }
-export default Contacts;
+
+export default ContactsPresentaional;

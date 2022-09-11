@@ -1,9 +1,7 @@
 import styled from "styled-components";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import SendIcon from '@mui/icons-material/Send';
-import React from "react";
-import userEvent from "@testing-library/user-event";
-import Friends from "../../routes/Friends";
+import React, { RefObject } from "react";
 
 const MainContainer = styled.div`
   display: flex;
@@ -109,18 +107,16 @@ interface Conversations{
     messagefrom: string
     messageto: string
   }>,
-  friends: any,
-  handleBlur: any,
-  messagesInput: any,
-  handleKeypress: any,
-  sendMessage: any,
-  friendName: any,
-  friendId: any,
-  bottomDiv: any
+  handleBlur: () => void,
+  messagesInput: RefObject<HTMLInputElement>,
+  handleKeypress: (e: { key: string; }) => void,
+  sendMessage: () => void,
+  friendName: string,
+  friendId: string,
+  bottomDiv: RefObject<HTMLDivElement>
 }
 
 const ConverationPresentational: React.FC<Conversations> = ({
-    friends,
     friendName,
     friendId,
     messages,
@@ -137,7 +133,6 @@ const ConverationPresentational: React.FC<Conversations> = ({
     <MainContainer>
       <NameBox>{friendName}</NameBox>
       <MessagesBox>
-        {/* <div ref={bottomDiv}/> */}
         {
           messages
           .filter(msg => msg.messageto === friendId || msg.messagefrom === friendId)
@@ -152,15 +147,6 @@ const ConverationPresentational: React.FC<Conversations> = ({
           ))
         }
         <div ref={bottomDiv}/>
-        {/* {messages.map((message, index) => (
-          message.from === 'user' ?
-          <MessageBoxUser key={index}>
-            <Message>{message.message}</Message>
-          </MessageBoxUser> :
-          <MessageBoxFriend key={index}>
-            <Message>{message.message}</Message>
-          </MessageBoxFriend>
-        ))} */}
       </MessagesBox>
       <InputContainer>
         <AttachFileIcon style={{color: `grey`}}/>

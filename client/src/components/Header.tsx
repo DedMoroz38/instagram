@@ -6,6 +6,11 @@ import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import ChatIcon from '@mui/icons-material/Chat';
 import axios from 'axios';
 import config from '../config.json';
+import HomeIcon from '@mui/icons-material/Home';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import SearchIcon from '@mui/icons-material/Search';
+import ModalToAddPost from './ModalToAddPost';
+import { useState } from 'react';
 
 const MainContainer = styled.div`
   display: flex;
@@ -16,17 +21,18 @@ const MainContainer = styled.div`
 `;
 const LinksContainer = styled.div`
   display: flex;
-  width: 100px;
   align-items: center;
   justify-content: space-around;
+  width: 250px;
   &:last-child {
     filter: ${({ theme }) => theme.filter};
   }
 `;
 
 
-const Header: React.FC<{}> = () => {
+const Header: React.FC = () => {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
   const logout = () => {
     axios.get(`${config.serverUrl}users/logout`,
@@ -46,9 +52,17 @@ const Header: React.FC<{}> = () => {
     <MainContainer>
       <Toggle />
       <LinksContainer>
-        <Link to="/" ><ChatIcon /></Link>
+        <Link to="/" ><HomeIcon /></Link>
+        <ModalToAddPost 
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+        />
+        <AddCircleOutlineIcon 
+          onClick={() => setIsOpen(true)}
+        />
+        <Link to="/messanger" ><ChatIcon /></Link>
         <Link to="/profile" ><PermIdentityIcon /></Link>
-        <Link to="/friends" >FD</Link>
+        <Link to="/friends" ><SearchIcon /></Link>
         <div onClick={() => logout()} ><LogoutIcon /></div>
       </LinksContainer>
     </MainContainer>

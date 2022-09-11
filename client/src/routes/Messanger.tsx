@@ -1,5 +1,5 @@
-import Conversations from '../components/Conversations/ConversationsContainer';
-import Contacts from '../components/Contacts';
+import ConversationsContainer from '../components/Conversations/ConversationsContainer';
+import ContactsContainer from '../components/Contacts/ContactsContainer';
 import React from 'react';
 import styled from 'styled-components';
 import { Route, Routes } from 'react-router-dom';
@@ -12,10 +12,9 @@ const MainContainer = styled.div`
 const Messanger: React.FC = () => {
   return (
     <MainContainer>
-      <Contacts />
-      {/* <Conversations /> */}
+      <ContactsContainer />
       <Routes>
-          <Route path="/:friend" element={<Conversations />} />
+          <Route path="/:friend" element={<ConversationsContainer />} />
       </Routes >
     </MainContainer>
   )

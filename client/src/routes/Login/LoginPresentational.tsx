@@ -1,14 +1,9 @@
-import React, { useRef, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from "styled-components";
 import LockIcon from '@mui/icons-material/Lock';
 import EmailIcon from '@mui/icons-material/Email';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { Link, useNavigate } from 'react-router-dom';
-import config from '../config.json';
-import axios from 'axios';
-import { createUser } from '../features/user/userSlice';
-import { useAppDispatch } from '../app/hooks';
+import { Link } from "react-router-dom";
 
 export const MainContainer = styled.div`
   position: relative;
@@ -126,34 +121,21 @@ export const ErorrPopup = styled.div`
   color: #ba8fff;
 `;
 
-const  Login: React.FC<{}> = () =>  {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const EmailInput = useRef<HTMLInputElement>(null);
-  const PasswordInput = useRef<HTMLInputElement>(null);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+interface Login {
+  EmailInput: React.RefObject<HTMLInputElement>,
+  showPassword: boolean,
+  setShowPassword: React.Dispatch<React.SetStateAction<boolean>>,
+  PasswordInput: React.RefObject<HTMLInputElement>,
+  login: () => void
+}
 
-  const login = () => {
-    axios.post(`${config.serverUrl}users/login`, { 
-      login: EmailInput.current?.value,
-      password: PasswordInput.current?.value,
-    },
-    { withCredentials: true }
-    )
-    .then(res => {
-      if(res.status === 200){
-        dispatch(createUser({...res.data.user}));
-        navigate('/', {
-          state: {
-            loginStatus: true
-          }
-        });
-      }
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  }
+const LoginPresentational: React.FC<Login> = ({
+  EmailInput,
+  showPassword,
+  setShowPassword,
+  PasswordInput,
+  login
+}) =>  {
 
   return (
     <MainContainer>
@@ -205,4 +187,5 @@ const  Login: React.FC<{}> = () =>  {
     </MainContainer>
   )
 }
-export default Login;
+
+export default LoginPresentational;

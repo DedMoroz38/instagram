@@ -3,14 +3,15 @@ import React from 'react';
 import styled from 'styled-components';
 import Messanger from '../routes/Messanger';
 import { Route, Routes } from 'react-router-dom';
-import Profile from '../routes/Profile';
-import Login from '../routes/Login';
-import Registration from '../routes/Registration';
+import ProfileContainer from '../routes/Profile/ProfileContainer';
+import LoginContainer from '../routes/Login/LoginContainer';
+import RegistrationContainer from '../routes/Registration/RegistrationContainer';
 import PrivateRoute from '../hocs/PrivateRoute';
 import NotFound from '../routes/NotFound';
-import Friends from '../routes/Friends';
+import FriendsContainer from '../routes/Friends/FriendsContainer';
+import MainContainer from '../routes/Main/MainContainer';
 
-const MainContainer = styled.div`
+const Container = styled.div`
   display: flex; 
   flex-direction: column;
   height: 100vh;
@@ -19,10 +20,16 @@ const MainContainer = styled.div`
 
 const Dashboard: React.FC = () => {
   return (
-    <MainContainer>
+    <Container>
       <Header />
       <Routes>
-        <Route path="/*" element={
+      <Route path="/" element={
+          <PrivateRoute>
+            <MainContainer />
+          </PrivateRoute>
+          }
+        />
+        <Route path="/messanger/*" element={
           <PrivateRoute>
             <Messanger />
           </PrivateRoute>
@@ -30,21 +37,21 @@ const Dashboard: React.FC = () => {
         />
         <Route path="/profile" element={
           <PrivateRoute>
-            <Profile />
+            <ProfileContainer />
           </PrivateRoute>
           }
         />
         <Route path="/friends" element={
           <PrivateRoute>
-            <Friends />
+            <FriendsContainer />
           </PrivateRoute>
           }
         />
-        <Route path="/signin" element={<Login />} />
-        <Route path="/signup" element={<Registration />} />
+        <Route path="/signin" element={<LoginContainer />} />
+        <Route path="/signup" element={<RegistrationContainer />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </MainContainer>
+    </Container>
   )
 }
 export default Dashboard;

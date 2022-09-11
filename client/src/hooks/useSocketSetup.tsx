@@ -12,10 +12,6 @@ const useSocketSetup = () => {
       alert('Error in socket connection!!!')
     });
 
-    // socket.on('messages', messages => {
-    //   dispatch(addMessage(messages));
-    // });
-
     socket.on('dm', message => {
       dispatch(addMessage({
         message: message.message,
@@ -26,7 +22,7 @@ const useSocketSetup = () => {
 
     return () => {
       socket.off('connect_error');
-      socket.off('messages');
+      socket.off('dm');
     }
   }, []);
 }
