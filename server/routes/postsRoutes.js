@@ -9,9 +9,12 @@ const router = express.Router();
 router.use(authController.protect);
 
 router.route('/')
-  .get(postsController.getPosts)
+  .get(postsController.getUserPosts)
   .post(postsController.uploadTourImages,
         postsController.resizeTourImages,
         postsController.createPost);
+router.route('/getUserFollowingPosts')
+  .get(postsController.getUserFollowingPosts)
+
 
 module.exports = router;

@@ -1,0 +1,82 @@
+Date : 2022-09-11 19:53:01
+Directory : /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src
+Total : 38 files,  1597 codes, 85 comments, 207 blanks, all 1889 lines
+
+Languages
++------------------+------------+------------+------------+------------+------------+
+| language         | files      | code       | comment    | blank      | total      |
++------------------+------------+------------+------------+------------+------------+
+| TypeScript React |         36 |      1,589 |         85 |        207 |      1,881 |
+| TypeScript       |          1 |          4 |          0 |          0 |          4 |
+| JSON             |          1 |          4 |          0 |          0 |          4 |
++------------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                   | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                      |         38 |      1,597 |         85 |        207 |      1,889 |
+| app                                                                                                                    |          2 |         18 |          3 |          4 |         25 |
+| components                                                                                                             |         14 |        687 |         60 |         86 |        833 |
+| components/Contacts                                                                                                    |          2 |         96 |          0 |         10 |        106 |
+| components/Conversations                                                                                               |          2 |        228 |          0 |         24 |        252 |
+| components/Posts                                                                                                       |          2 |         35 |          2 |         11 |         48 |
+| components/Theme                                                                                                       |          2 |         36 |          0 |          2 |         38 |
+| features                                                                                                               |          3 |         85 |          3 |         21 |        109 |
+| features/friends                                                                                                       |          1 |         24 |          1 |          7 |         32 |
+| features/messages                                                                                                      |          1 |         29 |          1 |          7 |         37 |
+| features/user                                                                                                          |          1 |         32 |          1 |          7 |         40 |
+| hocs                                                                                                                   |          1 |         48 |          1 |          7 |         56 |
+| hooks                                                                                                                  |          2 |         43 |          0 |          9 |         52 |
+| routes                                                                                                                 |         12 |        667 |         16 |         71 |        754 |
+| routes/Friends                                                                                                         |          2 |        110 |          0 |         12 |        122 |
+| routes/Login                                                                                                           |          2 |        219 |          0 |         21 |        240 |
+| routes/Main                                                                                                            |          2 |         13 |          0 |          7 |         20 |
+| routes/Profile                                                                                                         |          2 |        119 |         16 |         16 |        151 |
+| routes/Registration                                                                                                    |          2 |        180 |          0 |         11 |        191 |
++------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| filename                                                                                                               | language         | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/App.tsx                                                 | TypeScript React |         23 |          0 |          4 |         27 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/app/hooks.tsx                                           | TypeScript React |          5 |          1 |          1 |          7 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/app/store.tsx                                           | TypeScript React |         13 |          2 |          3 |         18 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Contacts/ContactsContainer.tsx               | TypeScript React |         30 |          0 |          5 |         35 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Contacts/ContactsPresentaional.tsx           | TypeScript React |         66 |          0 |          5 |         71 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Conversations/ConversationPresentational.tsx | TypeScript React |        154 |          0 |         11 |        165 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Conversations/ConversationsContainer.tsx     | TypeScript React |         74 |          0 |         13 |         87 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Dashboard.tsx                                | TypeScript React |         30 |         26 |          2 |         58 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Header.tsx                                   | TypeScript React |         66 |          0 |          6 |         72 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/ImagesSwiper.tsx                             | TypeScript React |         43 |         18 |          6 |         67 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/ModalToAddPost.tsx                           | TypeScript React |        117 |         14 |         22 |        153 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Posts/PostsContainer.tsx                     | TypeScript React |         29 |          2 |          7 |         38 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Posts/PostsPresentational.tsx                | TypeScript React |          6 |          0 |          4 |         10 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Theme/Themes.tsx                             | TypeScript React |         27 |          0 |          1 |         28 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Theme/globalStyles.tsx                       | TypeScript React |          9 |          0 |          1 |         10 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Toggler.tsx                                  | TypeScript React |         32 |          0 |          3 |         35 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/custom.d.ts                                  | TypeScript       |          4 |          0 |          0 |          4 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/config.json                                             | JSON             |          4 |          0 |          0 |          4 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/features/friends/friendsSlice.tsx                       | TypeScript React |         24 |          1 |          7 |         32 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/features/messages/messagesSlice.tsx                     | TypeScript React |         29 |          1 |          7 |         37 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/features/user/userSlice.tsx                             | TypeScript React |         32 |          1 |          7 |         40 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/hocs/PrivateRoute.tsx                                   | TypeScript React |         48 |          1 |          7 |         56 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/hooks/useDarkMode.tsx                                   | TypeScript React |         18 |          0 |          4 |         22 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/hooks/useSocketSetup.tsx                                | TypeScript React |         25 |          0 |          5 |         30 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/index.tsx                                               | TypeScript React |         16 |          2 |          3 |         21 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Friends/FriendsContainer.tsx                     | TypeScript React |         53 |          0 |          5 |         58 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Friends/FriendsPresentational.tsx                | TypeScript React |         57 |          0 |          7 |         64 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Login/LoginContainer.tsx                         | TypeScript React |         45 |          0 |          4 |         49 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Login/LoginPresentational.tsx                    | TypeScript React |        174 |          0 |         17 |        191 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Main/MainContainer.tsx                           | TypeScript React |          7 |          0 |          3 |         10 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Main/MainPresentational.tsx                      | TypeScript React |          6 |          0 |          4 |         10 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Messanger.tsx                                    | TypeScript React |         20 |          0 |          3 |         23 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/NotFound.tsx                                     | TypeScript React |          6 |          0 |          1 |          7 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Profile/ProfileContainer.tsx                     | TypeScript React |         32 |          0 |          6 |         38 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Profile/ProfilePresentational.tsx                | TypeScript React |         87 |         16 |         10 |        113 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Registration/RegistrationContainer.tsx           | TypeScript React |         59 |          0 |          7 |         66 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Registration/RegistrationPresentational.tsx      | TypeScript React |        121 |          0 |          4 |        125 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/socket.tsx                                              | TypeScript React |          6 |          0 |          2 |          8 |
+| Total                                                                                                                  |                  |      1,597 |         85 |        207 |      1,889 |
++------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+

@@ -2,17 +2,17 @@ import styled from "styled-components";
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import config from "../../config.json";
-import PostsContainer from "../../components/Posts/PostsContainer";
+import ProfilePostsContainer from "../../components/ProfilePosts/ProfilePostsContainer";
 
 const MainContainer = styled.div`
-  width: 935px;
-  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 0 auto;
-  padding: 30px 100px 0;
 `;
 
 const ProfileTopContainer = styled.div`
-  display: felx;
+  display: flex;
 `;
 
 const ProfileIconBox = styled.div`
@@ -105,7 +105,7 @@ const ProfilePresentational: React.FC<Profile> = ({
           <Name>{userInfo.name}</Name>
         </ProfileInfoBox>
       </ProfileTopContainer>
-      <PostsContainer />
+      <ProfilePostsContainer />
     </MainContainer>
   )
 }

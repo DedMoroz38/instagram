@@ -17,6 +17,7 @@ export const blurAnimation = keyframes`
 `;
 
 const MainContainer = styled.div`
+  z-index: 1;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -24,6 +25,7 @@ const MainContainer = styled.div`
 `;
 
 const BackgoundBlur = styled.div`
+  z-index: 1;
   position: fixed;
   top: 0;
   left: 0;
@@ -34,6 +36,7 @@ const BackgoundBlur = styled.div`
 `;
 
 const CloseModalButton = styled.div`
+  z-index: 1;
   color: white;
   position: fixed;
   top: 20px;
@@ -44,7 +47,7 @@ const CloseModalButton = styled.div`
 const ModalContainer = styled.div`
   height: 75vh;
   width: 35vw;
-  background: black;
+  background: ${({ theme }) => theme.background};
   border-radius: 20px;
   box-shadow: #ba8fff 0px 0px 30px;
   display: flex;
@@ -95,19 +98,19 @@ const ModalToAddPost: React.FC<Modal> = ({
   }
 
   const publishPost = (): void => {
-    const form = new FormData();
+    const attachmentsForm = new FormData();
 
     for(let file of post){
-      form.append('images', file);
+      attachmentsForm.append('images', file);
     }
 
     axios.post(`${config.serverUrl}posts`,
-      form,
+      attachmentsForm,
       { withCredentials: true }
     )
     .then(res => {
       onClose();
-      // TODO - create a tick "File load subbmition"
+      // TODO - create a tick: "File load subbmition"
     })
     .catch(err => {
       console.log(err);

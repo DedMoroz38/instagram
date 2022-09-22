@@ -23,15 +23,14 @@ exports.uploadTourImages = upload.fields([
 exports.resizeTourImages = catchAsync( async (req, res, next) => {
   if (!req.files.images) return next();
   // TODO - create an Error if no images
-
+  // TODO - rename images to attachments if neede
   req.body.images = [];
   await Promise.all(
       req.files.images.map( async (file, i) => {
           // TODO - create image id
-          const fileName = `image-12313-${Date.now()}-${i + 1}.jpeg`;
+          const fileName = `image-${req.user.id}-${Date.now()}-${i + 1}.jpeg`;
 
           await sharp(file.buffer)
-              .resize(500, 500)
               .toFormat('jpeg')
               .jpeg({ quality: 90 })
               .toFile(`public/img/postImages/${fileName}`);
@@ -43,21 +42,31 @@ exports.resizeTourImages = catchAsync( async (req, res, next) => {
 });
 
 exports.createPost = catchAsync( async (req, res) => {
-  const postOfImages = req.body.images;
+  // TODO - rename images to attachments if neede
+  const attachments = req.body.images;
   const userId = req.user.id;
-  await Posts.createPostForUserId(userId, postOfImages);
+  await Posts.createPostForUserId(userId, attachments);
 
   res.status(200).json({ 
     status: "success"
   });
 });
 
-exports.getPosts = catchAsync( async (req, res) => {
+exports.getUserPosts = catchAsync( async (req, res) => {
   const userId = req.user.id;
-  const posts = await (await Posts.getPostsbyUserId(userId)).rows[0];
-
+  const posts = await Posts.getPostsByUserId(userId);
   res.status(200).json({ 
     status: "success",
-    posts
+    posts: posts.rows
+  });
+});
+
+exports.getUserFollowingPosts = catchAsync( async (req, res) => {
+  const userId = req.user.id;
+  const posts = await Posts.getUserFollowingPostsByUserId(userId);
+  console.log(posts);
+  res.status(200).json({ 
+    status: "success",
+    posts: posts.rows
   });
 });

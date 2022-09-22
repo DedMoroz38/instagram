@@ -127,7 +127,6 @@ const ConverationPresentational: React.FC<Conversations> = ({
     bottomDiv
   }) => {
 
-  console.log(messages);
 
   return (
     <MainContainer>
