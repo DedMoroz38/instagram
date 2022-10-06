@@ -9,8 +9,13 @@ import config from '../config.json';
 import HomeIcon from '@mui/icons-material/Home';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import SearchIcon from '@mui/icons-material/Search';
-import ModalToAddPost from './ModalToAddPost';
-import { useState } from 'react';
+import ModalToAddPost from './AddNewPostComponents/ModalToAddPost';
+import { useContext, useState } from 'react';
+import ModalWindow from './AddNewPostComponents/ModalWindow';
+import { ModalContext } from './Dashboard';
+import ErrorPopUp from './ErrorPopUp';
+import { ErrorPopUpContext } from '../App';
+
 
 const MainContainer = styled.div`
   display: flex;
@@ -32,7 +37,7 @@ const LinksContainer = styled.div`
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // for posts TODO-find better way to solve it
 
   const logout = () => {
     axios.get(`${config.serverUrl}users/logout`,
@@ -53,10 +58,14 @@ const Header: React.FC = () => {
       <Toggle />
       <LinksContainer>
         <Link to="/" ><HomeIcon /></Link>
-        <ModalToAddPost 
+        <ModalWindow
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
-        />
+        >
+          <ModalToAddPost
+            onClose={() => setIsOpen(false)}
+          />
+        </ModalWindow>
         <AddCircleOutlineIcon 
           onClick={() => setIsOpen(true)}
         />

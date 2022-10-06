@@ -1,2 +1,4 @@
 Create global error-handler
 Create global requests handler
+rename Files to images in client config
+Create error when registering same email

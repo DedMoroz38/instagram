@@ -70,3 +70,15 @@ exports.getUserFollowingPosts = catchAsync( async (req, res) => {
     posts: posts.rows
   });
 });
+
+exports.getAttachmentsForPost = catchAsync( async (req, res) => {
+  const postId = req.params.postId;
+  const postAttachments = await Posts.getPostAttachmentsById(postId);
+  const postComments = await Posts.getCommentsByPostId(postId);
+
+  res.status(200).json({
+    status: 'success',
+    postAttachments: postAttachments.rows,
+    postComments: postComments.rows
+  })
+}); 

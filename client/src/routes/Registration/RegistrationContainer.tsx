@@ -1,65 +1,93 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
 import { createUser } from '../../features/user/userSlice';
 import RegistrationPresentational from './RegistrationPresentational';
-
 import axios from 'axios';
 import { useNavigate } from "react-router";
 import config from '../../config.json';
+import { useForm } from 'react-hook-form';
+import { ErrorPopUpContext } from '../../App';
 
 const RegistrationContainer: React.FC = () =>  {
+  const {isOpen, setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useContext(ErrorPopUpContext);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
-  const EmailInput = useRef<HTMLInputElement>(null);
-  const FullName = useRef<HTMLInputElement>(null);
-  const UserName = useRef<HTMLInputElement>(null);
-  const PasswordInput = useRef<HTMLInputElement>(null);
+  const {
+    setError,
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    defaultValues: {
+      fullName: "",
+      userName: "",
+      email: "",
+      password: "",
+    }
+  });
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
-  const validate = (): boolean => {
-    if (PasswordInput.current!.value.length >= 8) {
-      return true;
-    }
-    setShowPopup(true);
-    return false;
+  const showErrorShadow = (): void => {
+    setIsError(true)
+    setTimeout(() => {
+      setIsError(false);
+    }, 1000);
   }
 
-  const register = (): void => {
-    if(validate()) {
-      axios.post(`${config.serverUrl}users/signup`, { 
-        full_name: FullName.current?.value,
-        user_name: UserName.current?.value,
-        login: EmailInput.current?.value,
-        password: PasswordInput.current?.value,
-      }, { withCredentials: true })
-      .then(res => {
-        console.log(res);
-        dispatch(createUser(res.data.user));
-        if(res.status === 201){
-          navigate('/');
-        }
-      })
-      .catch(err => {
-        setShowPopup(true);
-        console.log(err);
-      });
-    }
+  const registerFn = (data: any): void => {
+    const {fullName, userName, email, password} = data;
+    axios.post(`${config.serverUrl}users/signup`, { 
+      full_name: fullName,
+      user_name: userName,
+      login: email,
+      password: password,
+    }, { withCredentials: true })
+    .then(res => {
+      console.log(res);
+      dispatch(createUser(res.data.user));
+      if(res.status === 201){
+        navigate('/');
+      }
+    })
+    .catch(err => {
+      const errorMessage = err.response.data.message;
+      showErrorShadow();
+      if(errorMessage === `Username is taken!`){
+        setError('userName', {
+          message: err.response.data.message
+        });
+      } else if(errorMessage === `Email is already registered!`) {
+        setError('email', {
+          message: err.response.data.message
+        });
+      } else {
+        setErrorMessage(errorMessage);
+        setErrorPopUpIsOpen(true);
+      }
+    });
   }
+
+
+  useEffect(() => {
+    if(Object.keys(errors).length === 0){
+      setIsError(false);
+    } else {
+      showErrorShadow();
+    }
+  }, [errors]);
 
   return (
     <RegistrationPresentational 
-      showPopup={showPopup}
-      FullName={FullName}
-      EmailInput={EmailInput}
-      PasswordInput={PasswordInput}
       showPassword={showPassword}
       setShowPassword={setShowPassword}
-      UserName={UserName}
+      registerFn={registerFn}
       register={register}
+      handleSubmit={handleSubmit}
+      errors={errors}
+      isError={isError}
      />
   )
 }

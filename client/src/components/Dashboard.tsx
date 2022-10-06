@@ -1,5 +1,5 @@
 import Header from './Header';
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import Messanger from '../routes/Messanger';
 import { Route, Routes } from 'react-router-dom';
@@ -10,6 +10,8 @@ import PrivateRoute from '../hocs/PrivateRoute';
 import NotFound from '../routes/NotFound';
 import FriendsContainer from '../routes/Friends/FriendsContainer';
 import MainContainer from '../routes/Main/MainContainer';
+import { ErrorPopUpContext } from '../App';
+import ErrorPopUp from './ErrorPopUp';
 
 const Container = styled.div`
   display: flex; 
@@ -18,9 +20,13 @@ const Container = styled.div`
   max-height: 100vh;
 `;
 
+export const ModalContext = React.createContext<any>(null);
+
 const Dashboard: React.FC = () => {
+
   return (
     <Container>
+      <ErrorPopUp/> 
       <Header />
       <Routes>
       <Route path="/" element={

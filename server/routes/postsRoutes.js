@@ -16,5 +16,8 @@ router.route('/')
 router.route('/getUserFollowingPosts')
   .get(postsController.getUserFollowingPosts)
 
+router.route('/getAttachmentsForPost/:postId')
+  .get(postsController.getAttachmentsForPost)
+
 
 module.exports = router;

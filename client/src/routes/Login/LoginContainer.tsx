@@ -1,23 +1,36 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import config from '../../config.json';
 import axios from 'axios';
 import { createUser } from '../../features/user/userSlice';
 import { useAppDispatch } from '../../app/hooks';
 import LoginPresentational from './LoginPresentational';
+import { useForm } from 'react-hook-form';
 
 
 const LoginContainer: React.FC<{}> = () =>  {
+  const [isError, setIsError] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const EmailInput = useRef<HTMLInputElement>(null);
-  const PasswordInput = useRef<HTMLInputElement>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    }
+  });
+  
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const login = () => {
+  const loginFn = (data: any) => {
+    const {email, password} = data;
+
     axios.post(`${config.serverUrl}users/login`, { 
-      login: EmailInput.current?.value,
-      password: PasswordInput.current?.value,
+      login: email,
+      password: password,
     },
     { withCredentials: true }
     )
@@ -36,13 +49,26 @@ const LoginContainer: React.FC<{}> = () =>  {
     });
   }
 
+  useEffect(() => {
+    if(Object.keys(errors).length === 0){
+      setIsError(false);
+    } else {
+      setIsError(true)
+      setTimeout(() => {
+        setIsError(false);
+      }, 1000);
+    }
+  }, [errors]);
+
   return (
     <LoginPresentational
-      EmailInput={EmailInput}
       showPassword={showPassword}
       setShowPassword={setShowPassword}
-      PasswordInput={PasswordInput}
-      login={login}
+      loginFn={loginFn}
+      register={register}
+      handleSubmit={handleSubmit}
+      isError={isError}
+      errors={errors}
     />
   )
 }

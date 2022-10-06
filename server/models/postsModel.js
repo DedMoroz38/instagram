@@ -65,3 +65,34 @@ exports.getUserFollowingPostsByUserId = async (userId) => {
     [userId]
   )
 }
+
+exports.getPostAttachmentsById = async (postId) => {
+  return await pool.query(
+    `
+    SELECT 
+      CAST(attachments.id AS INTEGER),
+      attachments.postid,
+      attachments.filename
+    FROM attachments 
+      INNER JOIN posts 
+        ON attachments.postid = posts.id
+        AND posts.id = $1;
+    `,
+    [postId]
+  )
+}
+
+exports.getCommentsByPostId = async (postId) => {
+  return await pool.query(
+    `
+    SELECT 
+      comments.id,
+      comments.comment
+    FROM comments
+    INNER JOIN posts
+      ON posts.id = comments.postid
+      AND posts.id = $1;
+    `,
+    [postId]
+  )
+}

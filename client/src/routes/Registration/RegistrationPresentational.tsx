@@ -6,99 +6,169 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { 
   MainContainer,
-  SignBox,
   SignForm, 
   FormHeding,
   InputBox,
-  SignInput,
+  FormInput,
   VisabilityToggleBox,
   ButtonBox,
-  SubmitButon,
-  ErorrPopup
+  SubmitButton,
+  ErrorMessage,
+  SignBox,
+  RedirectLink
  } from '../Login/LoginPresentational';
 import { Link } from 'react-router-dom';
+import { FieldErrorsImpl, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form';
+import { useContext } from 'react';
+import { ThemeContext } from "../../App";
+
 
 interface Registration {
-  showPopup: boolean,
-  FullName: React.RefObject<HTMLInputElement>,
-  EmailInput: React.RefObject<HTMLInputElement>,
-  PasswordInput: React.RefObject<HTMLInputElement>,
   showPassword: boolean,
   setShowPassword: React.Dispatch<React.SetStateAction<boolean>>,
-  UserName: React.RefObject<HTMLInputElement>,
-  register: () => void
+  registerFn: (data: {
+    fullName: string;
+    userName: string;
+    email: string;
+    password: string;
+  }) => void,
+  register: UseFormRegister<{
+    fullName: string;
+    userName: string;
+    email: string;
+    password: string;
+  }>,
+  handleSubmit: UseFormHandleSubmit<{
+    fullName: string;
+    userName: string;
+    email: string;
+    password: string;
+  }>,
+  errors: FieldErrorsImpl<{
+    fullName: string;
+    userName: string;
+    email: string;
+    password: string;
+  }>,
+  isError: boolean,
 }
 
 const RegistrationPresentational: React.FC<Registration> = ({
-  showPopup,
-  FullName,
-  EmailInput,
-  PasswordInput,
   showPassword,
   setShowPassword,
-  UserName,
-  register
+  registerFn,
+  register,
+  handleSubmit,
+  errors,
+  isError,
 }) =>  {
+  const {themeMode}= useContext(ThemeContext);
 
   return (
     <MainContainer>
-      {
-        showPopup ?
-        <ErorrPopup>Password should conatain at least 8 symbols!</ErorrPopup> :
-        null
-      }
-      <SignBox style={showPopup ? {boxShadow: 'red 0px 10px 30px', animationName: 'none'} : {boxShadow: 'none'}}>
-        <SignForm>
+      <SignBox 
+        style={
+          isError ? 
+          {
+            boxShadow: "#ff0033 0px 10px 30px",
+            animationName: 'none',
+          } :
+          {}
+        }
+      >
+        <SignForm onSubmit={handleSubmit((data: any) => {
+            registerFn(data);
+          })}
+        >
           <FormHeding>Registration</FormHeding>
           <InputBox>
-            <SignInput
+            <ErrorMessage>{errors.fullName ? errors.fullName.message : ''}</ErrorMessage>
+            <FormInput
               placeholder='Full Name'
-              ref={FullName}
+              {...register('fullName', {
+                required: {
+                  value: true,
+                  message: 'Provide your full name'
+                }
+              })}
             />
             <PersonIcon style={{
               top: '4px',
               left: '5px',
-              color: 'white',
+              color: `${themeMode.iconColor}`,
               position: 'absolute'}} 
             />
           </InputBox>
           <InputBox>
-            <SignInput
+            <ErrorMessage>{errors.userName ? errors.userName.message : ''}</ErrorMessage>
+            <FormInput
               placeholder='Username'
-              ref={UserName}
+              {...register('userName', {
+                required: {
+                  value: true,
+                  message: 'Come up with an username'
+                },
+                pattern: {
+                  value: /^[a-zA-Z0-9]*$/,
+                  message: 'Please use only alphanumeric characters'
+                },
+              })}
             />
             <InsertEmoticonIcon style={{
               top: '4px',
               left: '5px',
-              color: 'white',
+              color: `${themeMode.iconColor}`,
               position: 'absolute'}} 
             />
           </InputBox>
           <InputBox>
-            <SignInput
+            <ErrorMessage>{errors.email ? errors.email.message : ''}</ErrorMessage>
+            <FormInput
               placeholder='E-mail'
-              ref={EmailInput}
+              {...register('email', {
+                required: {
+                  value: true,
+                  message: 'Put in your email'
+                },
+                pattern: {
+                  value: /^[a-z0-9][a-z0-9-_\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/,
+                  message: 'Please provide a valid email address'
+                }
+              })}
             />
             <EmailIcon style={{
               top: '4px',
               left: '5px',
-              color: 'white',
+              color: `${themeMode.iconColor}`,
               position: 'absolute'}} 
             />
           </InputBox>
           <InputBox>
-            <SignInput
+            <ErrorMessage>{errors.password ? errors.password.message : ''}</ErrorMessage>
+            <FormInput
               placeholder='Password'
               type={showPassword ? 'text' : "password"} 
-              ref={PasswordInput}
+              {...register('password', {
+                required: {
+                  value: true,
+                  message: 'Put in your password'
+                },
+                minLength: {
+                  value: 8,
+                  message: 'Password must contain at least 8 characters'
+                }
+              })}
             />
             <LockIcon style={{
               top: '4px',
               left: '5px',
-              color: 'white',
+              color: `${themeMode.iconColor}`,
               position: 'absolute'}} 
             />
             <VisabilityToggleBox
+              style={{
+                color: `${themeMode.iconColor}`,
+              }}
               onClick={() => { setShowPassword(!showPassword) }}
             >
               {showPassword ? 
@@ -107,14 +177,12 @@ const RegistrationPresentational: React.FC<Registration> = ({
             </VisabilityToggleBox>
           </InputBox>
           <ButtonBox>
-            <Link 
+            <RedirectLink 
               to="/signin"
-              style={{
-                color: "rgb(94, 14, 148)",
-                marginLeft: "30px"
-              }}
-            >Go to login</Link>
-            <SubmitButon onClick={() => register()}>Register</SubmitButon>
+            >Go to login</RedirectLink>
+            <SubmitButton 
+              value="Register"
+            />
           </ButtonBox>
         </SignForm>
       </SignBox>

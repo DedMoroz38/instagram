@@ -4,6 +4,9 @@ import EmailIcon from '@mui/icons-material/Email';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Link } from "react-router-dom";
+import { FieldErrorsImpl, UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
+import { useContext } from "react";
+import { ThemeContext } from "../../App";
 
 export const MainContainer = styled.div`
   position: relative;
@@ -44,7 +47,7 @@ export const SignBox = styled.div`
   animation: ${shadowAnimation} 4s infinite alternate;
 `;
 
-export const SignForm = styled.div`
+export const SignForm = styled.form`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -64,8 +67,7 @@ export const InputBox = styled.div`
   position: relative;
 `;
 
-export const SignInput = styled.input`
-  border-radius: 10px 10px 0 0;
+export const FormInput = styled.input`
   font-size: 16px;
   border: none;
   height: 35px;
@@ -74,11 +76,21 @@ export const SignInput = styled.input`
   border-bottom: 1px solid ${({ theme }) => theme.border};
   width: 100%;
   background: ${({ theme }) => theme.background};
-  color: white;
+  color: ${({ theme }) => theme.color};
   &:-webkit-autofill,
+  &:-webkit-autofill:hover, 
   &:-webkit-autofill:focus {
-    transition: background-color 600000s 0s, color 600000s 0s;
+    -webkit-text-fill-color: ${({ theme }) => theme.color};
+    -webkit-box-shadow: 0 0 0px 1000px ${({ theme }) => theme.background} inset;
   }
+`;
+
+export const ErrorMessage = styled.p`
+  color: #ff0033;
+  position: absolute;
+  font-size: 13px;
+  left: 40px;
+  top: -10px;
 `;
 
 export const VisabilityToggleBox = styled.div`
@@ -96,7 +108,8 @@ export const ButtonBox = styled.div`
   justify-content: space-between;
 `;
 
-export const SubmitButon = styled.button`
+
+export const SubmitButton = styled.input.attrs({ type: 'submit' })`
   color: white;
   border: none;
   background-color: #593d88;
@@ -121,50 +134,111 @@ export const ErorrPopup = styled.div`
   color: #ba8fff;
 `;
 
+export const RedirectLink = styled(Link)`
+  color: ${({ theme }) => theme.formRedirectButtonColor};
+  margin-left: 30px;
+  font-size: 15px
+`;
+
 interface Login {
-  EmailInput: React.RefObject<HTMLInputElement>,
   showPassword: boolean,
   setShowPassword: React.Dispatch<React.SetStateAction<boolean>>,
-  PasswordInput: React.RefObject<HTMLInputElement>,
-  login: () => void
+  loginFn: (data: {
+    email: string;
+    password: string;
+  }) => void,
+  register: UseFormRegister<{
+    email: string;
+    password: string;
+}>,
+  handleSubmit: UseFormHandleSubmit<{
+    email: string;
+    password: string;
+}>,
+  isError: boolean,
+  errors: FieldErrorsImpl<{
+    email: string;
+    password: string;
+  }>
 }
 
 const LoginPresentational: React.FC<Login> = ({
-  EmailInput,
   showPassword,
   setShowPassword,
-  PasswordInput,
-  login
+  loginFn,
+  register,
+  handleSubmit,
+  isError,
+  errors
 }) =>  {
+  const {themeMode}= useContext(ThemeContext);
 
   return (
     <MainContainer>
-      <SignBox>
-        <SignForm>
+      <SignBox
+        style={
+          isError ? 
+          {
+            boxShadow: "#ff0033 0px 10px 30px",
+            animationName: 'none'
+          } :
+          {}
+        }
+      >
+        <SignForm onSubmit={handleSubmit((data: any) => {
+            loginFn(data);
+          })}
+        >
           <FormHeding>Login</FormHeding>
           <InputBox>
-            <SignInput 
+            <ErrorMessage>{errors.email ? errors.email.message : ''}</ErrorMessage>
+            <FormInput 
               placeholder='E-mail...'
-              ref={EmailInput}
+              {...register('email', {
+                required: {
+                  value: true,
+                  message: 'Please put in your email'
+                },
+                pattern: {
+                  value: /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
+                  message: 'Please provide a valid email address'
+                },
+                minLength: 8
+              })}
             />
             <EmailIcon style={{
+              color: `${themeMode.iconColor}`,
               top: '4px',
               left: '5px',
               position: 'absolute'}} 
             />
           </InputBox>
           <InputBox>
-            <SignInput 
+            <ErrorMessage>{errors.password ? errors.password.message : ''}</ErrorMessage>
+            <FormInput 
               placeholder='Password...'
               type={showPassword ? 'text' : "password"}
-              ref={PasswordInput}
+              {...register('password', {
+                required: {
+                  value: true,
+                  message: 'Please put in your password'
+                },
+                minLength: {
+                  value: 8,
+                  message: 'Password must contain at least 8 characters'
+                }
+              })}
             />
             <LockIcon style={{
+              color: `${themeMode.iconColor}`,
               top: '4px',
               left: '5px',
               position: 'absolute'}} 
             />
             <VisabilityToggleBox
+              style={{
+                color: `${themeMode.iconColor}`,
+              }}
               onClick={() => { setShowPassword(!showPassword) }}
             >
               {showPassword ? 
@@ -173,14 +247,13 @@ const LoginPresentational: React.FC<Login> = ({
             </VisabilityToggleBox>
           </InputBox>
           <ButtonBox>
-            <Link 
+            <RedirectLink 
               to="/signup"
-              style={{
-                color: "rgb(94, 14, 148)",
-                marginLeft: "30px"
-              }}
-            >Go to registration</Link>
-            <SubmitButon onClick={() => login()}>Log in</SubmitButon>
+            >Go to registration
+            </RedirectLink>
+            <SubmitButton 
+              value="Log in"
+            />
           </ButtonBox>
         </SignForm>
       </SignBox>

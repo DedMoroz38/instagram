@@ -28,6 +28,7 @@ const Input = styled.input`
   width: 500px;
   border: none;
   background: ${({ theme }) => theme.background};
+  transition: all 0.3s linear; 
 `;
 
 const NameBox = styled.div`

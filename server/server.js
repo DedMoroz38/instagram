@@ -15,6 +15,7 @@ const app = require('./app');
 
 const port = process.env.PORT || 5000;
 
+process.env.NODE_ENV = 'production';
 const server = app.listen(port, () => {
     console.log(`Run on port ${port}`);
 });
