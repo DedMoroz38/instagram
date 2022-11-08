@@ -13,17 +13,35 @@ const MainContainer = styled.div`
 
 const ProfileTopContainer = styled.div`
   display: flex;
+  padding-top: 30px;
+  width: 600px;
 `;
 
 const ProfileIconBox = styled.div`
   display: felx;
-  margin-right: 100px;
+  margin-right: 50px;
 `;
 
 const ProfileInfoBox = styled.div`
-  display: felx;
+  width: 250px;
+  display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  color: ${({ theme }) => theme.color};
+  height: 110px;
+  margin-top: 10px;
 `;
+
+const ProfileInfoRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const InfoString = styled.p`
+  & > span {
+    font-weight: 600;
+  }
+`
 
 const IconBox = styled.div`
   width: 150px;
@@ -54,31 +72,31 @@ const ChangeIconButton = styled.label`
   align-items: center;
   transition: background 0.3s;
 `;
-const UserName = styled.h2`
-  font-size: 28px;
-  color: ${({ theme }) => theme.color};
+const UserName = styled.p`
+  font-size: 22px;
   font-weight: 300;
 `;  
 
 const Name = styled.p`
-  color: ${({ theme }) => theme.color};
 `;
 
 interface Profile {
   userInfo: {
     name: string,
     login: string,
+    user_name: string,
     photo: string,
     id: string
   }
-  changeProfileIconHandler: (event: any) => void
+  changeProfileIconHandler: (event: any) => void,
+  profileInfo: any
 }
 
 const ProfilePresentational: React.FC<Profile> = ({
   userInfo,
-  changeProfileIconHandler
+  changeProfileIconHandler,
+  profileInfo
 }) => {
-
   return (
     <MainContainer>
       <ProfileTopContainer>
@@ -101,8 +119,18 @@ const ProfilePresentational: React.FC<Profile> = ({
           </IconBox>
         </ProfileIconBox>
         <ProfileInfoBox>
-          <UserName>maksimovegor70</UserName>
-          <Name>{userInfo.name}</Name>
+          <ProfileInfoRow>
+            <UserName>{userInfo.user_name}</UserName>
+          </ProfileInfoRow>
+          <ProfileInfoRow>
+            <InfoString><span>{profileInfo.number_of_posts}</span> post</InfoString>
+            <InfoString><span>{profileInfo.number_of_subscriptions}</span> followers</InfoString>
+            <InfoString><span>{profileInfo.number_of_subscribers}</span> following</InfoString>
+          </ProfileInfoRow>
+          <ProfileInfoRow>
+            <Name>{userInfo.name}</Name>
+          </ProfileInfoRow>
+          
         </ProfileInfoBox>
       </ProfileTopContainer>
       <ProfilePostsContainer />

@@ -2,14 +2,15 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface FriendsState {
-  friends: Array<{
-    id: string,
+  conversations: Array<{
+    user_id: number,
+    conversation_id: number,
     full_name: string
   }>,
 }
 
 const initialState: FriendsState = {
-  friends: [],
+  conversations: [],
 }
 
   
@@ -18,15 +19,18 @@ export const friendsSlice = createSlice({
   name: 'userFriends',
   initialState,
   reducers: {
-    addFriends: (state, action: PayloadAction<any>) => {
+    addConversations: (state, action: PayloadAction<any>) => {
       for(let user of action.payload){
-        state.friends.push(user);
+        if(!state.conversations.includes(user)){
+          state.conversations.push(user);
+        }
       }
-    }
+    },
+    resetFriends: () => initialState
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addFriends } = friendsSlice.actions;
+export const { addConversations, resetFriends } = friendsSlice.actions;
 
 export default friendsSlice.reducer;

@@ -1,33 +1,34 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import config from "../../config.json";
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { addFriends } from '../../features/friends/friendsSlice';
 import ContactsPresentaional from './ContactsPresentaional';
 
 
 export const ContactsContainer: React.FC = () => {
-  const userFriends = useAppSelector((state) => state.userFriends);
-  const dispatch = useAppDispatch();
+  const userConversations = useAppSelector((state) => state.userConversations);
+  
+  const [matchedConversations, setMatchedConversations] = useState<Array<{
+    user_id: number;
+    conversation_id: number;
+    full_name: string;
+  }>>([]);
+
+
+  const findUsers = (event: any): void => {
+    const correctRegex = new RegExp(event.target.value, 'i');
+    const filteredUsers = userConversations.conversations.filter((conversation) => correctRegex.test(conversation.full_name));
+    setMatchedConversations(filteredUsers);
+  }
 
   useEffect(() => {
-    axios.get(`${config.serverUrl}friends/getFollowings`, 
-    { 
-      withCredentials: true
-    })    
-    .then(res => {
-      if(res.status === 200){
-        dispatch(addFriends(res.data.friends));
-      }
-    })
-    .catch(err => {
-      console.log(err);
-    })
-  }, []);
+    setMatchedConversations(userConversations.conversations);
+  }, [userConversations])
 
   return (
     <ContactsPresentaional
-      userFriends={userFriends.friends}
+      matchedConversations={matchedConversations}
+      findUsers={findUsers}
     />
   )
 }

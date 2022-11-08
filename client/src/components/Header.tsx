@@ -15,6 +15,14 @@ import ModalWindow from './AddNewPostComponents/ModalWindow';
 import { ModalContext } from './Dashboard';
 import ErrorPopUp from './ErrorPopUp';
 import { ErrorPopUpContext } from '../App';
+import { useAppDispatch } from '../app/hooks';
+import { resetUser } from '../features/user/userSlice';
+import { resetMessages } from '../features/messages/messagesSlice';
+import { resetFriends } from '../features/friends/conversationsSlice';
+import { resetPosts as resetUserPosts } from '../features/posts/userPostsSlice';
+import { resetPosts as resetFollowingsPosts } from '../features/posts/followingsPostsSlice';
+
+
 
 
 const MainContainer = styled.div`
@@ -38,6 +46,7 @@ const LinksContainer = styled.div`
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false); // for posts TODO-find better way to solve it
+  const dispatch = useAppDispatch();
 
   const logout = () => {
     axios.get(`${config.serverUrl}users/logout`,
@@ -45,6 +54,11 @@ const Header: React.FC = () => {
     )
     .then(res => {
       if(res.status === 200){
+        dispatch(resetUser());
+        dispatch(resetFriends());
+        dispatch(resetMessages());
+        dispatch(resetFollowingsPosts());
+        dispatch(resetUserPosts());
         navigate('/signin');
       }
     })
@@ -78,3 +92,4 @@ const Header: React.FC = () => {
   )
 }
 export default Header;
+

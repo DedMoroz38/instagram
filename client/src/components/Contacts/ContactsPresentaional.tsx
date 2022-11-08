@@ -27,6 +27,29 @@ const MainContainer = styled.div`
     background: #555;
   }
 `;
+
+const FindContactsContainer = styled.div`
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding-left: 10px;
+`
+
+const FindContactsInput = styled.input`
+  width: 80%;
+  height: 40px;
+  border-radius: 20px;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  color: ${({ theme }) => theme.color};
+  width: 500px;
+  transition: all 0.3s linear; 
+  border: 1px solid rgb(207, 205, 202);
+  padding: 5px 20px 5px 20px;
+`
+
 const ContactBox = styled(NavLink)`
   text-decoration: none;
   display: flex;
@@ -44,23 +67,33 @@ const ContactValue = styled.div`
 `;
 
 interface Contacts{
-  userFriends: Array<{
-    id: string,
-    full_name: string
-  }>
+  matchedConversations: Array<{
+    user_id: number;
+    conversation_id: number;
+    full_name: string;
+  }>,
+  findUsers: (event: any) => void
 }
 
 export const ContactsPresentaional: React.FC<Contacts> = ({
-  userFriends
+  matchedConversations,
+  findUsers
 }) => {
+
   return (
     <MainContainer>
-      {userFriends.map((friend) => (
+      <FindContactsContainer>
+        <FindContactsInput
+          placeholder="Search..."
+          onChange={findUsers}
+        />
+      </FindContactsContainer>
+      {matchedConversations.map((conversation) => (
         <ContactBox
-          key={friend.id}
-          to={`${friend.full_name}.${friend.id}`}
+          key={conversation.user_id}
+          to={`${conversation.full_name}.${conversation.user_id}`}
         >
-          <ContactValue key={friend.id}>{friend.full_name}</ContactValue>
+          <ContactValue>{conversation.full_name}</ContactValue>
         </ContactBox>
       ))}
     </MainContainer>

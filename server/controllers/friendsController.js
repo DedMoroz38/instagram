@@ -25,7 +25,8 @@ exports.addFriend = catchAsync( async (req, res) => {
 });
 
 exports.getFollowings = catchAsync( async (req, res) => {
-  const friends = await (await User.getFriendsByUserId(req.user.id)).rows;
+  let friends = await User.getFriendsByUserId(req.user.id);
+  friends = friends.rows;
 
   res.status(200).json({
     status: "success",

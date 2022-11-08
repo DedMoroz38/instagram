@@ -102,11 +102,11 @@ const Message = styled.p`
 
 interface Conversations{
   messages: Array<{
-    [x: string]: any;
+    [x: string]: any; //TODO - what the heck?
     id?: string,
     message: string,
-    messagefrom: string
-    messageto: string
+    message_from: string
+    message_to: string
   }>,
   handleBlur: () => void,
   messagesInput: RefObject<HTMLInputElement>,
@@ -127,17 +127,15 @@ const ConverationPresentational: React.FC<Conversations> = ({
     sendMessage,
     bottomDiv
   }) => {
-
-
   return (
     <MainContainer>
       <NameBox>{friendName}</NameBox>
       <MessagesBox>
         {
           messages
-          .filter(msg => msg.messageto === friendId || msg.messagefrom === friendId)
+          .filter(msg => msg.message_to === friendId || msg.message_from === friendId)
           .map((message, index) => (
-            message.messageto === friendId ?
+            message.message_to === friendId ?
             <MessageBoxUser key={index}>
               <Message>{message.message}</Message>
             </MessageBoxUser> :

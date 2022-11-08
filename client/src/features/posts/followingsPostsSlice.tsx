@@ -51,11 +51,12 @@ export const followingsPostsSlice = createSlice({
     addPost: (state, action: PayloadAction<any>) => {
       //TODO - make it work
       // state.posts.push(action.payload);
-    }
+    },
+    resetPosts: () => initialState
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addPosts, addPost } = followingsPostsSlice.actions;
+export const { addPosts, addPost, resetPosts } = followingsPostsSlice.actions;
 
 export default followingsPostsSlice.reducer;

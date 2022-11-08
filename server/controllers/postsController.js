@@ -64,7 +64,6 @@ exports.getUserPosts = catchAsync( async (req, res) => {
 exports.getUserFollowingPosts = catchAsync( async (req, res) => {
   const userId = req.user.id;
   const posts = await Posts.getUserFollowingPostsByUserId(userId);
-  console.log(posts);
   res.status(200).json({ 
     status: "success",
     posts: posts.rows

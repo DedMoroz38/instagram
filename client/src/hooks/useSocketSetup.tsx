@@ -15,8 +15,9 @@ const useSocketSetup = () => {
     socket.on('dm', message => {
       dispatch(addMessage({
         message: message.message,
-        messagefrom: message.messagefrom,
-        messageto: message.messageto
+        message_from: message.message_from,
+        message_to: message.message_to,
+        created_at: message.created_at
       }));
     });
 

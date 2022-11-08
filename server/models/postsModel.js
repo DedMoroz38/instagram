@@ -58,7 +58,7 @@ exports.getUserFollowingPostsByUserId = async (userId) => {
     FROM attachments
     INNER JOIN posts
       ON posts.id = attachments.postId
-        AND posts.userId IN (SELECT getter FROM friends WHERE sender = $1)
+        AND posts.userId IN (SELECT getter FROM subscriptions WHERE sender = $1)
     INNER JOIN users
       ON users.id = posts.userId;
     `,

@@ -15,12 +15,16 @@ import {
   SubmitButton,
   ErrorMessage,
   SignBox,
-  RedirectLink
+  RedirectLink,
+  CircularProgressContainer
  } from '../Login/LoginPresentational';
 import { Link } from 'react-router-dom';
 import { FieldErrorsImpl, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form';
 import { useContext } from 'react';
 import { ThemeContext } from "../../App";
+import styled from 'styled-components';
+import EmailConfirmation from '../EmailConfirmation';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 interface Registration {
@@ -51,6 +55,7 @@ interface Registration {
     password: string;
   }>,
   isError: boolean,
+  isLoading: boolean
 }
 
 const RegistrationPresentational: React.FC<Registration> = ({
@@ -61,6 +66,7 @@ const RegistrationPresentational: React.FC<Registration> = ({
   handleSubmit,
   errors,
   isError,
+  isLoading
 }) =>  {
   const {themeMode}= useContext(ThemeContext);
 
@@ -180,9 +186,20 @@ const RegistrationPresentational: React.FC<Registration> = ({
             <RedirectLink 
               to="/signin"
             >Go to login</RedirectLink>
-            <SubmitButton 
-              value="Register"
-            />
+            {
+              isLoading ? 
+              <CircularProgressContainer>
+                <CircularProgress style={{
+                  margin: '0 auto',
+                  color: 'white',
+                  height: '30px',
+                  width: '30px'
+                }} />
+              </CircularProgressContainer> :
+              <SubmitButton 
+                value="Register"
+              />
+            }
           </ButtonBox>
         </SignForm>
       </SignBox>

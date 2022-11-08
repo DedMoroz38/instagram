@@ -134,10 +134,27 @@ export const ErorrPopup = styled.div`
   color: #ba8fff;
 `;
 
+export const ForgotYourPasswordLink = styled(Link)`
+  color: ${({ theme }) => theme.formRedirectButtonColor};
+  margin-left: 5px;
+  font-size: 11px;
+`
+
 export const RedirectLink = styled(Link)`
   color: ${({ theme }) => theme.formRedirectButtonColor};
   margin-left: 30px;
   font-size: 15px
+`;
+
+export const CircularProgressContainer = styled.div`
+  color: white;
+  background-color: #593d88;
+  border-radius: 30px;
+  width: 100px;
+  height: 40px;
+  display: flex;
+  justify-conternt: center;
+  align-items: center;
 `;
 
 interface Login {
@@ -245,6 +262,9 @@ const LoginPresentational: React.FC<Login> = ({
               <VisibilityIcon /> : 
               <VisibilityOffIcon />}
             </VisabilityToggleBox>
+            <ForgotYourPasswordLink
+              to="/passwordreset"
+            >Forgot your password?</ForgotYourPasswordLink>
           </InputBox>
           <ButtonBox>
             <RedirectLink 

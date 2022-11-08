@@ -2,12 +2,12 @@ const AppErrors = require('../utils/appErrors');
 
 const handleLoginDublicateError = () => {
   const message = `Email is already registered!`;
-  return new AppErrors(message, 500);
+  return new AppErrors(message, 409);
 }
 
 const handleUserDublicateError = () => {
   const message = `Username is taken!`;
-  return new AppErrors(message, 500);
+  return new AppErrors(message, 403);
 }
 
 const sendErrorDev = (err, req, res) => {
@@ -23,7 +23,6 @@ const sendErrorDev = (err, req, res) => {
 }
 
 const sendErorrProd = (err, req, res) => {
-  console.log(err);
   if(err.isOperational) {
       return res.status(err.statusCode).json({
           status: err.status,
@@ -42,8 +41,9 @@ module.exports = (err, req, res, next) => {
   if(process.env.NODE_ENV === 'development'){
     sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production'){
-    let error = { ...err };
     console.log(err);
+    const message = err.message;
+    let error = { ...err, message };
     if(+error.code === 23505) {
       if(error.constraint === 'users_login_key') error = handleUserDublicateError();
       if(error.constraint === 'users_login_key1') error = handleLoginDublicateError();

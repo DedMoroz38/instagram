@@ -1,6 +1,6 @@
 const express = require("express");
 const userRouter = require('./routes/userRoutes');
-const messagesRouter = require('./routes/messagesRoutes');
+const messangerRouter = require('./routes/messangerRoutes');
 const friendsRouter = require("./routes/friendsRoutes");
 const postsRoutes = require("./routes/postsRoutes");
 const cors = require("cors");
@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(express.json({ limit: "10kb"}));
 
 app.use('/api/v1/users', userRouter);
-app.use('/api/v1/messages', messagesRouter);
+app.use('/api/v1/messages', messangerRouter);
 app.use('/api/v1/friends', friendsRouter);
 app.use('/api/v1/posts', postsRoutes);
 

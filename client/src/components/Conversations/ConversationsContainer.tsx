@@ -23,17 +23,20 @@ const ConversationsContainer: React.FC<{}> = () => {
   const sendMessage = (): void => {
     const inputValue = messagesInput.current!.value;
     if (inputValue != ""){
+      const messageCreatedAt = Date.now();
+
       dispatch(addMessage({
         message: inputValue,
-        messagefrom: user.id,
-        messageto: friendId
+        message_from: user.id,
+        message_to: friendId,
+        created_at: messageCreatedAt
       }));
 
       const message = {
-        messageto: friendId,
-        message: inputValue
+        message_to: friendId,
+        message: inputValue,
+        created_at: messageCreatedAt
       }
-
       socket.emit('dm', message);
 
       messagesInput.current!.value = '';
@@ -54,17 +57,20 @@ const ConversationsContainer: React.FC<{}> = () => {
     messagesInput.current!.focus();
   }
 
-  useEffect(() => {
-    axios.get(`${config.serverUrl}messages/getMessages`,
-      { withCredentials: true }
-    )
-    .then(res => {
-      dispatch(addMessages(res.data.messages));
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  }, []); 
+  // useEffect(() => {
+  //   axios.get(`${config.serverUrl}messages/getMessages`,
+  //     { withCredentials: true }
+  //   )
+  //   .then(res => {
+  //     dispatch(addMessages(res.data.messages));
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //   });
+  // }, []); 
+
+  
+  
 
   useEffect(() => {
     bottomDiv.current?.scrollIntoView({ block: "end", behavior: "smooth" });

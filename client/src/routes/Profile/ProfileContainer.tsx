@@ -3,12 +3,19 @@ import axios from "axios";
 import { updateUser } from '../../features/user/userSlice';
 import config from "../../config.json";
 import ProfilePresentational from './ProfilePresentational';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 
 const ProfileContainer: React.FC = () => {
   const userInfo = useAppSelector((state) => state.userInfo);
   const dispatch = useAppDispatch();
+  // const [profileInfo, setProfileInfo] = useState<Array<{
+  //   number_of_posts: number,
+  //   number_of_subscriptions: number,
+  //   number_of_subscribers: number
+  // }>>({});
+
+  const [profileInfo, setProfileInfo] = useState({});
 
   const changeProfileIconHandler = function (event: { target: { files: (string | Blob)[]; }; }) {
     const form = new FormData();
@@ -18,17 +25,29 @@ const ProfileContainer: React.FC = () => {
       { withCredentials: true }
     )
     .then(res => {
-      console.log(res);
       dispatch(updateUser(res.data.user.photo));
     })
     .catch(err => {
-      console.log(err);
     });
   };
+  useEffect(() => {
+    axios.get(`${config.serverUrl}users/getProfileInfo`,
+      { withCredentials: true }
+    )
+    .then(res => {
+      setProfileInfo(shopCart => ({
+        ...shopCart,
+        ...res.data.profileInfo
+      }));;
+    })
+    .catch(err => {
+    });
+  }, []);
 
   
   return (
     <ProfilePresentational
+      profileInfo={profileInfo}
       userInfo={userInfo}
       changeProfileIconHandler={changeProfileIconHandler}
     />

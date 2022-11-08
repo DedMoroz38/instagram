@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '../features/user/userSlice';
-import friendReducer from '../features/friends/friendsSlice';
+import conversationsReducer from '../features/friends/conversationsSlice';
 import messagesReducer from '../features/messages/messagesSlice';
 import userPostsReducer from '../features/posts/userPostsSlice';
 import followingsPostsReducer from '../features/posts/followingsPostsSlice';
@@ -9,7 +9,7 @@ import followingsPostsReducer from '../features/posts/followingsPostsSlice';
 export const store = configureStore({
   reducer: {
     userInfo: userReducer,
-    userFriends: friendReducer,
+    userConversations: conversationsReducer,
     userMessages: messagesReducer,
     userPosts: userPostsReducer,
     followingsPosts: followingsPostsReducer
