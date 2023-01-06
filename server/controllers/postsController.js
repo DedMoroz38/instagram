@@ -15,34 +15,35 @@ const upload = multer({
     fileFilter: multerFilter
 });
 
-exports.uploadTourImages = upload.fields([
+exports.uploadPostImages = upload.fields([
   {name: 'images', maxCount: 10}
 ]);
 
 
-exports.resizeTourImages = catchAsync( async (req, res, next) => {
+
+
+exports.resizePostImages = catchAsync( async (req, res, next) => {
   if (!req.files.images) return next();
   // TODO - create an Error if no images
-  // TODO - rename images to attachments if neede
+  // TODO - rename images to attachments if needed
   req.body.images = [];
   await Promise.all(
       req.files.images.map( async (file, i) => {
           // TODO - create image id
           const fileName = `image-${req.user.id}-${Date.now()}-${i + 1}.jpeg`;
-
-          await sharp(file.buffer)
-              .toFormat('jpeg')
-              .jpeg({ quality: 90 })
-              .toFile(`public/img/postImages/${fileName}`);
-              
           req.body.images.push(fileName);
+          
+          await sharp(file.buffer)
+            .toFormat('jpeg')
+            .jpeg({ quality: 90 })
+            .toFile(`public/img/postImages/${fileName}`);
       })
   );
   next();
 });
 
 exports.createPost = catchAsync( async (req, res) => {
-  // TODO - rename images to attachments if neede
+  // TODO - rename images to attachments if needed
   const attachments = req.body.images;
   const userId = req.user.id;
   await Posts.createPostForUserId(userId, attachments);
@@ -64,10 +65,15 @@ exports.getUserPosts = catchAsync( async (req, res) => {
 exports.getUserFollowingPosts = catchAsync( async (req, res) => {
   const userId = req.user.id;
   const posts = await Posts.getUserFollowingPostsByUserId(userId);
-  console.log(posts);
+  const postsIds = posts.rows.map(post => {
+    return post.postId
+  });
+  const idOfLikedPosts = await Posts.getIdOfLikedPosts(postsIds, userId);
+
   res.status(200).json({ 
     status: "success",
-    posts: posts.rows
+    posts: posts.rows,
+    idOfLikedPosts: idOfLikedPosts.rows
   });
 });
 
@@ -82,3 +88,34 @@ exports.getAttachmentsForPost = catchAsync( async (req, res) => {
     postComments: postComments.rows
   })
 }); 
+
+exports.like = catchAsync( async (req, res) => {
+  const userId = req.user.id;
+  const postId = req.params.postId;
+
+  await Posts.likePostByUserId(userId, postId);
+  res.status(200).json({
+    status: 'success'
+  })
+});
+
+exports.comment = catchAsync( async (req, res) => {
+  const postId = req.params.postId;
+  const comment = req.body.comment;
+  const userId = req.user.id;
+
+  await Posts.commentPostBuPostId(postId, comment, userId);
+  res.status(200).json({
+    status: 'success'
+  })
+});
+
+exports.getComments = catchAsync( async(req, res) => {
+  const postId = req.params.postId;
+
+  comments = await Posts.getPostByPostId(postId)
+  res.status(200).json({
+    status: 'success',
+    comments: comments.rows
+  })
+});

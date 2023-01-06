@@ -1,34 +1,32 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useAppDispatch } from '../../app/hooks';
-import { createUser } from '../../features/user/userSlice';
 import RegistrationPresentational from './RegistrationPresentational';
 import axios from 'axios';
-import { useNavigate } from "react-router";
 import config from '../../config.json';
 import { useForm } from 'react-hook-form';
 import { ErrorPopUpContext } from '../../App';
+import { useNavigate } from 'react-router-dom';
+
 
 const RegistrationContainer: React.FC = () =>  {
-  const {isOpen, setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useContext(ErrorPopUpContext);
+  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useContext(ErrorPopUpContext);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate()
 
   const {
     setError,
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm({
-    defaultValues: {
-      fullName: "",
-      userName: "",
-      email: "",
-      password: "",
-    }
+    } = useForm({
+      defaultValues: {
+        fullName: "",
+        userName: "",
+        email: "",
+        password: "",
+      }
   });
-  const navigate = useNavigate();
-
-  const dispatch = useAppDispatch();
 
   const showErrorShadow = (): void => {
     setIsError(true)
@@ -39,6 +37,7 @@ const RegistrationContainer: React.FC = () =>  {
 
   const registerFn = (data: any): void => {
     const {fullName, userName, email, password} = data;
+    setIsLoading(true);
     axios.post(`${config.serverUrl}users/signup`, { 
       full_name: fullName,
       user_name: userName,
@@ -46,25 +45,29 @@ const RegistrationContainer: React.FC = () =>  {
       password: password,
     }, { withCredentials: true })
     .then(res => {
-      console.log(res);
-      dispatch(createUser(res.data.user));
-      if(res.status === 201){
-        navigate('/');
-      }
+      const user = res.data.user;
+      console.log(user);
+      navigate('/emailconfirmation', {
+        state: {
+          user: user
+        }
+      });
+      setIsLoading(false);
     })
     .catch(err => {
-      const errorMessage = err.response.data.message;
+      setIsLoading(false)
+      const errorStatusCode: number = err.response.status;
       showErrorShadow();
-      if(errorMessage === `Username is taken!`){
+      if(errorStatusCode === 403){
         setError('userName', {
           message: err.response.data.message
         });
-      } else if(errorMessage === `Email is already registered!`) {
+      } else if(errorStatusCode === 409) {
         setError('email', {
           message: err.response.data.message
         });
       } else {
-        setErrorMessage(errorMessage);
+        setErrorMessage("Something went wrong:( Please try later. We will sort the problem out!");
         setErrorPopUpIsOpen(true);
       }
     });
@@ -88,6 +91,7 @@ const RegistrationContainer: React.FC = () =>  {
       handleSubmit={handleSubmit}
       errors={errors}
       isError={isError}
+      isLoading={isLoading}
      />
   )
 }

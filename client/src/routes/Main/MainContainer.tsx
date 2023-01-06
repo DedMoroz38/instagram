@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import PostsPresentational from "./MainPresentational";
 import config from "../../config.json";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { addPosts } from "../../features/posts/followingsPostsSlice";
+import { addLikes, addPosts } from "../../features/posts/followingsPostsSlice";
 import GridColumn from "../../components/GridColumn";
 import React from "react";
 
 export const ModalWindowContext = React.createContext<any>(null);
 
 const MainContainer: React.FC = () =>  {
-  const {posts: followingsPosts, attachments: followingsPostsAttachments} = useAppSelector((state) => state.followingsPosts);
+  const {posts: followingsPosts, attachments: followingsPostsFirstAttachments} = useAppSelector((state) => state.followingsPosts);
   const [postsColumnState, setPostsColumnState] = useState<Array<JSX.Element>>([]);
   const dispatch = useAppDispatch();
   //For Modal window
@@ -20,16 +20,19 @@ const MainContainer: React.FC = () =>  {
   
 
   useEffect(() => {
-    axios.get(`${config.serverUrl}posts/getUserFollowingPosts`, 
-    { 
-      withCredentials: true
-    })    
-    .then(res => {
-      dispatch(addPosts(res.data.posts));
-    })
-    .catch(err => {
-      console.log(err);
-    })
+    if(followingsPosts.length === 0){
+      axios.get(`${config.serverUrl}posts/getUserFollowingPosts`, 
+      { 
+        withCredentials: true
+      })    
+      .then(res => {
+        dispatch(addPosts(res.data.posts));
+        dispatch(addLikes(res.data.idOfLikedPosts))
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    }
   }, []);
 
   useEffect(() => {
@@ -51,12 +54,11 @@ const MainContainer: React.FC = () =>  {
           postId: number;
           userName: string;
         }> = columnWrappers[`column${i}`];
-
         let postsColumn: JSX.Element = 
           <GridColumn
             key={i}
             columnPosts={columnPosts}
-            followingsPostsAttachments={followingsPostsAttachments}
+            followingsPostsFirstAttachments={followingsPostsFirstAttachments}
           />
         setPostsColumnState(prev => [...prev, postsColumn]);
       }

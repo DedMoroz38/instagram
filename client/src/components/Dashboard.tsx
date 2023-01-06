@@ -12,6 +12,9 @@ import FriendsContainer from '../routes/Friends/FriendsContainer';
 import MainContainer from '../routes/Main/MainContainer';
 import { ErrorPopUpContext } from '../App';
 import ErrorPopUp from './ErrorPopUp';
+import EmailConfirmation from '../routes/EmailConfirmation';
+import PasswordResetRequest from '../routes/PasswordResetRequest';
+import PasswordReset from '../routes/PasswordReset';
 
 const Container = styled.div`
   display: flex; 
@@ -29,7 +32,7 @@ const Dashboard: React.FC = () => {
       <ErrorPopUp/> 
       <Header />
       <Routes>
-      <Route path="/" element={
+        <Route path="/" element={
           <PrivateRoute>
             <MainContainer />
           </PrivateRoute>
@@ -55,9 +58,12 @@ const Dashboard: React.FC = () => {
         />
         <Route path="/signin" element={<LoginContainer />} />
         <Route path="/signup" element={<RegistrationContainer />} />
+        <Route path="/emailconfirmation" element={<EmailConfirmation />} />
+        <Route path="/passwordreset" element={<PasswordResetRequest />} />
+        <Route path="/createnewpassword" element={<PasswordReset />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Container>
-  )
+  ) 
 }
 export default Dashboard;

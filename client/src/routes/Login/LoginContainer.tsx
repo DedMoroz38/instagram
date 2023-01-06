@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import config from '../../config.json';
 import axios from 'axios';
@@ -6,12 +6,15 @@ import { createUser } from '../../features/user/userSlice';
 import { useAppDispatch } from '../../app/hooks';
 import LoginPresentational from './LoginPresentational';
 import { useForm } from 'react-hook-form';
+import { ErrorPopUpContext } from '../../App';
 
 
 const LoginContainer: React.FC<{}> = () =>  {
+  const {isOpen, setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useContext(ErrorPopUpContext);
   const [isError, setIsError] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const {
+    setError,
     register,
     handleSubmit,
     formState: { errors }
@@ -45,18 +48,31 @@ const LoginContainer: React.FC<{}> = () =>  {
       }
     })
     .catch(err => {
-      console.log(err);
+      const errorStatusCode: number = err.response.status;
+      showErrorShadow();
+      if(errorStatusCode === 401){
+        setError('email', {
+          message: err.response.data.message
+        });
+      } else {
+        setErrorMessage(err.response.data.message);
+        setErrorPopUpIsOpen(true);
+      }
     });
+  }
+
+  const showErrorShadow = (): void => {
+    setIsError(true)
+    setTimeout(() => {
+      setIsError(false);
+    }, 1000);
   }
 
   useEffect(() => {
     if(Object.keys(errors).length === 0){
       setIsError(false);
     } else {
-      setIsError(true)
-      setTimeout(() => {
-        setIsError(false);
-      }, 1000);
+      showErrorShadow();
     }
   }, [errors]);
 

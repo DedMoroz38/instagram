@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from 'react';
 import { ModalWindowContext } from '../../routes/Main/MainContainer';
 import config from "../../config.json";
 import axios from 'axios';
+import PostInfoComponent from './PostInfoComponent';
 
 const MainContainer = styled.div`
   position: fixed;
@@ -14,14 +15,11 @@ const MainContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
-  border: 1px solid red;
   display: flex;
+  background: ${({ theme }) => theme.messageBoxBackground};
+  border-radius: 20px;
 `;
 
-const PostInfoContainer = styled.div`
-  border: 1px solid red;
-  width: 300px;
-`;
 
 const ModalWindowForPosts: React.FC = ({
 }) => {
@@ -33,7 +31,8 @@ const ModalWindowForPosts: React.FC = ({
 
   const [postAttachments, setPostAttachments] = useState([]);
 
-  useEffect(() => {
+  useEffect(() => { 
+    if(postIdForModal === 0) return;
     axios.get(`${config.serverUrl}posts/getAttachmentsForPost/${postIdForModal}`,
       { withCredentials: true }
     )
@@ -45,7 +44,6 @@ const ModalWindowForPosts: React.FC = ({
     });
   }, [postIdForModal]);
 
-  console.log(postAttachments);
 
   if(!isOpen) return null;
 
@@ -59,9 +57,9 @@ const ModalWindowForPosts: React.FC = ({
         <FollowingPostsSwiper
           postAttachments={postAttachments}
         />
-        <PostInfoContainer>
-
-        </PostInfoContainer>
+        <PostInfoComponent
+          postId={postIdForModal}
+        />
       </MainContainer>
     </>,
     document.getElementById('portal')!

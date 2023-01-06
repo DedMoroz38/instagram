@@ -10,14 +10,24 @@ router.use(authController.protect);
 
 router.route('/')
   .get(postsController.getUserPosts)
-  .post(postsController.uploadTourImages,
-        postsController.resizeTourImages,
+  .post(postsController.uploadPostImages,
+        postsController.resizePostImages,
         postsController.createPost);
+
 router.route('/getUserFollowingPosts')
-  .get(postsController.getUserFollowingPosts)
+  .get(postsController.getUserFollowingPosts);
 
 router.route('/getAttachmentsForPost/:postId')
-  .get(postsController.getAttachmentsForPost)
+  .get(postsController.getAttachmentsForPost);
+
+router.route('/like/:postId')
+  .get(postsController.like);
+
+router.route('/comment/:postId')
+  .post(postsController.comment)
+  .get(postsController.getComments);
+
+
 
 
 module.exports = router;

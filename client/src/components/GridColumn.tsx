@@ -14,7 +14,7 @@ const GridColumnContainer = styled.div`
 
 
 interface GridColumn{
-  followingsPostsAttachments: {
+  followingsPostsFirstAttachments: {
     attachmentId: number;
     postId: number;
     firstPostAttachment: string;
@@ -25,23 +25,24 @@ interface GridColumn{
 
 // TODO - re-think modal window implementation
 const GridColumn: React.FC<GridColumn> = ({
-  followingsPostsAttachments,
+  followingsPostsFirstAttachments,
   columnPosts
 }) =>  {
 
 
   return (
     <GridColumnContainer>
-      {columnPosts.map((post: {postId: number, userName: string}) => {
+      {columnPosts.map((post: {postId: number, userName: string}, index: number) => {
 
         const firstAttachment = 
-          followingsPostsAttachments
+        followingsPostsFirstAttachments
           .filter((attachment) => 
             attachment.postId === post.postId)[0];
         
         const {postId, userName} = post;
         return (
           <Post 
+            key={index}
             postId={postId}
             userName={userName}
             firstAttachment={firstAttachment}

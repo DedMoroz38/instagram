@@ -5,7 +5,6 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper";
 import styled from "styled-components";
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const PostImage = styled.img`
   width: 100%;

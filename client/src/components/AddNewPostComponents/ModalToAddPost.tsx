@@ -3,7 +3,8 @@ import styled, { keyframes } from 'styled-components';
 import NewImagesSwiper from './NewImagesSwiper';
 import axios from 'axios';
 import config from "../../config.json";
-import { ModalContext } from '../Dashboard';
+import { CircularLoaidng } from '../StyledIcons';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 export const blurAnimation = keyframes`
   0% {
@@ -24,7 +25,7 @@ const MainContainer = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  height: 75vh;
+  height 35vw;
   width: 35vw;
   background: ${({ theme }) => theme.background};
   border-radius: 20px;
@@ -37,16 +38,36 @@ const ModalContainer = styled.div`
 `;
 
 const ModalCaption = styled.h2`
-  color: white
+  color: ${({theme}) => theme.color};
 `;
 
 const AddPostButton = styled.label`
-  color: white;
+  color: ${({theme}) => theme.color};
   border: 1px solid grey;
   padding: 2px 5px;
   border-radius: 4px;
+  cursor: pointer;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
+const AddFileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const AddFileIcon = styled(AddPhotoAlternateIcon)`
+  width: 80px !important;
+  height: 80px !important;
+  color: ${({theme}) => theme.color};
+`;
+
+const AddFileHeading = styled.p`
+  color: ${({theme}) => theme.color};
+`
 
 
 
@@ -59,20 +80,48 @@ const ModalToAddPost: React.FC<{
   const [newPostImages, setNewPostImages] = useState<Array<string>>([]);
   const [modalButtonFlug, setModalButtonFlug] = useState<boolean>(true);
   const [post, setPost] = useState<Array<string>>([]);
+  const [loading, setLoading] = useState(false);
+  const [unsupportedFileError, setUsupportedFileError] = useState<boolean>(false);
+  const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   const createNewPost = (event: any): void => {
-    const images = event.target.files;
-    setPost(images);
+    const files = event.target.files;
+    setPost(files);
 
-    for (let i = 0; i < images.length; i++) {
-      setNewPostImages(prev => [...prev, URL.createObjectURL(images[i])]);
-      // TODO - make only one array loop
+    for (let i = 0; i < files.length; i++) {
+      setNewPostImages(prev => [...prev, URL.createObjectURL(files[i])]);
     }
 
     setModalButtonFlug(false);
   }
 
+  const handleDragOver = (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+    if(!isDragOver){
+      setIsDragOver(true)
+    }
+  }
+
+  const handleDrop = (event: {
+    dataTransfer: any; preventDefault: () => void; 
+  }) => {
+    event.preventDefault();
+    setIsDragOver(false);
+    const files = event.dataTransfer.files;
+    for (let i = 0; i < files.length; i++) {
+      if(files[i].type.startsWith("image/")){
+        setNewPostImages(prev => [...prev, URL.createObjectURL(files[i])]);
+      } else {
+        setUsupportedFileError(true);
+        setNewPostImages([]);
+        break;
+      }
+    }
+    setModalButtonFlug(false);
+  }
+
   const publishPost = (): void => {
+    setLoading(true);
     const attachmentsForm = new FormData();
 
     for(let file of post){
@@ -84,10 +133,12 @@ const ModalToAddPost: React.FC<{
       { withCredentials: true }
     )
     .then(res => {
+      setLoading(false);
       onClose();
       // TODO - create a tick: "File load subbmition"
     })
     .catch(err => {
+      setLoading(false);
       console.log(err);
     })
   }
@@ -95,17 +146,27 @@ const ModalToAddPost: React.FC<{
   useEffect(() => {
   }, [newPostImages, modalButtonFlug]);
 
-
   return (
-    <MainContainer>
+    <MainContainer
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+    >
       <ModalContainer>
         <ModalCaption>Create new post</ModalCaption>
-        <NewImagesSwiper 
-          postImages={newPostImages}
-        />
+        {newPostImages.length === 0 ?
+          <AddFileContainer>
+            <AddFileIcon style={{color: `${isDragOver ? '#ba8fff': 'white'}`}} />
+            <AddFileHeading style={{color: `${isDragOver ? '#ba8fff': 'white'}`}}>Drag photos and videos here</AddFileHeading>
+          </AddFileContainer> :
+          <NewImagesSwiper 
+            postImages={newPostImages}
+          />
+        }
         { 
           modalButtonFlug ?
-          <AddPostButton htmlFor='addPost'>Create new post</AddPostButton> :
+          <AddPostButton htmlFor='addPost'>Select from computer</AddPostButton> :
+          loading ?
+          <CircularLoaidng dimensions={'30px'} /> :
           <AddPostButton onClick={() => publishPost()}>Publish</AddPostButton> 
         }
         <input 

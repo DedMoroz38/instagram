@@ -2,3 +2,32 @@ Create global error-handler
 Create global requests handler
 rename Files to images in client config
 Create error when registering same email
+
+rate limitter
+
+Use parralel transaction handling when deliting
+
+create error handling with json (errorStatus => errMessage)
+check 'protection' functionality: IMPORTANT!
+
+try to login before submitting an email, see what is going to happen!
+
+Move bcrypt sult to .env
+
+Create file with commonly used styles
+
+when log out, why not to just remove cookie?
+
+can i store date as int?
+
+get rid of await (await ...).row
+
+get rid of double 'protect' !IMPORTANT
+
+think of the way to prevante creating a user if email was not sent
+
+empty all stores after logout
+
+SQL
+
+change camale-case to lower-snakes

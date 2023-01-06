@@ -3,10 +3,11 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 interface MessagesState {
   messages: Array<{
-    id?: string,
+    id: number,
+    conversation_id: number,
     message: string,
-    messagefrom: string
-    messageto: string
+    created_at: string,
+    sender_id: number
   }>,
 }
 
@@ -26,12 +27,18 @@ export const messagesSlice = createSlice({
       }
     },
     addMessage: (state, action: PayloadAction<any>) => {
-      state.messages.push(action.payload);
-    }
+      state.messages.unshift(action.payload);
+    },
+    addPrevMessages: (state, action: PayloadAction<any>) => {
+      for(let message of action.payload){
+        state.messages.push(message);
+      }
+    },
+    resetMessages: () => initialState
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addMessages, addMessage } = messagesSlice.actions;
+export const { addMessages, addMessage, addPrevMessages, resetMessages } = messagesSlice.actions;
 
 export default messagesSlice.reducer;
