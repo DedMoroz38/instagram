@@ -42,6 +42,10 @@ const LinksContainer = styled.div`
   }
 `;
 
+const StyledLink = styled(Link)`
+  color: black;
+`;
+
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -71,7 +75,7 @@ const Header: React.FC = () => {
     <MainContainer>
       <Toggle />
       <LinksContainer>
-        <Link to="/" ><HomeIcon /></Link>
+        <StyledLink to="/" ><HomeIcon /></StyledLink>
         <ModalWindow
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
@@ -80,13 +84,13 @@ const Header: React.FC = () => {
             onClose={() => setIsOpen(false)}
           />
         </ModalWindow>
-        <AddCircleOutlineIcon 
+        <AddCircleOutlineIcon style={{cursor: 'pointer'}}
           onClick={() => setIsOpen(true)}
         />
-        <Link to="/messanger" ><ChatIcon /></Link>
-        <Link to="/profile" ><PermIdentityIcon /></Link>
-        <Link to="/friends" ><SearchIcon /></Link>
-        <div onClick={() => logout()} ><LogoutIcon /></div>
+        <StyledLink to="/messanger" ><ChatIcon /></StyledLink>
+        <StyledLink to="/profile" ><PermIdentityIcon /></StyledLink>
+        <StyledLink to="/friends" ><SearchIcon /></StyledLink>
+        <LogoutIcon style={{cursor: 'pointer'}} onClick={() => logout()} />
       </LinksContainer>
     </MainContainer>
   )

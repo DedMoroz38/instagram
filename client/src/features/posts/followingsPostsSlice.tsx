@@ -11,12 +11,14 @@ interface PostsState {
     postId: number,
     firstPostAttachment: string,
     userPhoto: string
-  }>
+  }>,
+  likes: Array<number>
 }
 
 const initialState: PostsState = {
   posts: [],
-  attachments: []
+  attachments: [],
+  likes: []
 }
 
 
@@ -48,15 +50,23 @@ export const followingsPostsSlice = createSlice({
       })
       }
     },
-    addPost: (state, action: PayloadAction<any>) => {
-      //TODO - make it work
-      // state.posts.push(action.payload);
+    addLikes: (state, action: PayloadAction<any>) => {
+      const ids = action.payload.map((postId: { postId: any; }) => {
+        return postId.postId
+      })
+      state.likes = [...ids];
     },
-    resetPosts: () => initialState
+    addLike: (state, action: PayloadAction<number>) => {
+      state.likes.push(action.payload);
+    },
+    removeLike: (state, action: PayloadAction<number>) => {
+      state.likes.splice(action.payload, 1);
+    },
+    resetPosts: () => initialState,
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addPosts, addPost, resetPosts } = followingsPostsSlice.actions;
+export const { addPosts, addLikes, resetPosts, removeLike, addLike } = followingsPostsSlice.actions;
 
 export default followingsPostsSlice.reducer;

@@ -219,8 +219,7 @@ const LoginPresentational: React.FC<Login> = ({
                 pattern: {
                   value: /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
                   message: 'Please provide a valid email address'
-                },
-                minLength: 8
+                }
               })}
             />
             <EmailIcon style={{
@@ -239,10 +238,6 @@ const LoginPresentational: React.FC<Login> = ({
                 required: {
                   value: true,
                   message: 'Please put in your password'
-                },
-                minLength: {
-                  value: 8,
-                  message: 'Password must contain at least 8 characters'
                 }
               })}
             />

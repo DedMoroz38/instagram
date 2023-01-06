@@ -31,7 +31,10 @@ exports.create = async (newUserData) => {
 
 exports.findById = async (userId) => {
   return await pool.query(
-    "SELECT * FROM users WHERE id=$1",
+    `SELECT *,
+      CAST(id AS INT)
+     FROM users 
+     WHERE id=$1`,
     [userId]
   );
 };

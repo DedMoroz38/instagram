@@ -4,6 +4,7 @@ import { addMessage } from "../features/messages/messagesSlice";
 import socket from "../socket";
 
 const useSocketSetup = () => {
+    
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -14,9 +15,9 @@ const useSocketSetup = () => {
 
     socket.on('dm', message => {
       dispatch(addMessage({
+        conversation_id: message.conversation_id,
+        sender_id: message.sender_id,
         message: message.message,
-        message_from: message.message_from,
-        message_to: message.message_to,
         created_at: message.created_at
       }));
     });

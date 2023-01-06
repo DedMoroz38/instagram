@@ -85,8 +85,8 @@ interface Profile {
     name: string,
     login: string,
     user_name: string,
-    photo: string,
-    id: string
+    photo: string | null,
+    id: number
   }
   changeProfileIconHandler: (event: any) => void,
   profileInfo: any
@@ -105,7 +105,7 @@ const ProfilePresentational: React.FC<Profile> = ({
             {
               userInfo.photo === null ? 
               <PermIdentityIcon style={{height: '100%', color: "white", width: '100%'}}/> : 
-              <img style={{height: '100%', width: '100%', borderRadius: "50%"}} src={`${config.serverFilesUrl}users/${userInfo.photo}`} alt="" />
+              <img style={{height: '100%', width: '100%', borderRadius: "50%"}} src={`${config.serverFilesUrl}users/${userInfo.photo}`} alt="my avatar" />
             }
             <ChangeIconButton 
               htmlFor="photo"

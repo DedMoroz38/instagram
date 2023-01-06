@@ -5,7 +5,8 @@ export interface FriendsState {
   conversations: Array<{
     user_id: number,
     conversation_id: number,
-    full_name: string
+    full_name: string,
+    photo: string | null
   }>,
 }
 

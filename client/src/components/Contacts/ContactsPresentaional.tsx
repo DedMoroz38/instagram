@@ -1,13 +1,15 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import config from "../../config.json";
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 
 const MainContainer = styled.div`
   height: 100%;
   overflow-y: scroll;
   list-style-type: none;
-  margin-right: 5px;
-  width: 30vw;
+  flex-grow: 1;
   box-sizing: border-box;
+  padding: 0 15px 11px;
 
   &::-webkit-scrollbar {
     width: 4px;
@@ -29,25 +31,28 @@ const MainContainer = styled.div`
 `;
 
 const FindContactsContainer = styled.div`
-  height: 60px;
+  padding-top: 20px;
   display: flex;
   align-items: center;
   justify-content: start;
-  padding-left: 10px;
+  margin-bottom: 10px;
 `
 
 const FindContactsInput = styled.input`
-  width: 80%;
+  background: #16171b;
+  width: 100%;
   height: 40px;
   border-radius: 20px;
   border: none;
-  background: transparent;
   font-size: 15px;
   color: ${({ theme }) => theme.color};
-  width: 500px;
   transition: all 0.3s linear; 
-  border: 1px solid rgb(207, 205, 202);
-  padding: 5px 20px 5px 20px;
+  height: 58px;
+  border-radius: 16px;
+  padding-left: 10px;
+  &::placeholder {
+    padding-left: 5px;
+  }
 `
 
 const ContactBox = styled(NavLink)`
@@ -55,29 +60,80 @@ const ContactBox = styled(NavLink)`
   display: flex;
   align-items: center;
   justify-content: start;
-  padding: 2px 10px;
+  padding: 0 10px;
   margin-bottom: 10px;
-  height: 56px;
+  border-radius: 15px;
+  height: 70px;
   &:hover {
-    background: grey;
+    background: #1a1e23;
   }
+  position: relative;
 `;
-const ContactValue = styled.div`
+
+const PhotoContainer = styled.div`
+  padding: 3px;
+  width: 50px;
+  height: 50px;
+  display: felx;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid white;
+`;
+
+const ContactPhoto = styled.img`
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+`;
+
+const ContactInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-left: 10px;
+  height: 40px;
+  justify-content: space-between;
+`
+
+const ContactName = styled.p`
   color: ${({ theme }) => theme.color}
 `;
+const LastMessage = styled.p`
+  font-size: 14px;
+  color: #96989d;
+`
+const TimeOfLastMessage = styled.p`
+  color: #96989d;
+  font-size: 14px;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+`
 
 interface Contacts{
   matchedConversations: Array<{
     user_id: number;
     conversation_id: number;
     full_name: string;
+    photo: string | null;
   }>,
-  findUsers: (event: any) => void
+  findUsers: (event: any) => void,
+  messages: Array<{
+    id: number,
+    conversation_id: number,
+    message: string,
+    created_at: string,
+    sender_id: number
+  }>,
+  calculateTime: (created_at: string) => string
 }
 
 export const ContactsPresentaional: React.FC<Contacts> = ({
   matchedConversations,
-  findUsers
+  findUsers,
+  messages,
+  calculateTime
 }) => {
 
   return (
@@ -88,14 +144,37 @@ export const ContactsPresentaional: React.FC<Contacts> = ({
           onChange={findUsers}
         />
       </FindContactsContainer>
-      {matchedConversations.map((conversation) => (
-        <ContactBox
-          key={conversation.user_id}
-          to={`${conversation.full_name}.${conversation.user_id}`}
-        >
-          <ContactValue>{conversation.full_name}</ContactValue>
-        </ContactBox>
-      ))}
+      {matchedConversations.map((conversation) => {
+        const lastMessage = messages.filter(msg => msg.conversation_id === conversation.conversation_id)[0];
+        let timeOfLastMessage;
+        if(lastMessage){
+          timeOfLastMessage = calculateTime(lastMessage.created_at);
+        } else {
+          timeOfLastMessage = '';
+        }
+
+        return (
+          <ContactBox
+            key={conversation.conversation_id}
+            to={`${conversation.full_name}&${conversation.conversation_id}`}
+          > 
+            {
+              conversation.photo === null ?
+              <PhotoContainer>
+                <PermIdentityIcon style={{height: '100%', color: "white", width: '100%'}}/>
+              </PhotoContainer> : 
+              <ContactPhoto
+                src={`${config.serverFilesUrl}users/${conversation.photo}`}
+                alt="user photo"
+              />
+            }
+            <ContactInfoContainer>
+              <ContactName>{conversation.full_name}</ContactName>
+              <LastMessage>{lastMessage?.message}</LastMessage>
+            </ContactInfoContainer>
+            <TimeOfLastMessage>{timeOfLastMessage}</TimeOfLastMessage>
+          </ContactBox>)
+      })}
     </MainContainer>
   )
 

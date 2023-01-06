@@ -9,12 +9,6 @@ import { useEffect, useState } from 'react';
 const ProfileContainer: React.FC = () => {
   const userInfo = useAppSelector((state) => state.userInfo);
   const dispatch = useAppDispatch();
-  // const [profileInfo, setProfileInfo] = useState<Array<{
-  //   number_of_posts: number,
-  //   number_of_subscriptions: number,
-  //   number_of_subscribers: number
-  // }>>({});
-
   const [profileInfo, setProfileInfo] = useState({});
 
   const changeProfileIconHandler = function (event: { target: { files: (string | Blob)[]; }; }) {

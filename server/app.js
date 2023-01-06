@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(express.json({ limit: "10kb"}));
 
 app.use('/api/v1/users', userRouter);
-app.use('/api/v1/messages', messangerRouter);
+app.use('/api/v1/messanger', messangerRouter);
 app.use('/api/v1/friends', friendsRouter);
 app.use('/api/v1/posts', postsRoutes);
 

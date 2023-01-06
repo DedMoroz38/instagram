@@ -1,14 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { updateImportEqualsDeclaration } from 'typescript';
 
 export interface UserState {
   [x: string]: any;
   name: string,
   user_name: string,
   login: string,
-  photo: string,
-  id: string
+  photo: string | null,
+  id: number
 }
 
 const initialState: UserState = {
@@ -16,7 +15,7 @@ const initialState: UserState = {
   user_name: "",
   login: "",
   photo: "",
-  id: ''
+  id: 0
 }
 
   

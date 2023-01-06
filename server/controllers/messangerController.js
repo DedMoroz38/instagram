@@ -1,17 +1,6 @@
 const catchAsync = require("../utils/catchAsync");
 const Messanger = require("../models/messangerModel");
-
-exports.getMessages = catchAsync(async (req, res, next) => {
-  const userId = req.user.id;
-  console.log('user',userId);
-
-  const messages = await Messanger.getMessagesByUId(userId);
-
-  res.status(200).json({
-    status: "success",
-    messages: messages.rows
-  });
-})
+const AppErrors = require("../utils/appErrors");
 
 exports.getConversationsAndBelongingMessages = catchAsync(async (req, res) => {
   const userId = req.user.id;
@@ -24,4 +13,35 @@ exports.getConversationsAndBelongingMessages = catchAsync(async (req, res) => {
     conversations: conversations.rows,
     messages: messages.rows
   });
-})
+});
+
+
+exports.getPastMessagesInARange = catchAsync(async (req, res) => {
+  const {groupNumber, conversationId} = req.params;
+  const leftBound = groupNumber * 20 + 1;
+  const rightBound = leftBound + 19;
+
+  const messages = await Messanger.getPastMessagesByUserId(leftBound, rightBound, conversationId);
+  res.status(200).json({
+    status: "success",
+    messages: messages.rows
+  });
+});
+
+exports.saveFiles = catchAsync(async (req, res) => {
+  const files = req.files;
+
+  Object.keys(files).forEach(key => {
+    const file = files[key];
+    const filePath = `${__dirname}/../public/files/${file.name}`;
+    file.mv(filePath, err => {
+      if (err) {
+        return next(new AppError("File was not saved!", 404));
+      }
+    })
+  })
+
+  res.status(200).json({
+    status: 'success'
+  })
+});

@@ -1,24 +1,12 @@
 const pool = require('../db');
 
 exports.sendMessage = async (message) => {
-
   return await pool.query(
-    'INSERT INTO messages (message_from, message_to, message, created_at) VALUES($1, $2, $3, $4) RETURNING *',
-    [message.message_from, message.message_to, message.message, message.created_at]
-  );
-}
-
-exports.getMessagesByUId = async (userId) => {
-
-  return await pool.query(
-    `SELECT
-      CAST(id AS INTEGER),
-      CAST(message_from AS INTEGER),
-      CAST(message_to AS INTEGER),
-      message,
-      created_at
-    FROM messages WHERE message_from=$1 OR message_to=$1`,
-    [userId]
+    `INSERT INTO messages
+      (conversation_id, sender_id, message, message_type)
+      VALUES($1, $2, $3, 'text') 
+    RETURNING *`,
+    [message.conversation_id, message.sender_id, message.message]
   );
 }
 
@@ -29,7 +17,8 @@ exports.getConversationsByUserId = async (userId) => {
     SELECT 
       user_id,
       conversation_id,
-      users.full_name
+      users.full_name,
+      users.photo
     FROM participants
     INNER JOIN conversations
       ON participants.conversation_id = conversations.id
@@ -46,18 +35,17 @@ exports.getConversationsByUserId = async (userId) => {
     [userId]
   )
 }
+
 exports.getMessagesInARange = async (lower, upper) => {
   return await pool.query(
     `
     SELECT
-      CAST(id AS INT),
       CAST(conversation_id AS INT),
       CAST(sender_id AS INT),
       message,
-      CAST(created_at AS INT)
+      created_at
     FROM (
       SELECT
-      id,
       conversation_id,
       message,
       created_at,
@@ -73,5 +61,48 @@ exports.getMessagesInARange = async (lower, upper) => {
       AND conversation_id BETWEEN $1 AND $2
     `,
     [lower, upper]
+  )
+}
+
+exports.getPastMessagesByUserId = async (leftBound, rightBound, conversationId) => {
+  return await pool.query(
+    `
+    SELECT
+      CAST(conversation_id AS INT),
+      CAST(sender_id AS INT),
+      message,
+      messages.id,
+      created_at
+    FROM (
+      SELECT
+      conversation_id,
+      message,
+      messages.id,
+      created_at,
+      sender_id,
+      row_number () OVER (
+        PARTITION BY
+            conversation_id
+        ORDER BY
+          created_at DESC
+        ) AS message_number
+      FROM messages) messages
+    WHERE message_number BETWEEN $1 AND $2
+      AND conversation_id = $3;
+    `,
+    [leftBound, rightBound, conversationId]
+  )
+}
+
+exports.getSenderId = async (conversation_id, sender_id) => {
+  return await pool.query(
+    `
+    SELECT 
+      user_id
+    FROM participants
+      WHERE conversation_id = $1
+      AND user_id != $2 
+    `,
+    [conversation_id, sender_id]
   )
 }

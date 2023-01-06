@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 const { Server } = require("socket.io"); //
 const {corsConfig} = require('./utils/serverConfig.js');
 const { authorizeUser } = require("./controllers/socketController");
-const { dm } = require('./controllers/socketController');
+const Socket = require('./controllers/socketController');
 
 process.on('uncaughtException', err => {
     console.log("Uncaught Exception💥", err);
@@ -27,8 +27,15 @@ const io = new Server(server, {
 io.use(authorizeUser);
 
 io.on('connect', socket => {
+
     socket.on('dm', (message) => {
-        dm(socket, message)
+        console.log(message);
+        Socket.dm(socket, message)
+    });
+
+    socket.on('disconnect', () => {
+        Socket.onDisconnect(socket)
+        // console.log('disconnected');
     });
 });
 // TODO helmet and move 'io' to different file
