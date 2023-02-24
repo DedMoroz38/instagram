@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import styled from 'styled-components';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
@@ -19,7 +19,7 @@ export const CircularLoaidng: React.FC<{
   return (
     <CircularLoaidngContainer style={{
       height: `${dimensions}`,
-      width: `${dimensions}`
+      width: `${dimensions}`,
     }} />
   )
 }

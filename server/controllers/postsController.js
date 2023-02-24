@@ -66,14 +66,18 @@ exports.getUserFollowingPosts = catchAsync( async (req, res) => {
   const userId = req.user.id;
   const posts = await Posts.getUserFollowingPostsByUserId(userId);
   const postsIds = posts.rows.map(post => {
-    return post.postId
+    return post.postId;
   });
-  const idOfLikedPosts = await Posts.getIdOfLikedPosts(postsIds, userId);
+  
+  let idOfLikedPosts = []
+  if(postsIds.length > 0){
+    idOfLikedPosts = await (await Posts.getIdOfLikedPosts(postsIds, userId)).rows;
+  }
 
   res.status(200).json({ 
     status: "success",
     posts: posts.rows,
-    idOfLikedPosts: idOfLikedPosts.rows
+    idOfLikedPosts: idOfLikedPosts
   });
 });
 

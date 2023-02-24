@@ -20,25 +20,13 @@ const server = app.listen(port, () => {
     console.log(`Run on port ${port}`);
 });
 
-const io = new Server(server, {
+let io = new Server(server, {
     cors: corsConfig
 });
 
-io.use(authorizeUser);
+require('./socket.js')(io);
 
-io.on('connect', socket => {
-
-    socket.on('dm', (message) => {
-        console.log(message);
-        Socket.dm(socket, message)
-    });
-
-    socket.on('disconnect', () => {
-        Socket.onDisconnect(socket)
-        // console.log('disconnected');
-    });
-});
-// TODO helmet and move 'io' to different file
+// TODO helmet 
 process.on('unhandledRejection', err => {
     console.log("Unhandled Rejection💥", err);
     server.close(() => {
@@ -46,4 +34,5 @@ process.on('unhandledRejection', err => {
     });
 }); 
 
-module.exports = io;
+const socketIoObject = io;
+module.exports.ioObject = socketIoObject;

@@ -14,7 +14,7 @@ router.route('/')
         postsController.resizePostImages,
         postsController.createPost);
 
-router.route('/getUserFollowingPosts')
+router.route('/getSubscribersPosts')
   .get(postsController.getUserFollowingPosts);
 
 router.route('/getAttachmentsForPost/:postId')

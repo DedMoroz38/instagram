@@ -1,19 +1,33 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import RegistrationPresentational from './RegistrationPresentational';
 import axios from 'axios';
 import config from '../../config.json';
 import { useForm } from 'react-hook-form';
-import { ErrorPopUpContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
+import { useErrorPopUpContext } from '../../ContextProviders/ClienErrorHandlingProvider';
+import { useThemeContext } from '../../ContextProviders/ThemeContextProvider';
+import { useSignUp } from '../../hooks/fetchHooks/authorization/useSignUp';
 
+type signUpData = {
+  fullName: string | null;
+  userName: string | null;
+  email: string | null;
+  password: string | null;
+}
 
 const RegistrationContainer: React.FC = () =>  {
-  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useContext(ErrorPopUpContext);
+  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
+  const {themeMode}= useThemeContext();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate()
-
+  const [signUpData, setSignUpData] = useState<signUpData>({
+    fullName: null,
+    userName: null,
+    email: null,
+    password: null
+  });
   const {
     setError,
     register,
@@ -35,44 +49,11 @@ const RegistrationContainer: React.FC = () =>  {
     }, 1000);
   }
 
-  const registerFn = (data: any): void => {
-    const {fullName, userName, email, password} = data;
-    setIsLoading(true);
-    axios.post(`${config.serverUrl}users/signup`, { 
-      full_name: fullName,
-      user_name: userName,
-      login: email,
-      password: password,
-    }, { withCredentials: true })
-    .then(res => {
-      const user = res.data.user;
-      console.log(user);
-      navigate('/emailconfirmation', {
-        state: {
-          user: user
-        }
-      });
-      setIsLoading(false);
-    })
-    .catch(err => {
-      setIsLoading(false)
-      const errorStatusCode: number = err.response.status;
-      showErrorShadow();
-      if(errorStatusCode === 403){
-        setError('userName', {
-          message: err.response.data.message
-        });
-      } else if(errorStatusCode === 409) {
-        setError('email', {
-          message: err.response.data.message
-        });
-      } else {
-        setErrorMessage("Something went wrong:( Please try later. We will sort the problem out!");
-        setErrorPopUpIsOpen(true);
-      }
-    });
-  }
+  const {loading} = useSignUp(signUpData, setError, showErrorShadow)
 
+  const signUp = (data: signUpData) => {
+    setSignUpData(data);
+  }
 
   useEffect(() => {
     if(Object.keys(errors).length === 0){
@@ -86,12 +67,13 @@ const RegistrationContainer: React.FC = () =>  {
     <RegistrationPresentational 
       showPassword={showPassword}
       setShowPassword={setShowPassword}
-      registerFn={registerFn}
+      signUp={signUp}
       register={register}
       handleSubmit={handleSubmit}
       errors={errors}
       isError={isError}
-      isLoading={isLoading}
+      loading={loading}
+      themeMode={themeMode}
      />
   )
 }

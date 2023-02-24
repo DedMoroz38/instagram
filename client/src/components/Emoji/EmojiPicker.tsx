@@ -1,8 +1,8 @@
 import Picker from 'emoji-picker-react';
 import styled from "styled-components";
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
-import { RefObject, useContext, useState } from 'react';
-import { ThemeContext } from '../../App';
+import { RefObject, useState } from 'react';
+import { useThemeContext } from '../../ContextProviders/ThemeContextProvider';
 
 const MainContainer = styled.div`
   position: relative;
@@ -23,7 +23,7 @@ interface Emoji {
 const Emoji: React.FC<Emoji> = ({
   messagesInput
 }) => {
-  const {theme}= useContext(ThemeContext);
+  const {theme} = useThemeContext();
   const [showPicker, setShowPicker] = useState<boolean>(false);
 
   const pickEmoji = (value) => {

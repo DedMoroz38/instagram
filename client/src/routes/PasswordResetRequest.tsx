@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import EmailIcon from '@mui/icons-material/Email';
-import { ButtonBox, ErrorMessage, FormInput, InputBox, RedirectLink, shadowAnimation, SubmitButton } from "./Login/LoginPresentational";
-import { useContext, useState } from "react";
-import { ErrorPopUpContext, ThemeContext } from "../App";
+import { ButtonBox, ErrorMessage, FormInput, InputBox, RedirectLink, SubmitButton } from "./Login/LoginPresentational";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import config from '../config.json';
+import { useErrorPopUpContext } from "../ContextProviders/ClienErrorHandlingProvider";
+import { useThemeContext } from "../ContextProviders/ThemeContextProvider";
+import { shadowAnimation } from "../components/AuthorizationForm";
 
 export const MainContainer = styled.div`
   animation: ${shadowAnimation} 4s infinite alternate;
@@ -34,8 +36,8 @@ export const ResetPasswordMessage = styled.p`
 
 
 const PasswordResetRequest: React.FC = () => {
-  const {themeMode}= useContext(ThemeContext);
-  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useContext(ErrorPopUpContext);
+  const {themeMode}= useThemeContext();
+  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
   const [isSent, setIsSent] = useState<boolean>(false);
 
   const {

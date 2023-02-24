@@ -1,7 +1,5 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
-import config from "../../config.json";
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
 import ContactsPresentaional from './ContactsPresentaional';
 
 

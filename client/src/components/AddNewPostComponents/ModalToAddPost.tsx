@@ -1,10 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import NewImagesSwiper from './NewImagesSwiper';
 import axios from 'axios';
 import config from "../../config.json";
 import { CircularLoaidng } from '../StyledIcons';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import ModalWindow from '../ModalWindow/ModalWindow';
+import CloseIcon from '@mui/icons-material/Close';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 export const blurAnimation = keyframes`
   0% {
@@ -69,9 +72,17 @@ const AddFileHeading = styled.p`
   color: ${({theme}) => theme.color};
 `
 
+const CloseModalButton = styled.div`
+  z-index: 1;
+  color: white;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+`;
 
 
-const ModalToAddPost: React.FC<{
+const ModalToAddPostComponent: React.FC<{
   onClose: () => void
 }> = ({
   onClose
@@ -103,7 +114,8 @@ const ModalToAddPost: React.FC<{
   }
 
   const handleDrop = (event: {
-    dataTransfer: any; preventDefault: () => void; 
+    dataTransfer: any; 
+    preventDefault: () => void; 
   }) => {
     event.preventDefault();
     setIsDragOver(false);
@@ -179,6 +191,25 @@ const ModalToAddPost: React.FC<{
         />
       </ModalContainer>
     </MainContainer>
+  )
+}
+
+const ModalToAddPost: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  return (
+    <>
+      <AddCircleOutlineIcon style={{cursor: 'pointer'}}
+        onClick={() => setIsOpen(true)}
+      />
+      {
+        isOpen ?
+        <ModalWindow onClose={() => setIsOpen(false)}>
+          <ModalToAddPostComponent onClose={() => setIsOpen(false)} />
+        </ModalWindow> :
+        null
+      }
+    </>
   )
 }
 

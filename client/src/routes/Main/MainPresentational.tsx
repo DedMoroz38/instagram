@@ -1,6 +1,6 @@
-import { useState } from "react";
 import styled from "styled-components";
 import ModalWindowForPosts from "../../components/FollowingPostsComponents/ModalWindowForPosts";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const MainContainer = styled.div`
   position: relative;
@@ -10,17 +10,23 @@ const MainContainer = styled.div`
 `;
 
 interface Main {
-  postsColumnState: Array<JSX.Element>
+  postsColumnState: Array<JSX.Element>,
+  loading: boolean
 }
 
 const MainPresentational: React.FC<Main> = ({
   postsColumnState,
+  loading
 }) =>  {
+
 
   return (
     <>
       <MainContainer>
         {
+          loading && <CircularProgress />
+        }
+        {         
           postsColumnState.map(column => (
             column
           ))

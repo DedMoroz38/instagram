@@ -1,6 +1,5 @@
-import { useContext } from "react";
 import styled, { keyframes } from "styled-components";
-import { ErrorPopUpContext } from "../App";
+import { useErrorPopUpContext } from "../ContextProviders/ClienErrorHandlingProvider";
 
 export const popupAnimation = keyframes`
   0% {
@@ -32,7 +31,7 @@ export const MainContainer = styled.div`
 `;
 
 const ErrorPopUp: React.FC = () => {
-  const {isOpen, setIsOpen, errorMessage} = useContext(ErrorPopUpContext);
+  const { isOpen, setIsOpen, errorMessage } = useErrorPopUpContext(); 
 
   if(!isOpen) return null;
 

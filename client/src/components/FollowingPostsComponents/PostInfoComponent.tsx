@@ -172,7 +172,7 @@ const PostInfoComponent: React.FC<PostInfo> = ({
         comments.map((comment, index) => (
           <CommentBox key={index}>
             <CommentCreatorPhoto 
-              src={`${process.env.REACT_APP_FILES_URL}/users/${comment.photo}`} 
+              src={`${process.env.REACT_APP_IMAGES_URL}users/${comment.photo}`} 
               alt="post creator" 
             />
             <CommentTextContianer>

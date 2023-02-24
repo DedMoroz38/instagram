@@ -3,11 +3,8 @@ import ConverationPresentational from './ConversationPresentational';
 import { useParams } from 'react-router-dom';
 import useSocketSetup from '../../hooks/useSocketSetup';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import socket from '../../socket';
 import axios from 'axios';
-import config from "../../config.json";
-import { addMessage, addMessages } from '../../features/messages/messagesSlice';
-import useMessageLoad from '../../hooks/useMessageLoad';
+import useMessageLoad from '../../hooks/fetchHooks/messanger/useMessageLoad';
 import { sendMessage } from '../../lib/messanger/sendMessage';
 
 
@@ -21,7 +18,7 @@ const ConversationsContainer: React.FC<{}> = () => {
   const [messagesGroupNumber, setMessagesGroupNumber] = useState(0);
   const [friendName, conversationId] = friend!.split('&');
   const conversation_id = +conversationId;
-  const observer = useRef<HTMLDivElement>(null!);
+  const observer = useRef();
   const {
     loading,
     hasMore,
@@ -33,7 +30,6 @@ const ConversationsContainer: React.FC<{}> = () => {
   const [attachedFiles, setAttachedFiles] = useState([]);
   const [percentCompleted, setPercentCompleted] = useState(0);
   useSocketSetup();
-
 
   const lastMessageRef = useCallback((node: any) => {
     if(loading) return;
@@ -67,37 +63,6 @@ const ConversationsContainer: React.FC<{}> = () => {
     setIsOpenFileModel(true);
   }
 
-  const sendMessageWithFiles = () => {
-    const attachedFilesData = new FormData();
-
-    Object.keys(attachedFiles).forEach(key => {
-      const item = attachedFiles.item(key);
-      attachedFilesData.append(item.name, item);
-    });
-
-    const config = {
-      onUploadProgress: (progressEvent: {loaded: number, total: number}) => {
-        const loaded = progressEvent.loaded;
-        const total = progressEvent.total;
-        setPercentCompleted(Math.floor((loaded / total) * 100));
-      },
-      withCredentials: true
-    }
-
-    axios.post(`${process.env.REACT_APP_SERVER_URL}messanger/sendFiles`,
-      attachedFilesData,
-      config
-    )
-    .then(res => {
-      console.log(res);
-    })
-    .catch(err => {
-      console.log(err);
-    })
-  }
-
-
-
   useEffect(() => {
     bottomDiv.current?.scrollIntoView({ block: "start", behavior: "smooth" });
   }, [userMessages]);
@@ -122,7 +87,7 @@ const ConversationsContainer: React.FC<{}> = () => {
       setIsOpenFileModel={setIsOpenFileModel}
       setAttachedFiles={setAttachedFiles}
       conversationId={conversation_id}
-      sendMessageWithFiles={sendMessageWithFiles}
+      setPercentCompleted={setPercentCompleted}
       percentCompleted={percentCompleted}
     />
   )

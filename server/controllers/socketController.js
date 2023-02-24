@@ -20,6 +20,12 @@ exports.dm = async (socket, message) => {
   socket.to(getter_id).emit('dm', message);
 } 
 
+exports.fileMessage = async (socket, messageId) => {
+  let getter = await Messages.getSenderIdByMessageId(messageId.messageId);
+  reciever = getter.rows[0].getter_id;
+  socket.to(reciever).emit('fm', messageId.messageId);
+}
+
 exports.onDisconnect = async (socket) => {
 
 }

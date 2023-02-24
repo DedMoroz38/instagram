@@ -1,4 +1,7 @@
 const pool = require('../db');
+const {jsArrayToSQLArrayConverter} = require('../libs/jsArrayToSQLArrayConverter');
+const {generateValuesForSQL} = require('../libs/generateValuesForSQL');
+
 
 exports.createPostForUserId = async (userId, attachments) => {
   let SQL = `
@@ -13,20 +16,11 @@ exports.createPostForUserId = async (userId, attachments) => {
           INSERT INTO attachments 
               (postId, fileName)
               VALUES
-  `
-  const attachmentsLength = attachments.length;
-  for(let attachment of attachments){
-    SQL += `(postIdFromPosts, '${attachment}')`;
-    if(attachment != attachments[attachmentsLength - 1]){
-      SQL += `,\n`;
-    } else {
-      SQL += `;`;
-    }
-  }
+  `;
+  SQL += generateValuesForSQL(attachments, 'postIdFromPosts');
   SQL += `
     END; $$;
   COMMIT;`
-  console.log(SQL);
   return await pool.query(SQL);
 };
 
@@ -135,7 +129,8 @@ exports.likePostByUserId = async (userId, postId) => {
 }
 
 exports.getIdOfLikedPosts = async (postsIds, userId) => {
-  let SQLarray = '(' + postsIds.join(', ') + ')';
+  const SQLarray = jsArrayToSQLArrayConverter(postsIds);
+  
   return await pool.query(
     `
       SELECT post_id AS "postId"

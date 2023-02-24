@@ -1,13 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-interface MessagesState {
+export interface MessagesState {
   messages: Array<{
-    id: number,
+    message_type: 'text'
+    message_id: number,
     conversation_id: number,
     message: string,
     created_at: string,
     sender_id: number
+  } | {
+    message_type: 'file',
+    message_id: number,
+    conversation_id: number,
+    created_at: string,
+    sender_id: number,
+    message: string,
+    attachments: Array<{
+      attachment_id: number,
+      file_name: string,
+      size: number,
+      message_id?: number
+    }>
   }>,
 }
 
@@ -29,16 +43,11 @@ export const messagesSlice = createSlice({
     addMessage: (state, action: PayloadAction<any>) => {
       state.messages.unshift(action.payload);
     },
-    addPrevMessages: (state, action: PayloadAction<any>) => {
-      for(let message of action.payload){
-        state.messages.push(message);
-      }
-    },
     resetMessages: () => initialState
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addMessages, addMessage, addPrevMessages, resetMessages } = messagesSlice.actions;
+export const { addMessages, addMessage, resetMessages } = messagesSlice.actions;
 
 export default messagesSlice.reducer;

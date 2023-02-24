@@ -1,0 +1,104 @@
+"filename", "language", "TypeScript React", "XML", "TypeScript", "JSON", "JSON with Comments", "CSS", "Properties", "HTML", "Markdown", "JavaScript", "Pug", "comment", "blank", "total"
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/.env", "Properties", 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 5
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/README.md", "Markdown", 0, 0, 0, 0, 0, 0, 0, 0, 26, 0, 0, 0, 21, 47
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/package-lock.json", "JSON", 0, 0, 0, 26900, 0, 0, 0, 0, 0, 0, 0, 0, 1, 26901
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/package.json", "JSON", 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 1, 65
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/public/index.css", "CSS", 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 1, 7
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/public/index.html", "HTML", 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 10, 1, 26
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/public/manifest.json", "JSON", 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 1, 26
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/App.tsx", "TypeScript React", 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 23
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/ContextProviders/ClienErrorHandlingProvider.tsx", "TypeScript React", 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 42
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/ContextProviders/ThemeContextProvider.tsx", "TypeScript React", 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 9, 49
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/app/hooks.tsx", "TypeScript React", 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 7
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/app/store.tsx", "TypeScript React", 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 22
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/AddNewPostComponents/ModalToAddPost.tsx", "TypeScript React", 165, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 22, 217
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/AddNewPostComponents/NewImagesSwiper.tsx", "TypeScript React", 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 47
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Contacts/ContactsContainer.tsx", "TypeScript React", 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 51
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Contacts/ContactsPresentaional.tsx", "TypeScript React", 169, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 183
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Conversations/ConversationPresentational.tsx", "TypeScript React", 307, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 325
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Conversations/ConversationsContainer.tsx", "TypeScript React", 112, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 16, 129
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Conversations/DefaultConversation.tsx", "TypeScript React", 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 56
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Conversations/File.tsx", "TypeScript React", 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 85
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Conversations/FileMessage.tsx", "TypeScript React", 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 54
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Conversations/FilesModal/AttachedFilesModal.tsx", "TypeScript React", 187, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 22, 233
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Conversations/FilesModal/FilesBox.tsx", "TypeScript React", 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 43
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Dashboard.tsx", "TypeScript React", 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 4, 69
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Emoji/EmojiPicker.tsx", "TypeScript React", 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 49
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/ErrorPopUp.tsx", "TypeScript React", 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 50
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/FollowingPostsComponents/FollowingPostsSwiper.tsx", "TypeScript React", 93, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 102
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/FollowingPostsComponents/ModalWindowForPosts.tsx", "TypeScript React", 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 69
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/FollowingPostsComponents/PostInfoComponent.tsx", "TypeScript React", 190, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 209
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/GridColumn.tsx", "TypeScript React", 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 9, 56
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Header.tsx", "TypeScript React", 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 83
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/ModalWindow/ModalWindow.tsx", "TypeScript React", 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 72
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Post.tsx", "TypeScript React", 122, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 135
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/ProfilePosts/ProfilePostsContainer.tsx", "TypeScript React", 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 37
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/ProfilePosts/ProfilePostsPresentational.tsx", "TypeScript React", 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 53
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/ProfilePosts/ProfilePostsSwiper.tsx", "TypeScript React", 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 54
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/StyledIcons.tsx", "TypeScript React", 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 89
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Theme/Themes.tsx", "TypeScript React", 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 49
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Theme/globalStyles.tsx", "TypeScript React", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Toggler.tsx", "TypeScript React", 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 32
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/custom.d.ts", "TypeScript", 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/config.json", "JSON", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/features/friends/conversationsSlice.tsx", "TypeScript React", 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 37
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/features/messages/messagesSlice.tsx", "TypeScript React", 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 44
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/features/posts/followingsPostsSlice.tsx", "TypeScript React", 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 8, 72
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/features/posts/userPostsSlice.tsx", "TypeScript React", 39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 8, 48
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/features/user/userSlice.tsx", "TypeScript React", 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 44
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/hocs/PrivateRoute.tsx", "TypeScript React", 81, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10, 92
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/hooks/useDarkMode.tsx", "TypeScript React", 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 27
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/hooks/useMessageLoad.tsx", "TypeScript React", 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 42
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/hooks/useSocketSetup.tsx", "TypeScript React", 26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 32
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/index.tsx", "TypeScript React", 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 21
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/lib/main/generateMasonryGrid.tsx", "TypeScript React", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/lib/messanger/sendMessage.tsx", "TypeScript React", 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 39
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/otherFiles/leftArrow.svg", "XML", 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 44
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/otherFiles/messangerIcon.svg", "XML", 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 51
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/EmailConfirmation.tsx", "TypeScript React", 74, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 14, 89
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Friends/FriendsContainer.tsx", "TypeScript React", 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 58
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Friends/FriendsPresentational.tsx", "TypeScript React", 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 64
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Login/LoginContainer.tsx", "TypeScript React", 86, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 94
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Login/LoginPresentational.tsx", "TypeScript React", 258, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22, 280
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Main/MainContainer.tsx", "TypeScript React", 82, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 12, 96
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Main/MainPresentational.tsx", "TypeScript React", 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 37
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Messanger.tsx", "TypeScript React", 43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 51
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/NotFound.tsx", "TypeScript React", 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/PasswordReset.tsx", "TypeScript React", 133, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 12, 151
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/PasswordResetRequest.tsx", "TypeScript React", 124, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 135
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Profile/ProfileContainer.tsx", "TypeScript React", 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 52
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Profile/ProfilePresentational.tsx", "TypeScript React", 104, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26, 11, 141
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Registration/RegistrationContainer.tsx", "TypeScript React", 93, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 101
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/routes/Registration/RegistrationPresentational.tsx", "TypeScript React", 203, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 209
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/socket.tsx", "TypeScript React", 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/tsconfig.json", "JSON with Comments", 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 1, 31
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/app.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -22, 0, 0, -12, -34
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/authController.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -132, 0, -6, -22, -160
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/errorController.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -48, 0, 0, -6, -54
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/friendsController.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -29, 0, 0, -6, -35
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/handlerFactory.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -14, 0, 0, -2, -16
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/messangerController.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -38, 0, 0, -10, -48
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/postsController.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -94, 0, -5, -22, -121
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/socketController.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -20, 0, -1, -6, -27
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/userController.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -71, 0, -1, -18, -90
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/db.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -9, 0, 0, -1, -10
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/models/messangerModel.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -102, 0, 0, -6, -108
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/models/passwordResetTokensModel.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -71, 0, 0, -16, -87
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/models/postsModel.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -167, 0, 0, -11, -178
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/models/userModel.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -134, 0, 0, -23, -157
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/package-lock.json", "JSON", 0, 0, 0, -6036, 0, 0, 0, 0, 0, 0, 0, 0, -1, -6037
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/package.json", "JSON", 0, 0, 0, -36, 0, 0, 0, 0, 0, 0, 0, 0, -1, -37
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/routes/friendsRoutes.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -9, 0, 0, -4, -13
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/routes/messangerRoutes.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -13, 0, 0, -5, -18
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/routes/postsRoutes.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -20, 0, 0, -13, -33
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/routes/userRoutes.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -20, 0, 0, -7, -27
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/server.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -36, 0, -2, -12, -50
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/utils/appErrors.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -10, 0, 0, -3, -13
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/utils/catchAsync.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -5, 0, 0, 0, -5
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/utils/emailSender.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -52, 0, 0, -8, -60
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/utils/serverConfig.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, -4, 0, 0, -1, -5
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/views/email/_style.pug", "Pug", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -264, -2, -2, -268
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/views/email/baseEmail.pug", "Pug", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -36, -3, -5, -44
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/views/email/passwordReset.pug", "Pug", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -16, 0, -2, -18
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/server/views/email/welcome.pug", "Pug", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -14, 0, -1, -15
+"Total", "-", 4198, 91, 4, 20922, 30, 6, 5, 15, 26, -1120, -330, 133, 321, 24301

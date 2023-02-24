@@ -3,11 +3,14 @@ import styled from 'styled-components';
 import messangerIcon from '../../otherFiles/messangerIcon.svg';
 
 const MainContainer = styled.div`
-  flex-grow: 4;
+  flex: 6;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  background: ${({ theme }) => theme.messageBoxBackground};
+  border-radius: 20px 0 0 0;
+  margin-top: 20px;
 `;
 
 const IconContainer = styled.div`

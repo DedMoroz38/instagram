@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Toggle from './Toggler';
@@ -7,20 +7,16 @@ import ChatIcon from '@mui/icons-material/Chat';
 import axios from 'axios';
 import config from '../config.json';
 import HomeIcon from '@mui/icons-material/Home';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import SearchIcon from '@mui/icons-material/Search';
 import ModalToAddPost from './AddNewPostComponents/ModalToAddPost';
-import { useContext, useState } from 'react';
-import ModalWindow from './AddNewPostComponents/ModalWindow';
-import { ModalContext } from './Dashboard';
-import ErrorPopUp from './ErrorPopUp';
-import { ErrorPopUpContext } from '../App';
 import { useAppDispatch } from '../app/hooks';
 import { resetUser } from '../features/user/userSlice';
 import { resetMessages } from '../features/messages/messagesSlice';
 import { resetFriends } from '../features/friends/conversationsSlice';
 import { resetPosts as resetUserPosts } from '../features/posts/userPostsSlice';
 import { resetPosts as resetFollowingsPosts } from '../features/posts/followingsPostsSlice';
+import FindFriendsSideBar from './FindFriendsSideBar';
+import { green } from '@mui/material/colors';
 
 
 
@@ -37,19 +33,24 @@ const LinksContainer = styled.div`
   align-items: center;
   justify-content: space-around;
   width: 250px;
-  &:last-child {
-    filter: ${({ theme }) => theme.filter};
+  // &:last-child {
+  //   filter: ${({ theme }) => theme.filter};
+  // }
+  & > a {
+    color: ${({ theme }) => theme.color};
+  }
+  & > svg {
+    color: ${({ theme }) => theme.color};
   }
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(NavLink)`
   color: black;
 `;
 
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false); // for posts TODO-find better way to solve it
   const dispatch = useAppDispatch();
 
   const logout = () => {
@@ -75,21 +76,11 @@ const Header: React.FC = () => {
     <MainContainer>
       <Toggle />
       <LinksContainer>
-        <StyledLink to="/" ><HomeIcon /></StyledLink>
-        <ModalWindow
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-        >
-          <ModalToAddPost
-            onClose={() => setIsOpen(false)}
-          />
-        </ModalWindow>
-        <AddCircleOutlineIcon style={{cursor: 'pointer'}}
-          onClick={() => setIsOpen(true)}
-        />
-        <StyledLink to="/messanger" ><ChatIcon /></StyledLink>
-        <StyledLink to="/profile" ><PermIdentityIcon /></StyledLink>
-        <StyledLink to="/friends" ><SearchIcon /></StyledLink>
+        <NavLink to="/" style={({ isActive }) => ({color: `${isActive ? 'green' : 'black'}`})} ><HomeIcon /></NavLink>
+        <ModalToAddPost />
+        <NavLink to="/messanger"><ChatIcon /></NavLink>
+        <NavLink to="/profile" ><PermIdentityIcon /></NavLink>
+        <FindFriendsSideBar />
         <LogoutIcon style={{cursor: 'pointer'}} onClick={() => logout()} />
       </LinksContainer>
     </MainContainer>

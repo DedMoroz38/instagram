@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useContext, useEffect } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { ErrorPopUpContext } from "../App";
 import config from '../config.json';
+import { useErrorPopUpContext } from "../ContextProviders/ClienErrorHandlingProvider";
+import { useResendEmialConfirmation } from "../hooks/fetchHooks/authorization/useResendEmialConfirmation";
 
 
 
@@ -36,11 +37,8 @@ const ResendButton = styled.button`
   margin-top: 35px;
 `
 
-interface EmailConfirmation{
-  // userId: number
-}
 
-interface LocationState {
+type LocationState = {
   state: {
     user: {
       id: number,
@@ -50,27 +48,14 @@ interface LocationState {
   }
 }
 
-const EmailConfirmation: React.FC<EmailConfirmation> = ({
+const EmailConfirmation: React.FC = ({
 }) => {
-  const {isOpen, setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useContext(ErrorPopUpContext);
   const location = useLocation();
   const { state } = location as LocationState;
   const user = state.user;
+  const [send, setSend] = useState<boolean>(false);
 
-  const resendEmailConfirmationMessage = () => {
-    axios.post(`${config.serverUrl}users/resendLoginConfirmationEmail`,
-    { 
-      user
-    }, 
-    { withCredentials: true })
-    .then(res => {
-      console.log(res);
-    }).catch(err => {
-      console.log(err);
-    });
-  }
-
-  
+  const {loading} = useResendEmialConfirmation(send, user, setSend);
 
   return (
     <MainContainer>
@@ -80,7 +65,9 @@ const EmailConfirmation: React.FC<EmailConfirmation> = ({
         <br/>
         Didn't receive the email? We will gladly send you another.
       </EmailConfirmationMessageText>
-      <ResendButton onClick={() => resendEmailConfirmationMessage()}>Resend Varification Email</ResendButton>
+      <ResendButton onClick={() => setSend(true)}>
+        Resend Varification Email
+      </ResendButton>
     </MainContainer>
     
   )

@@ -1,5 +1,5 @@
 import Header from './Header';
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Messanger from '../routes/Messanger';
 import { Route, Routes } from 'react-router-dom';
@@ -10,7 +10,6 @@ import PrivateRoute from '../hocs/PrivateRoute';
 import NotFound from '../routes/NotFound';
 import FriendsContainer from '../routes/Friends/FriendsContainer';
 import MainContainer from '../routes/Main/MainContainer';
-import { ErrorPopUpContext } from '../App';
 import ErrorPopUp from './ErrorPopUp';
 import EmailConfirmation from '../routes/EmailConfirmation';
 import PasswordResetRequest from '../routes/PasswordResetRequest';
@@ -47,12 +46,6 @@ const Dashboard: React.FC = () => {
         <Route path="/profile" element={
           <PrivateRoute>
             <ProfileContainer />
-          </PrivateRoute>
-          }
-        />
-        <Route path="/friends" element={
-          <PrivateRoute>
-            <FriendsContainer />
           </PrivateRoute>
           }
         />

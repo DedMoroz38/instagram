@@ -5,62 +5,9 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Link } from "react-router-dom";
 import { FieldErrorsImpl, UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
-import { useContext } from "react";
-import { ThemeContext } from "../../App";
-
-export const MainContainer = styled.div`
-  position: relative;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const shadowAnimation = keyframes`
-  50% {
-    box-shadow: #ba8fff 0px 10px 30px;
-  }
-`;
-
-export const popupAnimation = keyframes`
-  0% {
-    -webkit-transform: translateY(-1000px);
-            transform: translateY(-1000px);
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: translateY(0);
-            transform: translateY(0);
-    opacity: 1;
-  }
-`;
-
-
-export const SignBox = styled.div`
-  background: ${({ theme }) => theme.background};
-  height: 500px;
-  width: 400px;
-  border-radius: 15px 130px 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: ${shadowAnimation} 4s infinite alternate;
-`;
-
-export const SignForm = styled.form`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: column;
-  height: 400px;
-  width: 300px;
-`;
-
-export const FormHeding = styled.h1`
-  color: ${({ theme }) => theme.color};
-  opacity: 0.7;
-  font-size: 38px;
-`;
+import { Theme } from "../../components/Theme/Themes";
+import AuthorizationForm from "../../components/AuthorizationForm";
+import CircularProgress from '@mui/material/CircularProgress';
 
 export const InputBox = styled.div`
   width: 100%;
@@ -119,21 +66,6 @@ export const SubmitButton = styled.input.attrs({ type: 'submit' })`
   cursor: pointer;
 `;
 
-export const ErorrPopup = styled.div`
-  box-shadow: #ba8fff 0px 0px 5px;
-  border-radius: 10px;
-  width: 500px;
-  height: 50px;
-  position: absolute;
-  top: -30px;
-  background: ${({ theme }) => theme.background};
-  animation: ${popupAnimation} 0.5s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ba8fff;
-`;
-
 export const ForgotYourPasswordLink = styled(Link)`
   color: ${({ theme }) => theme.formRedirectButtonColor};
   margin-left: 5px;
@@ -160,7 +92,7 @@ export const CircularProgressContainer = styled.div`
 interface Login {
   showPassword: boolean,
   setShowPassword: React.Dispatch<React.SetStateAction<boolean>>,
-  loginFn: (data: {
+  signIn: (data: {
     email: string;
     password: string;
   }) => void,
@@ -176,103 +108,106 @@ interface Login {
   errors: FieldErrorsImpl<{
     email: string;
     password: string;
-  }>
+  }>,
+  themeMode: Theme,
+  loading: boolean
 }
 
 const LoginPresentational: React.FC<Login> = ({
   showPassword,
   setShowPassword,
-  loginFn,
+  signIn,
   register,
   handleSubmit,
   isError,
-  errors
+  errors,
+  themeMode,
+  loading
 }) =>  {
-  const {themeMode}= useContext(ThemeContext);
 
   return (
-    <MainContainer>
-      <SignBox
-        style={
-          isError ? 
+    <AuthorizationForm 
+      isError={isError}
+      handleSubmit={handleSubmit}
+      authFunction={signIn}
+      name={'Login'}
+    >
+      <>
+        <InputBox>
+          <ErrorMessage>{errors.email ? errors.email.message : ''}</ErrorMessage>
+          <FormInput 
+            placeholder='E-mail...'
+            {...register('email', {
+              required: {
+                value: true,
+                message: 'Please put in your email'
+              },
+              pattern: {
+                value: /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
+                message: 'Please provide a valid email address'
+              }
+            })}
+          />
+          <EmailIcon style={{
+            color: `${themeMode.iconColor}`,
+            top: '4px',
+            left: '5px',
+            position: 'absolute'}} 
+          />
+        </InputBox>
+        <InputBox>
+          <ErrorMessage>{errors.password ? errors.password.message : ''}</ErrorMessage>
+          <FormInput 
+            placeholder='Password...'
+            type={showPassword ? 'text' : "password"}
+            {...register('password', {
+              required: {
+                value: true,
+                message: 'Please put in your password'
+              }
+            })}
+          />
+          <LockIcon style={{
+            color: `${themeMode.iconColor}`,
+            top: '4px',
+            left: '5px',
+            position: 'absolute'}} 
+          />
+          <VisabilityToggleBox
+            style={{
+              color: `${themeMode.iconColor}`,
+            }}
+            onClick={() => { setShowPassword(!showPassword) }}
+          >
+            {showPassword ? 
+            <VisibilityIcon /> : 
+            <VisibilityOffIcon />}
+          </VisabilityToggleBox>
+          <ForgotYourPasswordLink
+            to="/passwordreset"
+          >Forgot your password?</ForgotYourPasswordLink>
+        </InputBox>
+        <ButtonBox>
+          <RedirectLink 
+            to="/signup"
+          >Go to registration</RedirectLink>
           {
-            boxShadow: "#ff0033 0px 10px 30px",
-            animationName: 'none'
-          } :
-          {}
-        }
-      >
-        <SignForm onSubmit={handleSubmit((data: any) => {
-            loginFn(data);
-          })}
-        >
-          <FormHeding>Login</FormHeding>
-          <InputBox>
-            <ErrorMessage>{errors.email ? errors.email.message : ''}</ErrorMessage>
-            <FormInput 
-              placeholder='E-mail...'
-              {...register('email', {
-                required: {
-                  value: true,
-                  message: 'Please put in your email'
-                },
-                pattern: {
-                  value: /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
-                  message: 'Please provide a valid email address'
-                }
-              })}
-            />
-            <EmailIcon style={{
-              color: `${themeMode.iconColor}`,
-              top: '4px',
-              left: '5px',
-              position: 'absolute'}} 
-            />
-          </InputBox>
-          <InputBox>
-            <ErrorMessage>{errors.password ? errors.password.message : ''}</ErrorMessage>
-            <FormInput 
-              placeholder='Password...'
-              type={showPassword ? 'text' : "password"}
-              {...register('password', {
-                required: {
-                  value: true,
-                  message: 'Please put in your password'
-                }
-              })}
-            />
-            <LockIcon style={{
-              color: `${themeMode.iconColor}`,
-              top: '4px',
-              left: '5px',
-              position: 'absolute'}} 
-            />
-            <VisabilityToggleBox
-              style={{
-                color: `${themeMode.iconColor}`,
-              }}
-              onClick={() => { setShowPassword(!showPassword) }}
-            >
-              {showPassword ? 
-              <VisibilityIcon /> : 
-              <VisibilityOffIcon />}
-            </VisabilityToggleBox>
-            <ForgotYourPasswordLink
-              to="/passwordreset"
-            >Forgot your password?</ForgotYourPasswordLink>
-          </InputBox>
-          <ButtonBox>
-            <RedirectLink 
-              to="/signup"
-            >Go to registration
-            </RedirectLink>
+            loading ? 
+            <CircularProgressContainer>
+              <CircularProgress style={{
+                margin: '0 auto',
+                color: 'white',
+                height: '30px',
+                width: '30px'
+              }} />
+            </CircularProgressContainer> :
             <SubmitButton 
               value="Log in"
             />
-          </ButtonBox>
-        </SignForm>
-      </SignBox>
-    </MainContainer>
+          }
+        </ButtonBox>
+      </>
+    </AuthorizationForm>
   )
 }
 

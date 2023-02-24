@@ -43,7 +43,7 @@ const SwiperNavNext = styled(SwiperNavPrev)`
   left: auto;
   transform: scale(-1, 1);
   transform-origin: center;
-  top: 50%;
+  top: calc(50% - 30px);
 `;
 
 const PostImage = styled.img`

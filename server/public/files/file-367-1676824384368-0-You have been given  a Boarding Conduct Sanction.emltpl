@@ -1,0 +1,345 @@
+Received: from LO2P265MB2461.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:12c::9)
+ by CWLP265MB4851.GBRP265.PROD.OUTLOOK.COM with HTTPS; Tue, 14 Feb 2023
+ 10:05:38 +0000
+Received: from DU2PR04CA0265.eurprd04.prod.outlook.com (2603:10a6:10:28e::30)
+ by LO2P265MB2461.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:12c::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Tue, 14 Feb
+ 2023 10:05:36 +0000
+Received: from DB5EUR01FT012.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:10:28e:cafe::a1) by DU2PR04CA0265.outlook.office365.com
+ (2603:10a6:10:28e::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24 via Frontend
+ Transport; Tue, 14 Feb 2023 10:05:36 +0000
+Authentication-Results: spf=fail (sender IP is 35.176.92.116)
+ smtp.mailfrom=em5292.natmatsci.ac.uk; dkim=pass (signature was verified)
+ header.d=natmatsci.ac.uk;dmarc=pass action=none
+ header.from=natmatsci.ac.uk;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of em5292.natmatsci.ac.uk
+ does not designate 35.176.92.116 as permitted sender)
+ receiver=protection.outlook.com; client-ip=35.176.92.116;
+ helo=egress-ip15b.ess.uk.barracuda.com;
+Received: from egress-ip15b.ess.uk.barracuda.com (35.176.92.116) by
+ DB5EUR01FT012.mail.protection.outlook.com (10.152.4.235) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.24 via Frontend Transport; Tue, 14 Feb 2023 10:05:35 +0000
+Received: from o3.email.isams.cloud (o3.email.isams.cloud [167.89.75.168]) by mx-inbound16-101.eu-west-2b.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Tue, 14 Feb 2023 10:05:34 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natmatsci.ac.uk;
+	h=mime-version:subject:from:reply-to:to:content-type:cc:content-type:
+	from:subject:to;
+	s=s1; bh=XWJPjwB7UzzTrqUVa+zjKTrijUo6dNqvzYVJr6BxMgE=;
+	b=VLkQYMs6POcLPoDeR5SaN+43r/wWzKUQatTL/vrlchWC9MWPPlcw2Coc9Udl4WptSjWg
+	2pS9LnoqB5VjCBi17fcHpOT2/VSTQqFag3Mg7hzLLSGo7zcezzT+JLiXgFdDB/z+TBYMfk
+	dsvqA0ko90aSarXC9DsqOXFh1n2jrZ1OGgAQA6lCcAEwOvEv0H6hgfNodh/KgiFkNKdVJ3
+	YSJfJepmXOU7vQpYn+1frAnSxgD+zX5qjpmlVfeKd7Xqoh0Q2A39dueJoVrBiN+qAVI7hI
+	YhxYiZEEAa5GkL1CoVKHeqRFjFx5SpyS2as4OfTnrwD48PDL0/9C/u6gmmhXMlcQ==
+Received: by filterdrecv-8dd65bbd4-zjszd with SMTP id filterdrecv-8dd65bbd4-zjszd-1-63EB5CED-2A
+        2023-02-14 10:05:33.690115218 +0000 UTC m=+313732.487967386
+Received: from [10.40.0.33] (unknown)
+	by geopod-ismtpd-3-0 (SG) with ESMTP
+	id 6bUrxqjfRI-JddQXsxesTw
+	for <egor.maksimov@natmatsci.ac.uk>;
+	Tue, 14 Feb 2023 10:05:33.508 +0000 (UTC)
+X-Mailer: MailBee.NET 12.2.0.630
+Subject: You have been given  a Boarding Conduct Sanction
+From: National Mathematics and Science College <info@natmatsci.ac.uk>
+Originating-IP: 127.0.0.1
+Application: iSAMS by iSAMS Independent Limited
+Date: Tue, 14 Feb 2023 10:05:33 +0000 (UTC)
+Message-ID: <4.9e385b443a8b939a1633@1124813-WEB1-19>
+Reply-To: National Mathematics and Science College <info@natmatsci.ac.uk>
+X-SG-EID:
+ =?us-ascii?Q?968hzoBEETOOOvy2Ry2QV9JTCiDt0kIgTP=2FcMbCKcqIO+CBO56ItVkm=2FJnRrmg?=
+ =?us-ascii?Q?XH=2FsEuCxHfSRnQdbfapU9rbn1GYafjQdQKWOG6w?=
+ =?us-ascii?Q?FxeGO0Z8P=2Fcfk8d2cFPobubnQtRAF2FXWVnAeLS?=
+ =?us-ascii?Q?iAvhGGh4bkJIaTwyHCbD1YfustGjxP41LyRpscK?=
+ =?us-ascii?Q?3VjpxxdzjR=2FBeb42Mq1nKmoXdQwJUMoPQmbHa2h?=
+ =?us-ascii?Q?+MPb5tvmmGc=2FmtQVnyC8gUXC6xBzPE1byL9B2m1?=
+ =?us-ascii?Q?awI2qsh2979tcQ5TZ8E8kQEWn0274=2FlEyDOSHaI?=
+ =?us-ascii?Q?ZOw=3D?=
+To: egor.maksimov@natmatsci.ac.uk
+X-Entity-ID: ycXVBKBuzbGhtz4X1hAT4A==
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_000_9E9F_27D9D742.A28FFFCA"
+X-BESS-ID: 1676369134-204197-5338-12014-1
+X-BESS-VER: 2019.1_20230201.1831
+X-BESS-Apparent-Source-IP: 167.89.75.168
+Return-Path:
+ bounces+19597244-1758-egor.maksimov=natmatsci.ac.uk@em5292.natmatsci.ac.uk
+X-MS-Exchange-Organization-ExpirationStartTime: 14 Feb 2023 10:05:36.0550
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 1cd83a5d-8496-44b5-ff3e-08db0e730460
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 4e0e07f7-8937-4fe0-9700-4a2ff3fb8560:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB5EUR01FT012:EE_|LO2P265MB2461:EE_
+X-MS-Exchange-Organization-AuthSource:
+ DB5EUR01FT012.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-Office365-Filtering-Correlation-Id: 1cd83a5d-8496-44b5-ff3e-08db0e730460
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-MS-Exchange-Organization-SCL: -1
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:35.176.92.116;CTRY:GB;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:NSPM;H:egress-ip15b.ess.uk.barracuda.com;PTR:egress-ip15b.ess.uk.barracuda.com;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 10:05:35.3519
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1cd83a5d-8496-44b5-ff3e-08db0e730460
+X-MS-Exchange-CrossTenant-Id: 4e0e07f7-8937-4fe0-9700-4a2ff3fb8560
+X-MS-Exchange-CrossTenant-AuthSource:
+ DB5EUR01FT012.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO2P265MB2461
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.7733970
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6086.024
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Ga/1owA/kSGjpGY+utXj2sY5jx6lXGBp2nYBSjeFBwfLQhLznNmef0/dwuPz?=
+ =?us-ascii?Q?jAOXaJV93255WQFNqRRZn5kG9W/7pLe27ywlG2PDWcRrXSvJIU51EsnoYqXq?=
+ =?us-ascii?Q?aSKLuHj5JcHVQYKiqg7WSgzmpECnCXmXHCsMatRLGEE5QMl0dTcso1xWG7QM?=
+ =?us-ascii?Q?zKHULlqmSN12M6tNnTP8bepgh/D1nvSSVbF5RQb6GmpVQAM7cZoZLnSoI7vo?=
+ =?us-ascii?Q?xLYWQ1OjFj7SeYdt//7Ygc1Iww1AztMr10feJNoe2tTW1y0ofv6FYEzleLux?=
+ =?us-ascii?Q?e8fmpZk4t6ROnytDM6LVN/p5CSPXOHkYHvH7rVEUnUnyOk/VLcYpKftgi/rA?=
+ =?us-ascii?Q?JNHmsD7h9EKHOLf3e2/hmlwdLqpk3sUFUTU3dusBTXopJgQRUIbBG6bv6KCH?=
+ =?us-ascii?Q?jZTsjO7mlnZdXjp2kxtSxlnvABDQSwPV3X2go2m+0bi4oIhoDDqeTIwg5VOp?=
+ =?us-ascii?Q?OXlY5SpNiVBSI8bn3kSRlRH1uq9U7FXsUEHiO68/E081OFN/XGAY3Ksz6BpY?=
+ =?us-ascii?Q?anO6E341sMc+6wMxEfAkFsTtIXS2nC9AtFBgL9Vr4DUIPjUCF8dYMK2ZmTqX?=
+ =?us-ascii?Q?ADb4Es0qpQz9cJrAoJidQiVtMG4b04HFw6Ql7ZNiPIc4ISe888uNJTlChAhV?=
+ =?us-ascii?Q?NbbjKmHlgGwl5vArBsQOHhDWIvfrrSkbr24Zr3VL17+MZ3H2t56gQ9Xhd4r3?=
+ =?us-ascii?Q?JXafMcYyaVNc4NMwNvV7lhOa9XyVl1U74y8Ggp1wF4FPlA9PhPphG7NBt34Y?=
+ =?us-ascii?Q?upD+Th2rHDD6s9PeiWZH+NHDzIOt/JyVXeWLlutNnzkX/6GxW9D69jA0t4uq?=
+ =?us-ascii?Q?8JM5Fqwz1r4zI8Aysdc1kAtYMeOFupGwzO7+qbagxF585gPGB+/OqGvog8MB?=
+ =?us-ascii?Q?xd9c+TvL7b+JahjTB+ns1e6dwdY0f13fmlgJJh8LyOSqjMOCqu80uDsy52rh?=
+ =?us-ascii?Q?by+rdVoSICF2qQba8A6XZiz16lZP8D/yQ7m+LqUIUq5/dGk+HQnmQQrZnY3r?=
+ =?us-ascii?Q?DnFmLv30X/t435iseM1lZ8H2n7VELe/xtQVAL6Wugvaoi8o5W7+3qvj4cyaz?=
+ =?us-ascii?Q?rnYVyGMpbpxTTzHE4nDseL7xy7UH7q0k9rHhcbrvE1G85c89GleKFgAownot?=
+ =?us-ascii?Q?sun7z244JR6n8diKrLlpQZiJ4RiMMtRJc0UDFc8jHCTxWfqjyx5L+XL4MK9z?=
+ =?us-ascii?Q?+tVNmC0ST6oZIuMkVZWn6yAi3+piTLvbNTqbLHpEtPT/Iz5/ejPA1U0gb6Ju?=
+ =?us-ascii?Q?Fuq73aRDFLHuNpL5EAeSiSl/al+Q3RFA9M4Gm+p7nI3jUsT8rlO1CljDZeAf?=
+ =?us-ascii?Q?M3kvsGpVqZBMq35djCPol6TJ?=
+MIME-Version: 1.0
+
+------=_NextPart_000_9E9F_27D9D742.A28FFFCA
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+
+You have been given a Boarding Conduct Sanction=20
+ Reward & Conduct Manager - Record Authorised
+This is an automated email sent to tell you that a reward and conduct recor=
+d has been submitted about you. Displayed below is an overview of the infor=
+mation.
+
+PUPIL CONFIRMATION - You have been given a Boarding Conduct Sanction =20
+=20
+Awarding Teacher:  Miss Tiarks=20
+ Record Date:  14/02/2023=20
+ Record Category:  not signing in/out=20
+ Record Description:  A description was not entered for this award.=20
+=20
+This is an automated e-mail and is sent by default from National Mathematic=
+s and Science College [info@natmatsci.ac.uk].
+If you reply to this e-mail please verify that this or any other address us=
+ed by the sender is the one to which you wish to reply.
+Exchange Received: 14 Feb 23 [10:05]=20
+=20=
+
+------=_NextPart_000_9E9F_27D9D742.A28FFFCA
+Content-Type: text/html; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns=3D"http://www.w3.=
+org/1999/xhtml"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+        <meta name=3D"viewport" content=3D"width=3D600">
+        <meta name=3D"name" content=3D"The National Mathematics and Science=
+ College">
+        <meta name=3D"domain" content=3D"isams.co.uk">
+        <title>You have been given  a Boarding Conduct Sanction </title>
+        <style type=3D"text/css">
+            /* Body CSS Tag */
+            body
+            {
+                background-color:rgb(242, 242, 242);
+                font-family:Lucida Grande, Arial, Helvetica, Geneva, Verdan=
+a, sans-serif;
+                padding:15px;
+                line-height:19px;
+            }
+            /* Table Cell TD CSS Tag */
+            td
+            {
+                font-family:Lucida Grande, Arial, Helvetica, Geneva, Verdan=
+a, sans-serif;
+                font-size:12px;
+                font-weight:400;
+                line-height:19px;
+            }
+            /* Template Table CSS Tags */
+            table.template_table
+            {
+                border:1px solid #DDDDDD;;
+                width:570px;
+            }
+            /* Template Header Cell TD Tags */
+            td.template_header
+            {
+                background-color:#c94545;
+                color:#FFFFFF;
+                font-size:18px;
+                font-weight:700;
+                height:18px;
+                line-height:normal;
+            }
+            /* Template Content Cell TD Tags */
+            td.template_content
+            {
+                background-color:#FFFFFF;
+                color:#000000;
+                font-size:12px;
+                font-weight:400;
+                line-height:19px;
+            }
+            /* Template Content Footer Cell TD Tags */
+            td.template_content_footer
+            {
+                background-color:#ffffff;
+                color:#999999;
+                font-size:11px;
+                font-weight:400;
+                line-height:18px;
+            }
+            /* Template Content Footer Spacer Div Tag */
+            div.template_content_footer_spacer
+            {
+                padding-bottom:8px;
+            }
+            /* Template Footer Cell TD Tags */
+            td.template_footer
+            {
+                background-color:#dbbc33;
+                color:#ffffff;
+                font-size:11px;
+                font-weight:400;
+                line-height:normal;
+            }
+        </style>
+    </head>   =20
+    <body style=3D"background-color:rgb(242, 242, 242);margin:0;padding:15p=
+x;line-height:19px;">
+        <table width=3D"100%" cellpadding=3D"0" cellspacing=3D"0" align=3D"=
+center" style=3D"background-color:rgb(242, 242, 242);">
+            <tr>
+                <td>
+                    <table cellpadding=3D"15" cellspacing=3D"0" border=3D"0=
+" align=3D"center" class=3D"template_table" style=3D"background-color:rgb(2=
+42, 242, 242);border:1px solid #DDDDDD;width:570px;">=20
+                        <tbody>=20
+                           =20
+                            <!-- INFO: Template Header Row -->
+                            <tr>
+                                <td class=3D"template_header" style=3D"text=
+-align:left;background-color:#c94545;">
+                                    <div style=3D"color:#FFFFFF;font-size:1=
+8px;font-weight:700;line-height:normal;">
+                                        You have been given  a Boarding Con=
+duct Sanction=20
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- INFO: Template Content Row -->
+                            <tr>=20
+                                <td class=3D"template_content" style=3D"tex=
+t-align:left;background-color:#FFFFFF;">=20
+                                    <div style=3D"color:#000000;font-size:1=
+2px;font-weight:400;line-height:18px;">
+                                        <b>Reward &amp; Conduct Manager - R=
+ecord Authorised</b><br> This is an automated email sent to tell you that a=
+ reward and conduct record has been submitted about you. Displayed below is=
+ an overview of the information.<br> <br> <table border=3D"1" width=3D"100%=
+" cellspacing=3D"0" cellpadding=3D"5" bordercolor=3D"#CC0000" bgcolor=3D"#F=
+FEAEA"> <tr> <td>PUPIL CONFIRMATION - You have been given  a Boarding Condu=
+ct Sanction </td> </tr> </table> <br> <table border=3D"0" cellspacing=3D"0"=
+ cellpadding=3D"3" width=3D"100%" style=3D"border: 1px solid #808080;backgr=
+ound:#F4F4F4;"> <tr> <td align=3D"right" width=3D"120"><b>Awarding Teacher:=
+</b></td> <td> Miss Tiarks</td> </tr> <tr> <td align=3D"right" width=3D"120=
+"> </td> <td><hr></td> </tr> <tr> <td align=3D"right" width=3D"120"><b>Reco=
+rd Date:</b></td> <td> 14/02/2023</td> </tr> <tr> <td align=3D"right" width=
+=3D"120"><b>Record Category:</b></td> <td> not signing in/out</td> </tr> <t=
+r> <td align=3D"right" width=3D"120"><b></b></td> <td> <!--Area--></td> </t=
+r> <tr> <td align=3D"right" valign=3D"top" width=3D"120"> </td> <td><hr></t=
+d> </tr> <tr> <td align=3D"right" valign=3D"top" width=3D"120"><b>Record De=
+scription:</b></td> <td> A description was not entered for this award.</td>=
+ </tr> </table>
+                                    </div>
+                                </td>=20
+                            </tr>
+                            <!-- INFO: Template Automated Content Row -->
+                            <tr>=20
+                                <td class=3D"template_content_footer" style=
+=3D"text-align:left;padding-top:0px;background-color:#ffffff;">
+                                    <div style=3D"font-size:11px;color:#999=
+999;font-weight:400;line-height:18px;">
+                                        <div class=3D"template_content_foot=
+er_spacer" style=3D"padding-bottom:8px;">
+                                            <img src=3D"https://natmatsci.i=
+sams.cloud/files/emailclient/images/NatMatSci Logo Very Small.png" border=
+=3D"0" alt=3D""><br>
+                                           =20
+                                           =20
+                                           =20
+                                        </div>
+                                        This is an automated e-mail  and is=
+ sent by default from National Mathematics and Science College [info@natmat=
+sci.ac.uk].<br>
+                                        If you reply to this e-mail please =
+verify that this or any other address used by the sender is the one to whic=
+h you wish to reply.<br>
+                                    </div>
+                                </td>=20
+                            </tr>
+                            <!-- INFO: Template Footer Row -->
+                            <tr>=20
+                                <td class=3D"template_footer" style=3D"back=
+ground-color:#dbbc33;">
+                                    <table cellpadding=3D"0" cellspacing=3D=
+"0" border=3D"0" width=3D"100%">
+                                        <tr>
+                                            <td class=3D"template_footer" s=
+tyle=3D"text-align:right;background-color:#dbbc33;">
+                                                <div style=3D"color:#ffffff=
+;font-size:11px;font-weight:400;line-height:normal;">
+                                                    Exchange Received: 14 F=
+eb 23 [10:05]
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>=20
+                            </tr>=20
+                        </tbody>=20
+                    </table>
+                </td>
+            </tr>
+        </table>
+       =20
+    <img src=3D"https://u19597244.ct.sendgrid.net/wf/open?upn=3DwpqVuZYcmE7=
+4ef5hry7IktU6QK6Dyf4RqhK2x8mmBC8kuUHIVpaJoI53Ds9s9GmUOsussOxhniifM3IeL9EXJC=
+ioRJvG-2FgGKagtXgIxeXSVQQDME-2FTDo3uue8rXNfKHzRhTK2zP8t2M-2B2Dn29qk0TNhgYHN=
+K-2Bytg1g9t82K0TWv4LwdSN46m7XTtqGRtexufDHmIDYe241Q6aGJKE4ZPD2jxrhiH1LHBonNY=
+RDpNa5k-3D" alt=3D"" width=3D"1" height=3D"1" border=3D"0" style=3D"height:=
+1px !important;width:1px !important;border-width:0 !important;margin-top:0 =
+!important;margin-bottom:0 !important;margin-right:0 !important;margin-left=
+:0 !important;padding-top:0 !important;padding-bottom:0 !important;padding-=
+right:0 !important;padding-left:0 !important;"></body>=20
+</html>=
+
+------=_NextPart_000_9E9F_27D9D742.A28FFFCA--
