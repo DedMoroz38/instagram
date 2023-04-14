@@ -4,10 +4,10 @@ import { ButtonBox, ErrorMessage, FormInput, InputBox, RedirectLink, SubmitButto
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import config from '../config.json';
 import { useErrorPopUpContext } from "../ContextProviders/ClienErrorHandlingProvider";
 import { useThemeContext } from "../ContextProviders/ThemeContextProvider";
 import { shadowAnimation } from "../components/AuthorizationForm";
+import { Errors } from "../lib/errors/Errors";
 
 export const MainContainer = styled.div`
   animation: ${shadowAnimation} 4s infinite alternate;
@@ -22,6 +22,7 @@ export const MainContainer = styled.div`
   width: 480px;
   border-radius: 15px 100px;
   padding: 30px 0;
+  color: ${({theme}) => theme.color}
 `;
 
 export const ResetPasswordForm = styled.form`
@@ -51,25 +52,26 @@ const PasswordResetRequest: React.FC = () => {
   });
 
   const sendEmail = (data: { email: string}): void => {
+    const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
     const { email } = data;
-    axios.post(`${config.serverUrl}users/forgotPassword`, { 
+    axios.post(`${process.env.REACT_APP_SERVER_URL}users/forgotPassword`, { 
       login: email,
     }, { withCredentials: true })
     .then(res => {
-      console.log(res);
       const status: number = res.status;
       if(status === 200){
         setIsSent(true);
       }
 
     }).catch(err => {
-      console.log(err);
+      setErrorMessage(Errors.default);
+      setErrorPopUpIsOpen(true);
       const status: number = err.response.status;
       if(status === 404){
         setErrorMessage(`No users found registered with ${data.email}`);
         setErrorPopUpIsOpen(true);
       } else {
-        setErrorMessage(`Something went wrong:( Please try later. We will sort the problem out!`);
+        setErrorMessage(Errors.default);
         setErrorPopUpIsOpen(true);
       }
     })

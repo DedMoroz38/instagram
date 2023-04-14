@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../app/hooks";
 import { useErrorPopUpContext } from "../../../ContextProviders/ClienErrorHandlingProvider";
 import { createUser } from "../../../features/user/userSlice";
+import { Errors } from "../../../lib/errors/Errors";
 
+axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 
 export const useIsLogedIn = (): {loading: boolean} => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -30,16 +32,15 @@ export const useIsLogedIn = (): {loading: boolean} => {
           });
         }
       } else {
-        setErrorMessage("Something went wrong:( Please try later. We will sort the problem out!");
+        setErrorMessage(Errors.default);
         setErrorPopUpIsOpen(true);
       }
     })
     .catch(err => {
-      console.log(err);
       if (err.response.status === 401){
         navigate('/signin');
       } else {
-        setErrorMessage("Something went wrong:( Please try later. We will sort the problem out!");
+        setErrorMessage(Errors.default);
         setErrorPopUpIsOpen(true);
       }
     })

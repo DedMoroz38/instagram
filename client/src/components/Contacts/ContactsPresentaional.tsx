@@ -13,7 +13,6 @@ const MainContainer = styled(Scrollbar)`
 `;
 
 const FindContactsContainer = styled.div`
-  padding-top: 20px;
   display: flex;
   align-items: center;
   justify-content: start;
@@ -21,7 +20,7 @@ const FindContactsContainer = styled.div`
 `
 
 export const FindContactsInput = styled.input`
-  background: #16171b;
+  background: ${({theme}) => theme.input.background};
   width: 100%;
   height: 40px;
   border-radius: 20px;
@@ -34,10 +33,14 @@ export const FindContactsInput = styled.input`
   padding-left: 16px;
   &::placeholder {
     padding-left: 5px;
+    color: ${({ theme }) => theme.input.placeholderColor};
   }
 `
 
 interface Contacts{
+  inputRef: any,
+  emptyQuery: any,
+  lastUserRef: (node: any) => void,
   matchedConversations: Array<{
     user_id: number;
     conversation_id: number;
@@ -56,6 +59,9 @@ interface Contacts{
 }
 
 export const ContactsPresentaional: React.FC<Contacts> = ({
+  inputRef,
+  emptyQuery,
+  lastUserRef,
   matchedConversations,
   findUsers,
   messages,
@@ -66,11 +72,12 @@ export const ContactsPresentaional: React.FC<Contacts> = ({
     <MainContainer>
       <FindContactsContainer>
         <FindContactsInput
+          ref={inputRef}
           placeholder="Search..."
           onChange={findUsers}
         />
       </FindContactsContainer>
-      {matchedConversations.map((conversation) => {
+      {matchedConversations.map((conversation, index) => {
         const lastMessage = messages.filter(msg => msg.conversation_id === conversation.conversation_id)[0];
         let timeOfLastMessage;
         if(lastMessage){
@@ -80,10 +87,12 @@ export const ContactsPresentaional: React.FC<Contacts> = ({
         }
         return (
           <ContactBox
-            key={conversation.conversation_id}
+            refernce={matchedConversations.length === index + 1 ? lastUserRef : null}
+            key={index}
             conversation={conversation}
             lastMessage={lastMessage}
             timeOfLastMessage={timeOfLastMessage}
+            emptyQuery={emptyQuery}
            />
         )
       })}

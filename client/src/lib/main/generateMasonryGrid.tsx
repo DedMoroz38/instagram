@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import GridColumn from "../../components/GridColumn";
 
 type generateMasonryGrid = (
-  numberOfColumns: number,
+  likingFunctions: any,
   setPostsColumnState: Dispatch<SetStateAction<JSX.Element[]>>,
   followingsPosts: {
     postId: number;
@@ -13,15 +13,20 @@ type generateMasonryGrid = (
     postId: number;
     firstPostAttachment: string;
     userPhoto: string;
-}[]
+  }[],
+  modalProp: any
 ) => void
 
 export const generateMasonryGrid: generateMasonryGrid = (
-  numberOfColumns,
+  likingProp,
   setPostsColumnState,
   followingsPosts,
-  followingsPostsFirstAttachments
+  followingsPostsFirstAttachments,
+  modalProp
 ) => {
+  const width = window.innerWidth;
+  const divider = width <= 420 ? 180 : 256;
+  const numberOfColumns = Math.trunc(width / divider);
   setPostsColumnState([]);
   let columnWrappers: any = {};
 
@@ -40,9 +45,11 @@ export const generateMasonryGrid: generateMasonryGrid = (
     }> = columnWrappers[`column${i}`];
     let postsColumn: JSX.Element = 
       <GridColumn
+        likingProp={likingProp}
         key={i}
         columnPosts={columnPosts}
         followingsPostsFirstAttachments={followingsPostsFirstAttachments}
+        modalProp={modalProp}
       />
     setPostsColumnState(prev => [...prev, postsColumn]);
   }

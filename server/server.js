@@ -1,8 +1,6 @@
 const dotenv = require('dotenv');
 const { Server } = require("socket.io"); //
 const {corsConfig} = require('./utils/serverConfig.js');
-const { authorizeUser } = require("./controllers/socketController");
-const Socket = require('./controllers/socketController');
 
 process.on('uncaughtException', err => {
     console.log("Uncaught Exception💥", err);

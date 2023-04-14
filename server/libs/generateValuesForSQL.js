@@ -16,7 +16,6 @@ exports.generateValuesForSQL2 = (filesToSave, idName) => {
 
 exports.generateValuesForSQL = (attachments, idName) => {
   let SQL = '';
-
   const attachmentsLength = attachments.length;
   for(let attachment of attachments){
     SQL += `(${idName}, '${attachment}')`;

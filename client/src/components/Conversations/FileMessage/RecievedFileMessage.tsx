@@ -2,36 +2,39 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import File from './File';
 import DownloadIcon from '@mui/icons-material/Download';
-import axios from 'axios';
-import fileDownload from 'js-file-download';
 import { installFile } from '../../../lib/messanger/installFile';
-import { CircularProgress } from 'material-ui';
 import ProgressCircle from '../../ProgressCircle';
 
-const MainContainer = styled.div`
+export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding-top: 10px;
-  max-width: 500px;
+  max-width: calc(100% - 30px);
+  @media (max-width: 420px){
+    padding: 0;
+  }
 `
 
 const FileBox = styled.div`
   transition: all 0.3s;
   position: relative;
+  width: 90%;
 `;
 
 const InstallButton = styled.button`
   border: none;
   background: transparent;
   position: absolute;
-  z-index: 1;
-  right: -20px;
-  top: 8px;
+  right: -62px;
+  top: 5px;
   color: white;
   cursor: pointer;
+  @media (max-width: 420px){
+    right: -60px;
+  }
 `;
 const MessageText = styled.p`
-  margin-left: 10px;
+  margin-left: 5px;
   margin-bottom: 10px;
 `;
 
@@ -61,14 +64,11 @@ const RecievedFileMessage: React.FC<RecievedFileMessage> = ({attachments, text})
                 name: attachment.file_name
               }}
             />
-            {
-              percentCompleted === null &&
               <InstallButton
                 onClick={() => installFile(attachment, setPercentCompleted)}
               >
                 <DownloadIcon />
               </InstallButton>
-            }
             {
               percentCompleted !== null ?
               <ProgressCircle percentCompleted={percentCompleted} /> :

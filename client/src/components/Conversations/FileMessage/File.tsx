@@ -10,8 +10,7 @@ const FileContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 10px;
-  background: #16171b;
+  padding: 5px 10px 5px 0;
   border-radius: 5px;
 `;
 
@@ -30,7 +29,7 @@ const FileInfoBox = styled.div`
   justify-content: space-between;
   margin-left: 10px;
   height: 85%;
-  width: calc(100% - 50px);
+  width: 100%;
 `;
 
 const FileName = styled.p`
@@ -43,7 +42,7 @@ const FileName = styled.p`
 `;
 
 const FileSize = styled.p`
-  color: #96989d;
+  color: ${({theme}) => theme.color};
   font-size: 12px;
 `;
 
@@ -70,6 +69,7 @@ const File: React.FC<{
     }
   }
   fileSizeInBytes = +fileSizeInBytes.toFixed(1);
+
 
   return (
     <>

@@ -1,5 +1,7 @@
 import axios from "axios";
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { useErrorPopUpContext } from "../../../ContextProviders/ClienErrorHandlingProvider";
+import { Errors } from "../../../lib/errors/Errors";
 import { useFetch } from "../useFetch"
 
 export const useResendEmialConfirmation = (
@@ -12,6 +14,7 @@ export const useResendEmialConfirmation = (
   setSend: Dispatch<SetStateAction<boolean>>
 ): {loading: boolean} => {
   const [loading, setLoading] = useState(false);
+  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
 
   useEffect(() => {
     if(send && user){
@@ -22,9 +25,9 @@ export const useResendEmialConfirmation = (
       }, 
       { withCredentials: true })
       .then(res => {
-        console.log(res);
       }).catch(err => {
-        console.log(err);
+        setErrorMessage(Errors.default);
+        setErrorPopUpIsOpen(true);
       })
       .finally(() => {
         setLoading(false);

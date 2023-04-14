@@ -7,7 +7,7 @@ type ErrorPopUpContext = {
   setErrorMessage: Dispatch<SetStateAction<string>>
 }
 
- const ErrorPopUpContext = createContext<ErrorPopUpContext | null>(null);
+const ErrorPopUpContext = createContext<ErrorPopUpContext | null>(null);
 export const useErrorPopUpContext = () => {
   const currentErrorPopUpContext = useContext(ErrorPopUpContext);
 

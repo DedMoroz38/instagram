@@ -1,18 +1,18 @@
 import axios from "axios";
-import config from "../../config.json";
-import styled from "styled-components";
-import { createUser } from "../../features/user/userSlice";
 import { useRef, useState } from "react";
 import FriendsPresentational from "./FriendsPresentational";
+import { useErrorPopUpContext } from "../../ContextProviders/ClienErrorHandlingProvider";
+import { Errors } from "../../lib/errors/Errors";
 
 const FriendsContainer: React.FC = () => {
   const [newFriend, setNewFriend] = useState<string>('');
   const friendName = useRef<HTMLInputElement>(null);
+  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
 
   const searchForFriend = () => {
     const newFriendName = friendName.current!.value;
     if (newFriendName.length !== 0){
-      axios.post(`${config.serverUrl}friends/getAccount`, 
+      axios.post(`${process.env.REACT_APP_SERVER_URL}friends/getAccount`, 
       {friendName: newFriendName},
       { withCredentials: true }
       ) 
@@ -22,7 +22,8 @@ const FriendsContainer: React.FC = () => {
         }
       })
       .catch(err => {
-        console.log(err);
+        setErrorMessage(Errors.default);
+        setErrorPopUpIsOpen(true);
       })
     } else {
       alert('Empty input!');
@@ -31,17 +32,18 @@ const FriendsContainer: React.FC = () => {
 
   const addFriend = () => {
     const newFriendName = friendName.current!.value;
-    axios.post(`${config.serverUrl}friends/follow`, 
+    const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
+    axios.post(`${process.env.REACT_APP_SERVER_URL}friends/follow`, 
     {friendUName: newFriendName},
     { withCredentials: true }
     )
     .then(res => {
       if(res.status === 200){
-        console.log(res.data);
       }
     })
     .catch(err => {
-      console.log(err);
+      setErrorMessage(Errors.default);
+      setErrorPopUpIsOpen(true);
     })
 }
 

@@ -10,42 +10,46 @@ const GridColumnContainer = styled.div`
   &:last-of-type{
     margin-right: 0;
   }
+  @media (max-width: 420px){
+    width: 180px;
+  }
 `;
 
 
 interface GridColumn{
+  likingProp: any,
   followingsPostsFirstAttachments: {
     attachmentId: number;
     postId: number;
     firstPostAttachment: string;
     userPhoto: string;
   }[],
-  columnPosts: any
+  columnPosts: any,
+  modalProp: any
 }
 
-// TODO - re-think modal window implementation
 const GridColumn: React.FC<GridColumn> = ({
+  likingProp,
   followingsPostsFirstAttachments,
-  columnPosts
+  columnPosts,
+  modalProp
 }) =>  {
-
-
   return (
     <GridColumnContainer>
-      {columnPosts.map((post: {postId: number, userName: string}, index: number) => {
+      {columnPosts.map((post: {postId: number, userName: string, userId: number}, index: number) => {
 
         const firstAttachment = 
         followingsPostsFirstAttachments
           .filter((attachment) => 
             attachment.postId === post.postId)[0];
         
-        const {postId, userName} = post;
         return (
           <Post 
+            likingProp={likingProp}
             key={index}
-            postId={postId}
-            userName={userName}
+            post={post}
             firstAttachment={firstAttachment}
+            modalProp={modalProp}
           />
         )
       })}

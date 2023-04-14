@@ -7,7 +7,8 @@ exports.sendMessage = async (message) => {
     `INSERT INTO messages
       (conversation_id, sender_id, message, message_type)
       VALUES($1, $2, $3, 'text') 
-    RETURNING id`,
+    RETURNING id
+    `,
     [message.conversation_id, message.sender_id, message.message]
   );
 }
@@ -214,5 +215,31 @@ exports.getMessageAttachments = (fileMessages) => {
     FROM message_attachments
     WHERE message_id IN ${sqlIdList}
     `,
+  )
+}
+
+exports.getConversation = (senderId, recieverId) => {
+  // pool.query('SELECT * FROM ($1, $2)', [funcName, values])
+
+  return pool.query(`
+    SELECT get_conversation_id(${senderId}, ${recieverId})
+  `)
+}
+
+exports.getParticipant = (conversationId, userId) => {
+
+  return pool.query(`
+    SELECT 
+      users.full_name,
+      CAST(users.id AS INT) AS user_id,
+      users.photo,
+      participants.conversation_id
+    FROM users
+    INNER JOIN participants
+      ON participants.user_id = users.id
+      AND participants.conversation_id = $1
+      AND participants.user_id != $2
+  `,
+  [conversationId, userId]
   )
 }

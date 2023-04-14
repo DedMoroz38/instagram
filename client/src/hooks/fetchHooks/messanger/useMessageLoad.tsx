@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useErrorPopUpContext } from "../../../ContextProviders/ClienErrorHandlingProvider";
+import { Errors } from "../../../lib/errors/Errors";
 const useMessageLoad = (messagesGroupNumber: number, conversationId: number) => {
+  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [prevMessages, setPrevMessages] = useState<Array<{
@@ -26,7 +29,8 @@ const useMessageLoad = (messagesGroupNumber: number, conversationId: number) => 
           setHasMore(false);
         }
       }).catch(err => {
-        console.log(err);
+        setErrorMessage(Errors.default);
+        setErrorPopUpIsOpen(true);
       });
     }
   },[messagesGroupNumber, conversationId]);

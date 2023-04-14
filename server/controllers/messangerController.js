@@ -103,8 +103,27 @@ exports.installFile = catchAsync(async (req, res, next) => {
     filePath, 
     // "Steve Jobs.pdf", // Remember to include file extension
     (err) => {
-      console.log(err);
       return next(new AppError("Problem downloading the file", 404));
     }
   );
 });
+
+exports.createConversation = catchAsync(async (req, res) => {
+  const {senderId, recieverId} = req.params;
+  const converationId = await Messanger.getConversation(senderId, recieverId);
+
+  res.status(200).json({
+    status: 'success',
+    converationId: converationId.rows[0].get_conversation_id
+  })
+});
+
+exports.getConversation = catchAsync(async (req, res) => {
+  const {conversationId, userId} = req.params;
+  const participant = await Messanger.getParticipant(conversationId, userId);
+
+  res.status(200).json({
+    status: 'success',
+    conversation: participant.rows[0]
+  })
+})

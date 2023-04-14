@@ -1,4 +1,9 @@
+import { CircularProgress } from "material-ui";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { generateMasonryGrid } from "../../lib/main/generateMasonryGrid";
+import ModalWindowForPosts from "../FollowingPostsComponents/ModalWindowForPosts";
+import { CircularLoaidng } from "../StyledIcons";
 import ProfilePostsSwiper from "./ProfilePostsSwiper";
 
 const MainContainer = styled.div`
@@ -9,44 +14,61 @@ const MainContainer = styled.div`
 `;
 
 const PostsContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 250px);
-  grid-auto-rows: 250px;
-  grid-gap: 20px;
+  display: flex;
+  margin-bottom: 30px;
 `;
 
+const Line = styled.hr`
+  transition: all 0.3s linear;
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    ${({theme}) => theme.profile.hr},
+    rgba(0, 0, 0, 0)
+  );
+  width: 90vw;
+  margin-bottom: 20px;
+`
+
 interface ProfilePosts{
-  userPosts: Array<number>,
-  postsAttachments: Array<{
-    attachmentId: number,
-    postId: number
-    fileName: string
-  }>
+  postsColumnState: Array<JSX.Element>,
+  loading: boolean,
+  modalProp: any,
+  likingProp: any
 }
 
 const ProfilePostsPresentational: React.FC<ProfilePosts> = ({
-  userPosts,
-  postsAttachments
+  loading,
+  postsColumnState,
+  modalProp,
+  likingProp
 }) => {
-  console.log(userPosts);
+
   return (
-    <MainContainer>
-      <h1 style={{marginBottom: '30px'}}>Posts</h1>
-      <PostsContainer>
+    <>
+      <MainContainer>
+        <Line />
         {
-          userPosts.map((postId) => (
-            <div key={postId}>
-              <ProfilePostsSwiper attachmentsArray={
-                postsAttachments
-                .filter((attachment) => 
-                        attachment.postId === postId
-                )
-              } />
-            </div>
-          ))
+          loading ? 
+          <CircularLoaidng dimensions="50px" />:
+          <>
+            <PostsContainer>
+              {         
+                postsColumnState.map(column => (
+                  column
+                ))
+              }
+            </PostsContainer>
+          </>
         }
-      </PostsContainer>
-    </MainContainer>
+      </MainContainer>
+      <ModalWindowForPosts 
+        modalProp={modalProp}
+        likingProp={likingProp}
+       />
+    </>
   )
 }
 

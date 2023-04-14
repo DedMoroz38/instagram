@@ -16,5 +16,7 @@ router.post("/sendFiles",
   );
 router.get("/getFileNames/:messageId", messangerController.getFileNames);
 router.get("/installFile/:attachment_id", messangerController.installFile);
+router.get('/createConversation/:senderId/:recieverId', messangerController.createConversation);
+router.get('/getConversation/:conversationId/:userId', messangerController.getConversation)
 
 module.exports = router;

@@ -7,7 +7,10 @@ import { useGetUsers } from '../hooks/fetchHooks/users/useGetUsers';
 import { CircularLoaidng, IdentityIcon } from './StyledIcons';
 import axios from 'axios';
 import { Scrollbar } from './Theme/globalStyles';
-import useMessageLoad from '../hooks/fetchHooks/messanger/useMessageLoad';
+import { useOutsideAlerter } from '../hooks/useOutsideAlerter';
+import { Link } from 'react-router-dom';
+import { Errors } from '../lib/errors/Errors';
+import { useErrorPopUpContext } from '../ContextProviders/ClienErrorHandlingProvider';
 
 const slideInAnimation = keyframes`
   0% {
@@ -21,20 +24,30 @@ const slideInAnimation = keyframes`
 `;
 
 const MainContainer = styled.div`
+  cursor: pointer;
   position: absolute;
   width: 400px;
   height: calc(100vh - 49px);
   left: 0;
   top: 49px;
   background: ${({theme}) => theme.background};
-  z-index: 1;
   border-radius: 0 10px 10px 0;
   padding: 40px 20px;
+  color: ${({theme}) => theme.color};
   animation: ${slideInAnimation} 0.4s;
   animation-fill-mode: forwards; 
-  color: ${({theme}) => theme.color};
   transition: all 0.3s linear;
-  z-index: 2;
+  z-index: 3;
+  @media (max-width: 420px) {
+    box-shadow: none;
+    border-radius: 0;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    animation: none;
+    padding: 40px 20px 0 20px;
+  }
 `;
 
 const CloseButton = styled(CloseIcon)`
@@ -58,7 +71,9 @@ const LoadingBox = styled.div`
   margin-top: 50px;
 `;
 
-const UserBox = styled.div`
+const UserBox = styled(Link)`
+  color: ${({theme}) => theme.color};
+  text-decoration: none;
   flex-shrink: 0;
   padding-left: 10px;
   border-radius: 10px;
@@ -108,23 +123,28 @@ const UnfollowButton = styled(FollowButton)`
   border: 1px solid ${({theme}) => theme.message};
 `;
 
+const NoUsersMessage = styled.p`
+  text-align: center;
+`
+
 const FindFriendsSideBar: React.FC = () => {
+  const boxRef = useRef<HTMLDivElement>();
   const [open, setOpen] = useState<boolean>(false);
   const [query, setQuery] = useState<string>('');
   const [foundUsers, setFoundUsers] = useState<Array<{
-    id: number,
+    user_id: number,
     user_name: string,
     full_name: string,
     photo: string | null
   }>>([]);
   const [subscribedIds, setSubscribedIds] = useState<Array<number>>([]);
   const [usersGroupNumber, setUsersGroupNumber] = useState(0);
-  const {loading, hasMore} = useGetUsers(
+  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
+  const {loading, hasMore, data} = useGetUsers(
     query,
-    setSubscribedIds,
     usersGroupNumber,
     setUsersGroupNumber,
-    setFoundUsers
+    true
   );
   const observer = useRef();
  
@@ -151,10 +171,10 @@ const FindFriendsSideBar: React.FC = () => {
     { withCredentials: true }
     )
     .then(res => {
-      console.log(res);
     })
     .catch(err => {
-      console.log(err);
+      setErrorMessage(Errors.default);
+      setErrorPopUpIsOpen(true);
     })
   }
 
@@ -171,6 +191,20 @@ const FindFriendsSideBar: React.FC = () => {
     }
   }, [open]);
 
+  useEffect(() => {
+    setSubscribedIds([]);
+    setFoundUsers([]);
+  }, [query]);
+
+  useEffect(() => {
+    if(!data) return;
+    const {users, subscribedIds} = data;
+    setFoundUsers((prevUsers) => [ ...prevUsers, ...users]);
+    setSubscribedIds((prevSubscribedIds) => [ ...prevSubscribedIds, ...subscribedIds]);
+  }, [data]);
+
+  useOutsideAlerter(boxRef, () => setOpen(false));
+
   return (
     <>
       <SearchIcon
@@ -179,7 +213,8 @@ const FindFriendsSideBar: React.FC = () => {
       />
       {
         open &&
-        <MainContainer>
+        <MainContainer ref={boxRef}>
+
           <CloseButton onClick={() => setOpen(false)} />
           <FindContactsInput
             ref={inputRef}
@@ -189,8 +224,17 @@ const FindFriendsSideBar: React.FC = () => {
           {
             <UsersContainer>
             {
+              foundUsers.length === 0 &&
+              <NoUsersMessage>Start typing to find other users</NoUsersMessage>
+            }
+            {
               foundUsers.map((user, index) => (
-                <UserBox key={user.id} ref={foundUsers.length === index + 1 ? lastUserRef : null}>
+                <UserBox 
+                  key={user.user_id}
+                  ref={foundUsers.length === index + 1 ? lastUserRef : null}
+                  to={`${user.user_id}`}
+                  onClick={() => setOpen(false)}
+                >
                   { 
                     user.photo === null ?
                     <IdentityIcon dimensions='44px' />:
@@ -204,12 +248,12 @@ const FindFriendsSideBar: React.FC = () => {
                     <Name>{user.full_name}</Name>
                   </UserInfoBox>
                   {
-                    !subscribedIds.includes(user.id) ?
+                    !subscribedIds.includes(user.user_id) ?
                     <FollowButton
-                      onClick={() => followOrUnfollow(user.id)}
+                      onClick={() => followOrUnfollow(user.user_id)}
                     >follow</FollowButton> :
                     <UnfollowButton
-                      onClick={() => followOrUnfollow(user.id)}
+                      onClick={() => followOrUnfollow(user.user_id)}
                     >unfollow</UnfollowButton>
                   }
                 </UserBox>
@@ -231,5 +275,7 @@ const FindFriendsSideBar: React.FC = () => {
 }
 
 export default FindFriendsSideBar;
+
+
 
 

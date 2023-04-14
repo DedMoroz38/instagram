@@ -1,20 +1,19 @@
 import styled from "styled-components";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import SendIcon from '@mui/icons-material/Send';
-import React, { Dispatch, RefObject, SetStateAction, useState } from "react";
+import React, { RefObject, useState } from "react";
 import CircularProgress from '@mui/material/CircularProgress';
 import Emoji from "../Emoji/EmojiPicker";
 import AttachedFilesModal from "./FilesModal/AttachedFilesModal";
-import FileMessage from "./FileMessage/FileMessage";
 import Messages from "./Messages/Messages";
-import axios from "axios";
-import fileDownload from "js-file-download";
+import WestIcon from '@mui/icons-material/West';
+import { useWidthContext } from "../../ContextProviders/WidthProivder";
+import { Link } from "react-router-dom";
 
 const MainContainer = styled.div`
   flex-shrink: 0;
   position: relative;
   transition: all 0.3s linear;
-  margin-top: 20px;
   display: flex;
   flex: 6;
   flex-direction: column;
@@ -22,17 +21,34 @@ const MainContainer = styled.div`
   align-items: center;
   border-radius: 20px 0 0 0;
   background: ${({ theme }) => theme.messageBoxBackground};
+  @media (max-width: 420px){
+    padding-bottom: 50px;
+  }
 `;
 
 const NameBox = styled.div`
+  position: relative;
   border-radius: 20px 0 0 0;
-  background: #000000;
+  background: ${({ theme }) => theme.conversations.topBar.background};
   display: flex;
   justify-content: center;
   align-items: center;
   height: 55px;
   width: 100%;
-  color: ${({ theme }) => theme.color};
+  color: ${({ theme }) => theme.conversations.topBar.color};
+  @media (max-width: 420px){
+    border-radius: 0;
+    margin-top: 55px;
+  }
+`;
+const Name = styled(Link)`
+  color: ${({ theme }) => theme.conversations.topBar.color};
+  text-decoration: none;
+`;
+
+const GoBack = styled(WestIcon)`
+  position: absolute;
+  left: 10px;
 `;
 
 const MessagesBox = styled.div` 
@@ -42,6 +58,10 @@ const MessagesBox = styled.div`
   display: flex;
   flex-direction: column-reverse;
   padding: 15px 15px 30px 15px;
+  @media (max-width: 420px){
+    padding-bottom: 0;
+    height: calc(100vh - 225px);
+  }
   &::-webkit-scrollbar {
     width: 4px;
   }
@@ -86,7 +106,11 @@ const InputContainer = styled.div`
   height: 70px;
   width: calc(100% - 30px);
   margin-bottom: 20px;
-  background: ${({ theme }) => theme.textInput};
+  background: ${({ theme }) => theme.input.background};
+  @media (max-width: 420px){
+    margin-bottom: 5px;
+    height: 60px;
+  }
 `;
 
 const Input = styled.input`
@@ -98,6 +122,7 @@ const Input = styled.input`
   transition: all 0.3s linear; 
   &::placeholder {
     padding-left: 5px;
+    color: ${({ theme }) => theme.input.placeholderColor};
   }
 `;
 
@@ -140,8 +165,7 @@ interface Conversations{
   setIsOpenFileModel: any,
   setAttachedFiles: any,
   conversationId: number,
-  setPercentCompleted: Dispatch<SetStateAction<number>>,
-  percentCompleted: number
+  goBack: () => void
 }
 
 const ConverationPresentational: React.FC<Conversations> = ({
@@ -162,18 +186,32 @@ const ConverationPresentational: React.FC<Conversations> = ({
     setIsOpenFileModel,
     setAttachedFiles,
     conversationId,
-    setPercentCompleted,
-    percentCompleted
+    goBack
   }) => {
   const [fileMessage, setFileMessage] = useState('');
+  const {isMobile} = useWidthContext();
+  const messages = [...filteredMessages, ...filteredPrevMessages];
+
+  const lastSentFileIndex = 
+    messages
+    .filter((message) => {
+      return message.sender_id == 168 && message.message_type == 'file'
+    }).length;
   
+
   return (
     <MainContainer>
-      <NameBox>{friendName}</NameBox>
+      <NameBox>
+        <Name to={`/${userId}`}>{friendName}</Name>
+        {
+          isMobile &&
+          <GoBack onClick={() => goBack()} />
+        }
+      </NameBox>
       <MessagesBox>
         <div ref={bottomDiv}/>
-        <FileMessage attachedFiles={attachedFiles} percentCompleted={percentCompleted} />
         <Messages
+          lastSentFileIndex={lastSentFileIndex}
           messages={filteredMessages}
           userId={userId}
           lastMessageRef={filteredPrevMessages.length === 0 ? lastMessageRef : null}
@@ -181,6 +219,7 @@ const ConverationPresentational: React.FC<Conversations> = ({
         {
           filteredPrevMessages.length > 0 ?
           <Messages
+            lastSentFileIndex={lastSentFileIndex}
             messages={filteredPrevMessages}
             userId={userId}
             lastMessageRef={lastMessageRef}
@@ -216,7 +255,7 @@ const ConverationPresentational: React.FC<Conversations> = ({
           ><SendIcon /></SendButton>
           <input 
             style={{display: "none"}}
-            onChange={attachFiles}
+            onChange={(e) => attachFiles(e)}
             multiple
             accept=''
             type='file'
@@ -231,7 +270,6 @@ const ConverationPresentational: React.FC<Conversations> = ({
           isOpenFileModel={isOpenFileModel}
           setAttachedFiles={setAttachedFiles}
           conversationId={conversationId}
-          setPercentCompleted={setPercentCompleted}
           setFileMessage={setFileMessage}
           fileMessage={fileMessage}
         />

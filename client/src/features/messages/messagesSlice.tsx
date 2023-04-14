@@ -11,13 +11,13 @@ export interface MessagesState {
     sender_id: number
   } | {
     message_type: 'file',
-    message_id: number,
+    message_id: number | null,
     conversation_id: number,
     created_at: string,
     sender_id: number,
     message: string,
     attachments: Array<{
-      attachment_id: number,
+      attachment_id?: number,
       file_name: string,
       size: number,
       message_id?: number
@@ -28,8 +28,6 @@ export interface MessagesState {
 const initialState: MessagesState = {
   messages: []
 }
-
-  
 
 export const messagesSlice = createSlice({
   name: 'userMessages',
@@ -47,7 +45,6 @@ export const messagesSlice = createSlice({
   },
 })
 
-// Action creators are generated for each case reducer function
 export const { addMessages, addMessage, resetMessages } = messagesSlice.actions;
 
 export default messagesSlice.reducer;

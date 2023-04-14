@@ -13,7 +13,6 @@ const {corsConfig} = require('./utils/serverConfig.js');
 
 app.enable("trust proxy");
 
-
 app.use(cors(corsConfig));
 
 app.use(express.static(path.join(__dirname, "public")));

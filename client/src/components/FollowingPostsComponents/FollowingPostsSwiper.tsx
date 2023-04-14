@@ -1,24 +1,40 @@
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper";
 import styled from "styled-components";
 import config from "../../config.json";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import arrowVector from '../../otherFiles/leftArrow.svg'
+import { useWidthContext } from "../../ContextProviders/WidthProivder";
 
 const MainContainer = styled.div`
-  width: 50vw;
-  height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 20px;
+  grid-area: post;
+  max-height: 90vh;
+  margin-right: 50px;
+  min-height: 70vh;
+
+  @media (max-width: 420px){
+    width: 100vw;
+    height: auto;
+    min-height: auto;
+    ${props => props.isCommentOpen ? 
+      `display: none`
+       : ``}
+  }
 `;
 
 const SwiperContainer = styled(Swiper)`
   height: 100%;
+  @media (max-width: 420px){
+    width: 100%;
+    max-height: 60vh;
+    background: ${({ theme }) => theme.messageBoxBackground};
+  }
 `;
 
 const SwiperNavPrev = styled.div`
@@ -56,17 +72,20 @@ interface Swiper{
     filename: string;
     id: number;
     postid: number
-  }>
+  }>,
+  isCommentOpen: boolean
 }
 
 const FollowingPostsSwiper: React.FC<Swiper>= ({
-  postAttachments
+  postAttachments,
+  isCommentOpen
 }) => {
+  const {isMobile} = useWidthContext()
   const navPrevRef = useRef(null);  
   const navNextRef = useRef(null);
-  
+
   return (
-    <MainContainer>
+    <MainContainer isCommentOpen={isCommentOpen}>
       <SwiperContainer
         pagination={{
           clickable: true,
@@ -79,21 +98,26 @@ const FollowingPostsSwiper: React.FC<Swiper>= ({
         }}
       >
         {
-          postAttachments.map((attachment) => (
+          postAttachments.map((fileName, index) => (
             <SwiperSlide 
-              key={attachment.id}
+              key={index}
               style={{
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center'
               }}
             >
-              <PostImage src={config.serverPostUrl + `${attachment.filename}`} alt="postImage"/>
+              <PostImage src={process.env.REACT_APP_POST_URL + `${fileName}`} alt="postImage"/>
             </SwiperSlide>
           ))
         }
-        <SwiperNavPrev ref={navPrevRef} />
-        <SwiperNavNext ref={navNextRef} />
+        {
+          !isMobile &&
+          <>
+            <SwiperNavPrev ref={navPrevRef} />
+            <SwiperNavNext ref={navNextRef} />
+          </>
+        }
       </SwiperContainer>
     </MainContainer>
   );

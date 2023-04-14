@@ -3,31 +3,51 @@ import ProfilePostsPresentational from "./ProfilePostsPresentational";
 import axios from "axios";
 import config from "../../config.json";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { addPosts } from "../../features/posts/userPostsSlice";
-
+import { useGetPosts } from "../../hooks/fetchHooks/profile/useGetPosts";
+import { generateMasonryGrid } from "../../lib/main/generateMasonryGrid";
+import { useGetSubscribersPosts } from "../../hooks/fetchHooks/main/useGetSubscribersPosts";
+import {addPosts, addLikes, addNumberOfLikes, removeLike, decrementLikeNumber, incrementLikeNumber, addLike} from '../../features/posts/userPostsSlice';
+import { useResize } from "../../hooks/useResize";
 
 const ProfilePostsContainer: React.FC = ({
 
 }) => {
-  const {posts, attachments} = useAppSelector((state) => state.userPosts);
-  const dispatch = useAppDispatch();
+  const {posts: userPosts, attachments: userPostsFirstAttachments} = useAppSelector((state) => state.userPosts);
+  const functions = {addPosts, addLikes, addNumberOfLikes};
+  const {posts: subscribersPosts} = useAppSelector((state) => state.userPosts);
+  const {loading} = useGetSubscribersPosts(functions, [subscribersPosts], `posts/true`);
+  const [postsColumnState, setPostsColumnState] = useState<Array<JSX.Element>>([]);
+  const [postIdForModal, setPostIdForModal] = useState<number>(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const likingProp = {
+    for: 'userPosts',
+    removeLike,
+    decrementLikeNumber,
+    incrementLikeNumber,
+    addLike
+  }
 
-  useEffect(() => {
-    axios.get(`${config.serverUrl}posts`,
-      { withCredentials: true }
-    )
-    .then(res => {
-      dispatch(addPosts(res.data.posts));
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  }, []);
+  const onClose = () => {
+    if (!isOpen) return;
+    setIsOpen(false);
+  }
+
+  const generateGrid = () => generateMasonryGrid(
+    likingProp,
+    setPostsColumnState,
+    userPosts,
+    userPostsFirstAttachments,
+    {setPostIdForModal, setIsOpen}
+  );
+
+  useResize(generateGrid, userPosts);
 
   return (
     <ProfilePostsPresentational 
-      userPosts={posts}
-      postsAttachments={attachments}
+      postsColumnState={postsColumnState}
+      loading={loading}
+      modalProp={{isOpen, onClose, postIdForModal}}
+      likingProp={likingProp}
     />
   )
 }

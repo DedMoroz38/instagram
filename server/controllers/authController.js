@@ -85,7 +85,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     await PasswordResetToken.savePasswordResetTokenByUserId(userId, newPassowrdResetToken);
   }
   try{
-    const resetPasswordURL = `${req.protocol}://localhost:3000/createnewpassword?token=${passwordResetToken}&userId=${userId}`;
+    const resetPasswordURL = `${req.protocol}://${process.env.IP}:3000/createnewpassword?token=${passwordResetToken}&userId=${userId}`;
     await new Email(user, resetPasswordURL).sendPasswrodReset();
 
     res.status(200).json({
@@ -124,15 +124,12 @@ exports.resetPassword = catchAsync( async (req, res, next) => {
 
 
 // TODO add - catchAsync
-exports.logout = (req, res) => {
-  res.cookie('jwt', "loggedOut", {
-      expires: new Date(Date.now() + 10 * 1000),
-      httpOnly: true
-  }); 
+exports.logout = catchAsync( async(req, res) => {
+  res.clearCookie('jwt');
   res.status(200).json({
     status: "success"
   });
-}
+});
 
 exports.protect = catchAsync(async (req, res, next) => {
   let token;

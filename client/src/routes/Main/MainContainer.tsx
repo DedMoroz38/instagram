@@ -3,6 +3,7 @@ import PostsPresentational from "./MainPresentational";
 import { useAppSelector } from "../../app/hooks";
 import { generateMasonryGrid } from "../../lib/main/generateMasonryGrid";
 import { useGetSubscribersPosts } from "../../hooks/fetchHooks/main/useGetSubscribersPosts";
+import { addLike, addLikes, addNumberOfLikes, addPosts, decrementLikeNumber, incrementLikeNumber, removeLike } from "../../features/posts/followingsPostsSlice";
 
 type ModalWindowContext = {
   setPostIdForModal: Dispatch<SetStateAction<number>>,
@@ -21,9 +22,23 @@ const MainContainer: React.FC = () =>  {
   const [postIdForModal, setPostIdForModal] = useState<number>(0);
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
-  const {loading} = useGetSubscribersPosts();
+  const functions = {addPosts, addLikes, addNumberOfLikes};
+  const likingProp = {
+    for: 'followingsPosts',
+    removeLike,
+    decrementLikeNumber,
+    incrementLikeNumber,
+    addLike
+  }
+  const {loading} = useGetSubscribersPosts(functions, [followingsPosts], `posts/false`);
 
-  const generateGrid = () => generateMasonryGrid(Math.trunc(window.innerWidth / 256), setPostsColumnState, followingsPosts, followingsPostsFirstAttachments);
+  const generateGrid = () => generateMasonryGrid(
+    likingProp,
+    setPostsColumnState,
+    followingsPosts,
+    followingsPostsFirstAttachments,
+    {setPostIdForModal, setIsOpen}
+  );
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -36,6 +51,7 @@ const MainContainer: React.FC = () =>  {
     }
   }, [followingsPosts]);
 
+
   return (
     <ModalWindowContext.Provider value={{
       setPostIdForModal,
@@ -47,6 +63,8 @@ const MainContainer: React.FC = () =>  {
       <PostsPresentational 
         postsColumnState={postsColumnState}
         loading={loading}
+        modalProp={{isOpen, onClose, postIdForModal}}
+        likingProp={likingProp}
       />
     </ModalWindowContext.Provider>
   )

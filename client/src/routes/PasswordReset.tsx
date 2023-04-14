@@ -1,4 +1,4 @@
-import { ButtonBox, ErrorMessage, FormInput, InputBox } from "./Login/LoginPresentational";
+import { ButtonBox, ErrorMessage, FormInput, InputBox, SubmitButton } from "./Login/LoginPresentational";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import config from '../config.json';
@@ -7,6 +7,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import { useNavigate } from 'react-router-dom'
 import { useErrorPopUpContext } from "../ContextProviders/ClienErrorHandlingProvider";
 import { useThemeContext } from "../ContextProviders/ThemeContextProvider";
+import { Errors } from "../lib/errors/Errors";
 
 
 
@@ -41,7 +42,7 @@ const PasswordReset: React.FC = () => {
   {
     const { password, passwordConfirm } = data;
     if(password === passwordConfirm){
-      axios.patch(`${config.serverUrl}users/resetPassword`, { 
+      axios.patch(`${process.env.REACT_APP_SERVER_URL}users/resetPassword`, { 
         password,
         passwordResetToken,
         userId
@@ -53,7 +54,7 @@ const PasswordReset: React.FC = () => {
           setErrorMessage(`Password reset token is invalid or has expired. Request a new one`);
           setErrorPopUpIsOpen(true);
         } else {
-          setErrorMessage(`Something went wrong:( Please try later. We will sort the problem out!`);
+          setErrorMessage(Errors.default);
           setErrorPopUpIsOpen(true);
         }
       })

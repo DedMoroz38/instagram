@@ -25,23 +25,6 @@ exports.createPostForUserId = async (userId, attachments) => {
 };
 
 exports.getPostsByUserId = async (userId) => {
-  console.log(userId);
-  return await pool.query(
-    `
-    SELECT 
-      posts.id AS "postId",
-      attachments.id AS "attachmentId",
-      attachments.filename AS "fileName"
-    FROM attachments
-    INNER JOIN posts
-      ON posts.id = attachments.postId
-        AND posts.userId = $1;
-    `,
-    [userId]
-  );
-};
-
-exports.getUserFollowingPostsByUserId = async (userId) => {
   return await pool.query(
     `
     SELECT
@@ -62,13 +45,44 @@ exports.getUserFollowingPostsByUserId = async (userId) => {
     FROM attachments) attachments
     INNER JOIN posts
       ON posts.id = attachments.postId
-        AND posts.userId IN (SELECT getter FROM subscriptions WHERE sender = $1)
+        AND posts.userId = $1
         AND attachment_number = 1
     INNER JOIN users
       ON users.id = posts.userId
     ORDER BY posts.created_at DESC;
     `,
     [userId]
+  );
+};
+
+exports.getUserFollowingPostsByUserId = async (dataFor) => {
+  return await pool.query(
+    `
+    SELECT
+      CAST(posts.id AS INT) AS "postId",
+      attachments.filename AS "firstPostAttachment",
+      users.user_name AS "userName",
+      users.photo AS "userPhoto",
+      CAST(attachments.id AS INT) AS "attachmentId",
+      CAST(users.id AS INT) AS "userId"
+    FROM (
+      SELECT
+      filename,
+      postid,
+      id,
+      row_number() OVER (
+        PARTITION BY
+            postid
+        ) AS attachment_number
+    FROM attachments) attachments
+    INNER JOIN posts
+      ON posts.id = attachments.postId
+        AND posts.userId ${dataFor}
+        AND attachment_number = 1
+    INNER JOIN users
+      ON users.id = posts.userId
+    ORDER BY posts.created_at DESC;
+    `
   )
 }
 
@@ -130,15 +144,25 @@ exports.likePostByUserId = async (userId, postId) => {
 
 exports.getIdOfLikedPosts = async (postsIds, userId) => {
   const SQLarray = jsArrayToSQLArrayConverter(postsIds);
-  
+
   return await pool.query(
+    `SELECT
+      (SELECT ARRAY(
+        SELECT post_id
+        FROM likes
+        WHERE post_id IN ${SQLarray}
+          AND user_id = ${userId})) AS liked_ids,
+      (SELECT ARRAY(
+        SELECT
+          json_object_agg(
+              posts.id,
+              (SELECT COUNT(*) From likes Where post_id = posts.id)
+          )
+          FROM posts 
+          WHERE posts.id IN ${SQLarray}
+        ) AS number_of_likes
+      )
     `
-      SELECT post_id AS "postId"
-      FROM likes
-      WHERE post_id IN ${SQLarray}
-          AND user_id = $1;
-    `,
-    [userId]
   )
 }
 
@@ -169,5 +193,65 @@ exports.getPostByPostId = async (postId) => {
       AND postid = $1;
   `,
   [postId]
+  )
+}
+
+exports.getLikeId = async (userId, postId) => {
+
+  return await pool.query(
+  `
+  SELECT 
+    likes.id
+  FROM likes
+  INNER JOIN users
+    ON likes.user_id = users.id
+    AND users.id = $1
+    AND likes.post_id = $2;
+  `,
+  [userId, postId]
+  )
+}
+
+exports.getPostInfo = async (userId, postId) => {
+  return await pool.query(
+    `
+    SELECT
+      (SELECT ARRAY[user_name, photo]
+        FROM users 
+        INNER JOIN posts
+        ON users.id = posts.userid
+      AND posts.id = ${postId}) as user_name,
+      (SELECT ARRAY(SELECT filename FROM attachments WHERE postid = ${postId})) as fileNames,
+      (SELECT ARRAY(
+        SELECT ARRAY[comment , user_name , photo]
+        FROM post_comments 
+            INNER JOIN users
+            ON users.id = post_comments.user_id
+        WHERE postid = ${postId})) as comments
+    `
+  )
+}
+
+exports.getPostCreaterId = async (postId) => {
+  return await pool.query(
+    `
+      SELECT userid
+      FROM posts
+        WHERE id = $1
+    `,
+    [postId]
+  )
+}
+
+exports.delete = async (postId) => {
+  return await pool.query(
+    `
+    BEGIN;
+      DELETE FROM attachments WHERE postid = ${postId};
+      DELETE FROM likes WHERE post_id = ${postId};
+      DELETE FROM post_comments WHERE postid = ${postId};
+      DELETE FROM posts WHERE id = ${postId};
+    COMMIT;
+    `
   )
 }

@@ -6,6 +6,7 @@ import App from './App';
 import { store } from './app/store';
 import ClienErrorHandlingProvider from './ContextProviders/ClienErrorHandlingProvider';
 import ThemeContextProvider from './ContextProviders/ThemeContextProvider';
+import WidthProvider from './ContextProviders/WidthProivder';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -16,7 +17,9 @@ root.render(
       {/* <React.StrictMode> */}
         <ClienErrorHandlingProvider>
           <ThemeContextProvider>
-            <App />
+            <WidthProvider>
+              <App />
+            </WidthProvider>
           </ThemeContextProvider>
         </ClienErrorHandlingProvider>
       {/* </React.StrictMode> */}

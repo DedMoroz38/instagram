@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -6,11 +6,13 @@ import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper";
 import styled from "styled-components";
 
-const PostImage = styled.img`
-  width: 100%;
+const SwiperContainer = styled(Swiper)`
   height: 100%;
-  display: flex;
-  overflow-x: scroll;
+`
+
+const PostImage = styled.img`
+  max-width: 100%;
+  max-height: 100%;
 `;
 
 interface Swiper {
@@ -23,7 +25,7 @@ const NewImagesSwiper: React.FC<Swiper> = ({
 }) => {
   return (
     <>
-      <Swiper
+      <SwiperContainer
         style={{width: '100%'}}
         pagination={{
           dynamicBullets: true,
@@ -34,12 +36,19 @@ const NewImagesSwiper: React.FC<Swiper> = ({
       >
         {
           postImages.map((image, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide 
+              key={index}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
               <PostImage src={image} alt="postImage"/>
             </SwiperSlide>
           ))
         }
-      </Swiper>
+      </SwiperContainer>
     </>
   );
 }

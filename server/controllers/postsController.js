@@ -2,6 +2,7 @@ const catchAsync = require("./../utils/catchAsync");
 const multer = require('multer');
 const sharp = require("sharp");
 const Posts = require('../models/postsModel');
+const AppError = require('../utils/appErrors');
 
 const multerStorage = multer.memoryStorage();
 
@@ -20,24 +21,31 @@ exports.uploadPostImages = upload.fields([
 ]);
 
 
-
-
 exports.resizePostImages = catchAsync( async (req, res, next) => {
   if (!req.files.images) return next();
   // TODO - create an Error if no images
   // TODO - rename images to attachments if needed
   req.body.images = [];
   await Promise.all(
-      req.files.images.map( async (file, i) => {
-          // TODO - create image id
+    req.files.images.map( async (file, i) => {
+
+        if(file.mimetype.endsWith('gif')){
+          const fileName = `image-${req.user.id}-${Date.now()}-${i + 1}.gif`;
+          req.body.images.push(fileName);
+          await sharp(file.buffer, {animated: true})
+            .withMetadata() 
+            .toFile(`public/img/postImages/${fileName}`);
+        } else {
           const fileName = `image-${req.user.id}-${Date.now()}-${i + 1}.jpeg`;
           req.body.images.push(fileName);
           
           await sharp(file.buffer)
+            .withMetadata() 
             .toFormat('jpeg')
             .jpeg({ quality: 90 })
             .toFile(`public/img/postImages/${fileName}`);
-      })
+        }
+    })
   );
   next();
 });
@@ -62,35 +70,68 @@ exports.getUserPosts = catchAsync( async (req, res) => {
   });
 });
 
-exports.getUserFollowingPosts = catchAsync( async (req, res) => {
+const getPosts = async (res, dataFor, userId) => {
+  const posts = await Posts.getUserFollowingPostsByUserId(dataFor);
+  if (posts.rows.length > 0){
+    const postsIds = posts.rows.map(post => {
+      return post.postId;
+    });
+    
+    let idOfLikedPosts = []
+    if(postsIds.length > 0){
+      idOfLikedPosts = await (await Posts.getIdOfLikedPosts(postsIds, userId)).rows;
+    }
+
+    const {liked_ids, number_of_likes} = idOfLikedPosts[0];
+
+    res.status(200).json({ 
+      status: "success",
+      posts: posts.rows,
+      idOfLikedPosts: liked_ids,
+      numberOfLikes: number_of_likes
+    });
+  } else {
+    res.status(200).json({ 
+      status: "success",
+    });
+  }
+}
+
+exports.getPosts = catchAsync( async (req, res) => {
   const userId = req.user.id;
-  const posts = await Posts.getUserFollowingPostsByUserId(userId);
-  const postsIds = posts.rows.map(post => {
-    return post.postId;
-  });
-  
-  let idOfLikedPosts = []
-  if(postsIds.length > 0){
-    idOfLikedPosts = await (await Posts.getIdOfLikedPosts(postsIds, userId)).rows;
+  const {isForUser} = req.params;
+  let dataFor;
+  if (isForUser === 'true'){
+    dataFor = `= ${userId}`
+  } else {
+    dataFor = `IN (SELECT getter FROM subscriptions WHERE sender = ${userId})`
   }
 
-  res.status(200).json({ 
-    status: "success",
-    posts: posts.rows,
-    idOfLikedPosts: idOfLikedPosts
-  });
+  getPosts(res, dataFor, userId);
 });
 
+exports.getPostsForAccount = catchAsync(async (req, res) => {
+  const {userId} = req.params;
+  getPosts(res, `= ${userId}`, req.user.id);
+})
+
 exports.getAttachmentsForPost = catchAsync( async (req, res) => {
+  const userId = req.user.id;
   const postId = req.params.postId;
-  const postAttachments = await Posts.getPostAttachmentsById(postId);
-  const postComments = await Posts.getCommentsByPostId(postId);
+  
+  const post = await Posts.getPostInfo(userId, postId);
+  const {
+    user_name,
+    filenames,
+    comments,
+  } = post.rows[0];
 
   res.status(200).json({
     status: 'success',
-    postAttachments: postAttachments.rows,
-    postComments: postComments.rows
-  })
+    userName: user_name,
+    postAttachments: filenames,
+    postComments: comments,
+  });
 }); 
 
 exports.like = catchAsync( async (req, res) => {
@@ -114,12 +155,17 @@ exports.comment = catchAsync( async (req, res) => {
   })
 });
 
-exports.getComments = catchAsync( async(req, res) => {
-  const postId = req.params.postId;
-
-  comments = await Posts.getPostByPostId(postId)
+exports.delete = catchAsync(async (req, res, next) => {
+  const userId = req.user.id;
+  const postId = +req.params.postId
+  const postCreatorId = await Posts.getPostCreaterId(postId);
+  if(userId == postCreatorId.rows[0].userid){
+    await Posts.delete(postId)
+  } else {
+    return next(new AppError("Can't delete this post", 400));
+  }
   res.status(200).json({
-    status: 'success',
-    comments: comments.rows
+    status: 'success'
   })
-});
+})
+

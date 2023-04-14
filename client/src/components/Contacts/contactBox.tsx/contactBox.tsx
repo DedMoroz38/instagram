@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import { CSSProperties } from "react";
+import { IdentityIcon } from "../../StyledIcons";
 
 const MainContainer = styled(NavLink)`
   box-sizing: border-box;
@@ -15,21 +15,9 @@ const MainContainer = styled(NavLink)`
   height: 70px;
   width: 100%;
   &:hover {
-    background: #1a1e23;
+    ${({theme}) => theme.contact.hoverBackground};
   }
   position: relative;
-`;
-
-const PhotoContainer = styled.div`
-  aspect-ratio: 1/1;
-  padding: 3px;
-  width: 50px;
-  height: 50px;
-  display: felx;
-  border-radius: 50%;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid white;
 `;
 
 const ContactPhoto = styled.img`
@@ -41,25 +29,33 @@ const ContactPhoto = styled.img`
 const ContactInfoContainer = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: start;
+  justify-content: space-between;
+  align-items: center;
   margin-left: 10px;
   height: 40px;
-  justify-content: space-between;
 `
 
 const ContactName = styled.p`
   color: ${({ theme }) => theme.color};
+  // overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   width: 50%;
 `;
+
+const InfoBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+`
+
 const LastMessage = styled.p`
   font-size: 14px;
   color: #96989d;
   width: 70%;
   white-space: nowrap;
-  overflow: hidden;
+  // overflow: hidden;
   text-overflow: ellipsis;
 `
 const TimeOfLastMessage = styled.p`
@@ -71,6 +67,7 @@ const TimeOfLastMessage = styled.p`
 `
 
 interface ContactBox{
+  refernce: any,
   conversation: {
     user_id: number;
     conversation_id: number;
@@ -91,28 +88,31 @@ const activeStyle: CSSProperties = {
   background: "red",
 };
 
-const ContactBox: React.FC<ContactBox> = ({conversation, lastMessage, timeOfLastMessage}) => {
+const ContactBox: React.FC<ContactBox> = ({refernce, conversation, lastMessage, timeOfLastMessage, emptyQuery}) => {
 
   return (
     <MainContainer
-      to={`${conversation.full_name}&${conversation.conversation_id}`}
-      style={({ isActive }) => ({ color: isActive ? "green" : "blue" })}
+      ref={refernce}
+      to={`${conversation.user_id}`}
+      state={{ conversation }}
+      onClick={() => emptyQuery()}
     > 
       {
         conversation.photo === null ?
-        <PhotoContainer>
-          <PermIdentityIcon style={{height: '100%', color: "white", width: '100%'}}/>
-        </PhotoContainer> : 
+        <IdentityIcon dimensions="50px"/>
+         : 
         <ContactPhoto
           src={`${process.env.REACT_APP_IMAGES_URL}users/${conversation.photo}`}
           alt="user photo"
         />
       }
       <ContactInfoContainer>
-        <ContactName>{conversation.full_name}</ContactName>
-        <LastMessage>{lastMessage?.message}</LastMessage>
+        <InfoBox>
+          <ContactName>{conversation.full_name}</ContactName>
+          <LastMessage>{lastMessage?.message}</LastMessage>
+        </InfoBox>
+        <TimeOfLastMessage>{timeOfLastMessage}</TimeOfLastMessage>
       </ContactInfoContainer>
-      <TimeOfLastMessage>{timeOfLastMessage}</TimeOfLastMessage>
     </MainContainer>
   )
 }

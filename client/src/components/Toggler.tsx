@@ -16,6 +16,14 @@ const Button = styled.button`
   background: transparent;
 `;
 
+const SunIcon = styled(LightModeIcon)`
+  color: ${({ theme }) => theme.header.linkColor};
+`;
+
+const MoonIcon = styled(BedtimeIcon)`
+  color: ${({ theme }) => theme.header.linkColor};
+`
+
 const Toggle: React.FC = () => {
   const { themeToggler, theme } = useThemeContext();
 
@@ -23,8 +31,8 @@ const Toggle: React.FC = () => {
       <Button onClick={themeToggler} >
         {
           theme === 'light' ? 
-          <LightModeIcon style={{color: 'black'}} /> :
-          <BedtimeIcon style={{color: 'white'}} /> 
+          <SunIcon /> :
+          <MoonIcon/> 
         }
       </Button>
   );

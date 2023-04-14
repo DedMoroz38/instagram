@@ -3,7 +3,8 @@ import {Theme} from './Themes';
 
 export const GlobalStyles = createGlobalStyle`
   body {
-    background: ${({ theme }: {theme: Theme}) => theme.background};
+    -webkit-tap-highlight-color: transparent !important;
+    background: ${({ theme }: {theme: Theme}) => theme.main.background};
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     transition: all 0.3s linear;
   }

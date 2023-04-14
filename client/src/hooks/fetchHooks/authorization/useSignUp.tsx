@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { UseFormSetError } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useErrorPopUpContext } from '../../../ContextProviders/ClienErrorHandlingProvider';
+import { Errors } from '../../../lib/errors/Errors';
 
 type signUpData = {
   fullName: string | null;
@@ -60,7 +61,7 @@ export const useSignUp = ({
             message: err.response.data.message
           });
         } else {
-          setErrorMessage("Something went wrong:( Please try later. We will sort the problem out!");
+          setErrorMessage(Errors.default);
           setErrorPopUpIsOpen(true);
         }
       })

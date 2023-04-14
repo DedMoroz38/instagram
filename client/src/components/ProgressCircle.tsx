@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const Outer = styled.div`
   position: absolute;
   top: 5px;
-  left: 10px;
+  left: 0;
   place-items: center;
 `
 

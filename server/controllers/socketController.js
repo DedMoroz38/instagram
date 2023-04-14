@@ -3,14 +3,15 @@ const { promisify } = require('util');
 const catchAsync = require("./../utils/catchAsync");
 const Messages = require('../models/messangerModel');
 const cookie = require("cookie") //installed from npm;
+const AppError = require('../utils/appErrors');
 
 module.exports.authorizeUser = catchAsync(async (socket, next) => {
+  if (!socket.handshake.headers.cookie) return next(new AppError("You are not logged in!", 401))
   var JWTToken = cookie.parse(socket.handshake.headers.cookie).jwt;
   const decoded = await promisify(jwt.verify)(JWTToken, process.env.JWT_SECRET);
   socket.request.userId = decoded.id;
   socket.join(+decoded.id);
   next();
-  // TODO try use catchAsync and get rid of re-varification
 });
 
 exports.dm = async (socket, message) => {

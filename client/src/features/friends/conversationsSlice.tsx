@@ -27,11 +27,14 @@ export const friendsSlice = createSlice({
         }
       }
     },
+    addConversation: (state, action: PayloadAction<any>) => {
+      state.conversations.push(action.payload)
+    },
     resetFriends: () => initialState
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addConversations, resetFriends } = friendsSlice.actions;
+export const { addConversations, addConversation, resetFriends } = friendsSlice.actions;
 
 export default friendsSlice.reducer;

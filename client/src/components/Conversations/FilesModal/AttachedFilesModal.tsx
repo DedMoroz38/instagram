@@ -1,10 +1,10 @@
-import React, { Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import Emoji from '../../Emoji/EmojiPicker';
 import FilesBox from './FilesBox';
 import ModalWindow from '../../ModalWindow/ModalWindow';
 import { useSendFile } from '../../../hooks/fetchHooks/messanger/useSendFile';
-import { useAppDispatch } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { addMessage } from '../../../features/messages/messagesSlice';
 
 const MainContainer = styled.div`
@@ -117,7 +117,6 @@ interface AttachedFiles{
   isOpenFileModel: boolean,
   setAttachedFiles: any,
   conversationId: number,
-  setPercentCompleted: Dispatch<SetStateAction<number>>,
   setFileMessage: React.Dispatch<React.SetStateAction<string>>,
   fileMessage: string
 }
@@ -127,7 +126,6 @@ const AttachedFilesModalComponent: React.FC<AttachedFiles> = ({
   setIsOpenFileModel,
   setAttachedFiles,
   conversationId,
-  setPercentCompleted,
   setFileMessage,
   fileMessage
 }) => {
@@ -137,8 +135,8 @@ const AttachedFilesModalComponent: React.FC<AttachedFiles> = ({
     size: number
   }> = Array.from(attachedFiles);
   const messagesInput = useRef<HTMLInputElement>(null);
+
   const {sendFiles} = useSendFile(
-    setPercentCompleted, 
     attachedFiles, 
     setIsOpenFileModel, 
     messagesInput, 
@@ -147,20 +145,33 @@ const AttachedFilesModalComponent: React.FC<AttachedFiles> = ({
     fileMessage
   );
   const dispatch = useAppDispatch();
+  const userId = useAppSelector(state => state.userInfo.id);
+
 
   const handleKeypress = (e: { key: string; }): void => {
     if (e.key === "Enter") {
-      sendFiles();
-      // dispatch(addMessage({
-      //   type: 'file',
-      //   message_id: null,
-      //   conversation_id: +messageData.conversation_id,
-      //   created_at: messageData.created_at,
-      //   sender_id: messageData.sender_id,
-      //   message: messageData.message,
-      //   attachments: [...files]
-      // }))
+      send();
     }
+  }
+
+  const send = () => {
+    sendFiles();
+    let attachments: {file_name: string, size: number} = [];
+      files.forEach(file => {
+        attachments.push({
+          file_name: file.name,
+          size: file.size
+        });
+      });
+      dispatch(addMessage({
+        message_type: 'file',
+        message_id: null,
+        conversation_id: conversationId,
+        created_at: new Date().toISOString(),
+        sender_id: userId,
+        message: messagesInput.current!.value.trim(),
+        attachments: attachments
+      }))
   }
 
   const cancel = () => {
@@ -189,7 +200,7 @@ const AttachedFilesModalComponent: React.FC<AttachedFiles> = ({
       </InputBox>
       <Footer>
         <Button onClick={() => cancel()}>Cancel</Button>
-        <Button onClick={() => sendFiles()}>Send</Button>
+        <Button onClick={() => send()}>Send</Button>
       </Footer>
     </MainContainer>
   )
@@ -201,7 +212,6 @@ const AttachedFilesModal: React.FC<AttachedFiles> = ({
   setAttachedFiles,
   isOpenFileModel,
   conversationId,
-  setPercentCompleted,
   setFileMessage,
   fileMessage
 }) => {
@@ -216,7 +226,6 @@ const AttachedFilesModal: React.FC<AttachedFiles> = ({
         isOpenFileModel={isOpenFileModel}
         setAttachedFiles={setAttachedFiles}
         conversationId={conversationId}
-        setPercentCompleted={setPercentCompleted}
         setFileMessage={setFileMessage}
         fileMessage={fileMessage}
       />

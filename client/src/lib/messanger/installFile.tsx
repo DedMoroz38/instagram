@@ -1,5 +1,7 @@
 import axios from "axios";
 import fileDownload from "js-file-download";
+import { useErrorPopUpContext } from "../../ContextProviders/ClienErrorHandlingProvider";
+import { Errors } from "../errors/Errors";
 
 export const installFile = (attachment: {
   attachment_id: number;
@@ -8,6 +10,7 @@ export const installFile = (attachment: {
 },
 setPercentCompleted: React.Dispatch<React.SetStateAction<number | null>>,
 ) => {
+  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
   setPercentCompleted(0);
   const {attachment_id, file_name} = attachment;
   axios.get(`messanger/installFile/${attachment_id}`,
@@ -28,6 +31,7 @@ setPercentCompleted: React.Dispatch<React.SetStateAction<number | null>>,
     fileDownload(res.data, file_name);
   })
   .catch(err => {
-    console.log(err);
+    setErrorMessage(Errors.default);
+    setErrorPopUpIsOpen(true);
   });
 }

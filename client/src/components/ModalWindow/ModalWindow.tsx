@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import styled, { keyframes } from 'styled-components';
 import CloseIcon from '@mui/icons-material/Close';
+import { useWidthContext } from '../../ContextProviders/WidthProivder';
 
 
 const blurAnimation = keyframes`
@@ -32,6 +33,7 @@ const ModalConatiner = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
+  ${props => props?.extraStyles}
 `;
 
 const CloseModalButton = styled.div`
@@ -45,23 +47,27 @@ const CloseModalButton = styled.div`
 
 interface ModalWindow{
   children: JSX.Element,
-  onClose?: () => void
+  onClose?: () => void,
+  extraStyles?: string
 }
 
 const ModalWindow: React.FC<ModalWindow> = ({
   children,
-  onClose
+  onClose,
+  extraStyles
 }) => {
-
+  const {isMobile} = useWidthContext()
   return ReactDOM.createPortal(
     <>
       <BackgroundBlur />
-      {onClose &&
+      {onClose && !isMobile &&
         <CloseModalButton onClick={() => onClose()}>
           <CloseIcon />
         </CloseModalButton>
       }
-      <ModalConatiner>
+      <ModalConatiner
+        extraStyles={extraStyles}
+      >
         {children}
       </ModalConatiner>
     </>,

@@ -73,7 +73,6 @@ exports.checkIfTokenExists = async (userId) => {
 
 exports.updatePassowrdResetByUserId = async (userId, password) => {
   const currentTimeStamp = Date.now();
-  console.log(currentTimeStamp);
 
   return await pool.query(
     `

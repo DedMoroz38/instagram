@@ -16,8 +16,9 @@ router.get("/me", userController.getMe);
 router.get("/submitEmail/:userId", userController.submitEmail);
 router.post("/resendLoginConfirmationEmail/", userController.resendLoginConfirmationEmail);
 router.get("/getProfileInfo", userController.getProfileInfo);
+router.get("/getProfileInfo/:userId", userController.getProfileInfo);
 
-
+router.get('/:userId', userController.getUserInfo)
 router.patch("/updateMe",
   userController.uploadUserPhoto,
   userController.resizeUserPhoto,

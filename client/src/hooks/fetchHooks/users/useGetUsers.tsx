@@ -1,28 +1,31 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { useErrorPopUpContext } from "../../../ContextProviders/ClienErrorHandlingProvider";
+import { Errors } from "../../../lib/errors/Errors";
 
 const CancelToken = axios.CancelToken;
 
 export const useGetUsers = (
   query: string,
-  setSubscribedIds: React.Dispatch<React.SetStateAction<number[]>>,
   usersGroupNumber: number,
   setUsersGroupNumber: React.Dispatch<React.SetStateAction<number>>,
-  setFoundUsers: React.Dispatch<React.SetStateAction<{
-    id: number;
-    user_name: string;
-    full_name: string;
-    photo: string | null;
-}[]>>
+  areIdsNeeded: boolean
   ) => {
+  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
   const [loading, setLoading] = useState<boolean>(false);
-  
+  const [data, setData] = useState<{
+    users: Array<{
+      id: number,
+      full_name: string,
+      user_name: string,
+      photo: string
+    }>,
+  }>();
+
   let cancel: () => void;
   const [hasMore, setHasMore] = useState(true);
 
   const resetState = () => {
-    setFoundUsers([]);
-    setSubscribedIds([]);
     setUsersGroupNumber(0);
     setHasMore(true);
   }
@@ -33,7 +36,7 @@ export const useGetUsers = (
       return;
     };
     setLoading(true);
-    axios.get(`friends/getAccounts/${query}/${usersGroupNumber}`, 
+    axios.get(`friends/getAccounts/${query}/${usersGroupNumber}/${areIdsNeeded}`, 
     { 
       withCredentials: true,
       cancelToken: new CancelToken(function executor(c) {
@@ -42,10 +45,8 @@ export const useGetUsers = (
     }
     )
     .then(res => {
-      const {users, subscribedIds} = res.data;
-      setFoundUsers((prevUsers) => [ ...prevUsers, ...users]);
-      setSubscribedIds((prevSubscribedIds) => [ ...prevSubscribedIds, ...subscribedIds]);
-      if(users.length < 10){
+      setData(res.data);
+      if(res.data.users.length < 10){
         setHasMore(false);
       }
     })
@@ -53,7 +54,8 @@ export const useGetUsers = (
       if(axios.isCancel(err)){
         return
       }
-      console.log(err);
+      setErrorMessage(Errors.default);
+      setErrorPopUpIsOpen(true);
     })
     .finally(() => {
       setLoading(false);
@@ -66,5 +68,5 @@ export const useGetUsers = (
   }, [query]);
 
 
-  return {loading, hasMore}
+  return {loading, hasMore, data}
 }

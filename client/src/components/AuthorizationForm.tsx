@@ -1,5 +1,6 @@
+import { DetailedHTMLProps, HTMLAttributes, RefObject } from "react";
 import { UseFormHandleSubmit } from "react-hook-form";
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes, ThemedStyledProps } from "styled-components";
 
 const MainContainer = styled.div`
 position: relative;
@@ -9,9 +10,9 @@ align-items: center;
 justify-content: center;
 `;
 
-export const shadowAnimation = keyframes`
+export const shadowAnimation = (props: ThemedStyledProps<Pick<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "key" | keyof HTMLAttributes<HTMLDivElement>> & { ref?: ((instance: HTMLDivElement | null) => void) | RefObject<HTMLDivElement> | null | undefined; } & object, any>) => keyframes`
   50% {
-    box-shadow: #ba8fff 0px 10px 30px;
+    box-shadow: ${props.theme.shadow} 0px 10px 30px;
   }
 `;
 
@@ -23,7 +24,10 @@ const SignBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: ${shadowAnimation} 4s infinite alternate;
+  animation: ${props => shadowAnimation(props)} 4s infinite alternate;
+  @media (max-width: 420px){
+    width: calc(100vw - 40px);
+  }
 `;
 
 const SignForm = styled.form`

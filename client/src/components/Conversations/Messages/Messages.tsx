@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { MessagesState } from "../../../features/messages/messagesSlice";
-import File from "../FileMessage/File";
 import RecievedFileMessage from "../FileMessage/RecievedFileMessage";
+import SentFileMessages from "../FileMessage/SentFileMessages";
 
 const MessageBoxUser = styled.div`
 background: ${({ theme }) => theme.message};
@@ -19,14 +19,23 @@ margin-left: auto;
 flex-shrink: 0;
 color: white;
 word-break: break-word;
+@media (max-width: 420px){
+  max-width: 80%;
+  border-radius: 8px 8px 0 8px;
+}
 `;
 
 const MessageBoxFriend = styled(MessageBoxUser)`
-background: ${({ theme }) => theme.messageFriend};
-margin-left: inherit;
-margin-right: auto;
-border-radius: 0 12px 12px 12px;
-color: ${({ theme }) => theme.messageColor};
+  background: ${({ theme }) => theme.messageFriend};
+  margin-left: inherit;
+  margin-right: auto;
+  border-radius: 0 12px 12px 12px;
+  color: ${({ theme }) => theme.messageColor};
+  max-width: 60%;
+  @media (max-width: 420px){
+    max-width: 80%;
+    border-radius: 0 8px 8px 8px;
+  }
 `;
 
 const Message = styled.p`
@@ -36,6 +45,7 @@ padding: 10px 0;
 `;
 
 const MessageTimeContainer = styled.div`
+width: 30px;
 flex-shrink: 0;
 display: flex;
 align-items: end;
@@ -45,20 +55,21 @@ padding-bottom: 5px;
 `;
 
 const MessageTimeUser = styled.p`
-color: white;
-font-size: 10px;
+  color: white;
+  font-size: 10px;
 `;
 
 const MessageTimeFriend = styled(MessageTimeUser)`
-color: #96989d;
+  color: #96989d;
 `;
 
 interface Messages extends MessagesState {
   userId: number,
-  lastMessageRef: any
+  lastMessageRef: any,
 }
 
 const Messages: React.FC<Messages> = ({messages, userId, lastMessageRef}) => {
+  var sentFileCounter = 0;
 
   return(
     <>
@@ -68,8 +79,24 @@ const Messages: React.FC<Messages> = ({messages, userId, lastMessageRef}) => {
         if(message.sender_id === userId){
           if(message.message_type !== 'file'){
             return(
-              <MessageBoxUser ref={messages.length === index + 1 ? lastMessageRef : null} key={message.message_id}>
+              <MessageBoxUser ref={messages.length === index + 1 ? lastMessageRef : null} key={index}>
                 <Message>{message.message}</Message>
+                <MessageTimeContainer>
+                  <MessageTimeUser>{createdAt}</MessageTimeUser>
+                </MessageTimeContainer>
+              </MessageBoxUser>
+            )
+          } else {
+            sentFileCounter++;
+            return (
+              <MessageBoxUser 
+                ref={messages.length === index + 1 ? lastMessageRef : null} key={index}
+              >
+                <SentFileMessages 
+                  isLast={sentFileCounter === 1 ? true : false}
+                  attachments={message.attachments}
+                  text={message.message}
+                />
                 <MessageTimeContainer>
                   <MessageTimeUser>{createdAt}</MessageTimeUser>
                 </MessageTimeContainer>
@@ -79,7 +106,7 @@ const Messages: React.FC<Messages> = ({messages, userId, lastMessageRef}) => {
         } else { 
           if(message.message_type === 'file'){
             return (
-              <MessageBoxFriend ref={messages.length === index + 1 ? lastMessageRef : null} key={message.message_id}>
+              <MessageBoxFriend ref={messages.length === index + 1 ? lastMessageRef : null} key={index}>
                 <RecievedFileMessage 
                   attachments={message.attachments}
                   text={message.message}
@@ -91,7 +118,7 @@ const Messages: React.FC<Messages> = ({messages, userId, lastMessageRef}) => {
             )
           }
           return(
-            <MessageBoxFriend ref={messages.length === index + 1 ? lastMessageRef : null} key={message.message_id}>
+            <MessageBoxFriend ref={messages.length === index + 1 ? lastMessageRef : null} key={index}>
               <Message>{message.message}</Message>
               <MessageTimeContainer>
                 <MessageTimeFriend>{createdAt}</MessageTimeFriend>

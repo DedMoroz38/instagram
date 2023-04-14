@@ -25,15 +25,17 @@ export const CircularLoaidng: React.FC<{
 }
 
 const IdentityIconContainer = styled.div`
-  border: 1px solid ${({ theme }) => theme.border};
+  border: 1px solid ${({ theme }) => theme.identityIcon};
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  aspect-ratio: 1/1;
 `;
 
 const Icon = styled(PermIdentityIcon)`
-  color: ${({ theme }) => theme.color} !important;
+  color: ${({ theme }) => theme.identityIcon} !important;
+  width: 100% !important;
 `;
 
 export const IdentityIcon: React.FC<{

@@ -1,10 +1,12 @@
 import axios from "axios";
-import { Dispatch, RefObject, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, RefObject, SetStateAction, useContext, useEffect, useState } from "react"
 import { useAppSelector } from "../../../app/hooks";
+import { useErrorPopUpContext } from "../../../ContextProviders/ClienErrorHandlingProvider";
+import { useFileLoadContext } from "../../../ContextProviders/FileLoadProvider";
+import { Errors } from "../../../lib/errors/Errors";
 import socket from "../../../socket";
 
 export const useSendFile = (
-  setPercentCompleted: Dispatch<SetStateAction<number>>,
   attachedFiles: any,
   setIsOpenFileModel: any,
   messagesInput: RefObject<HTMLInputElement>,
@@ -12,7 +14,8 @@ export const useSendFile = (
   setFileMessage: React.Dispatch<React.SetStateAction<string>>,
   fileMessage: string
 ): {sendFiles: () => void} => {
-
+  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
+  const {setPercentCompleted} = useFileLoadContext();
   const sendFiles = () => {
     setFileMessage(messagesInput.current!.value.trim());
   }
@@ -21,8 +24,6 @@ export const useSendFile = (
     setIsOpenFileModel(false);
     const attachedFilesData = new FormData();
 
-
-    
     Object.keys(attachedFiles).forEach(key => {
       const item = attachedFiles.item(key);
       attachedFilesData.append(item.name, item);
@@ -39,17 +40,20 @@ export const useSendFile = (
       withCredentials: true
     }
 
+
     axios.post(`messanger/sendFiles`,
       attachedFilesData,
       config
     )
     .then(res => {
+      setFileMessage('');
       socket.emit('fm', {
         messageId: res.data.messageId,
       });
     })
     .catch(err => {
-      console.log(err);
+      setErrorMessage(Errors.default);
+      setErrorPopUpIsOpen(true);
     })
   }, [fileMessage]);
 

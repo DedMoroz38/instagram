@@ -98,16 +98,18 @@ exports.subscribeToUser = async (userId, friendId) => {
   );
 }
 
-exports.getUserByNameOrUserName = async (query, groupNumber) => {
+exports.getUserByNameOrUserName = async (query, groupNumber, userId) => {
 
   return await pool.query(`
-    SELECT CAST(id AS INT),
+    SELECT CAST(id AS INT) AS user_id,
       user_name,
       full_name,
       photo
     FROM users 
-      WHERE user_name ~* '${query}'
+      WHERE users.id != ${userId}
+      AND user_name ~* '${query}'
       OR full_name ~* '${query}'
+      AND users.id != ${userId}
     LIMIT 10 OFFSET ${groupNumber * 10}
   `
   );

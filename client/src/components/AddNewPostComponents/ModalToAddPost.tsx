@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import NewImagesSwiper from './NewImagesSwiper';
 import axios from 'axios';
-import config from "../../config.json";
 import { CircularLoaidng } from '../StyledIcons';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import ModalWindow from '../ModalWindow/ModalWindow';
-import CloseIcon from '@mui/icons-material/Close';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { Errors } from '../../lib/errors/Errors';
+import { useErrorPopUpContext } from '../../ContextProviders/ClienErrorHandlingProvider';
 
 export const blurAnimation = keyframes`
   0% {
@@ -28,20 +28,25 @@ const MainContainer = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  height 35vw;
-  width: 35vw;
+  height 500px;
+  width: 500px;
   background: ${({ theme }) => theme.background};
-  border-radius: 20px;
+  border-radius: 10px;
   box-shadow: #ba8fff 0px 0px 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   padding: 20px;
+  @media (max-width: 420px){
+    height: 300px;
+    width: 300px;
+  }
 `;
 
 const ModalCaption = styled.h2`
   color: ${({theme}) => theme.color};
+  margin-bottom: 10px;
 `;
 
 const AddPostButton = styled.label`
@@ -54,12 +59,14 @@ const AddPostButton = styled.label`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 10px;
 `;
 
 const AddFileContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: ${({theme}) => theme.color};
 `;
 
 const AddFileIcon = styled(AddPhotoAlternateIcon)`
@@ -70,6 +77,7 @@ const AddFileIcon = styled(AddPhotoAlternateIcon)`
 
 const AddFileHeading = styled.p`
   color: ${({theme}) => theme.color};
+  text-align: center;
 `
 
 const CloseModalButton = styled.div`
@@ -87,13 +95,13 @@ const ModalToAddPostComponent: React.FC<{
 }> = ({
   onClose
 }) => {
-
   const [newPostImages, setNewPostImages] = useState<Array<string>>([]);
   const [modalButtonFlug, setModalButtonFlug] = useState<boolean>(true);
   const [post, setPost] = useState<Array<string>>([]);
   const [loading, setLoading] = useState(false);
   const [unsupportedFileError, setUsupportedFileError] = useState<boolean>(false);
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
+  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
 
   const createNewPost = (event: any): void => {
     const files = event.target.files;
@@ -140,7 +148,7 @@ const ModalToAddPostComponent: React.FC<{
       attachmentsForm.append('images', file);
     }
 
-    axios.post(`${config.serverUrl}posts`,
+    axios.post(`${process.env.REACT_APP_SERVER_URL}posts`,
       attachmentsForm,
       { withCredentials: true }
     )
@@ -151,12 +159,14 @@ const ModalToAddPostComponent: React.FC<{
     })
     .catch(err => {
       setLoading(false);
-      console.log(err);
+      setErrorMessage(Errors.default);
+      setErrorPopUpIsOpen(true);
     })
   }
 
   useEffect(() => {
   }, [newPostImages, modalButtonFlug]);
+
 
   return (
     <MainContainer
@@ -167,8 +177,10 @@ const ModalToAddPostComponent: React.FC<{
         <ModalCaption>Create new post</ModalCaption>
         {newPostImages.length === 0 ?
           <AddFileContainer>
-            <AddFileIcon style={{color: `${isDragOver ? '#ba8fff': 'white'}`}} />
-            <AddFileHeading style={{color: `${isDragOver ? '#ba8fff': 'white'}`}}>Drag photos and videos here</AddFileHeading>
+            {/* <AddFileIcon style={{color: `${isDragOver ? '#ba8fff': 'white'}`}} />
+            <AddFileHeading style={{color: `${isDragOver ? '#ba8fff': 'white'}`}}>Drag photos and videos here</AddFileHeading> */}
+            <AddFileIcon />
+            <AddFileHeading>Drag photos and videos here</AddFileHeading>
           </AddFileContainer> :
           <NewImagesSwiper 
             postImages={newPostImages}
@@ -214,3 +226,4 @@ const ModalToAddPost: React.FC = () => {
 }
 
 export default ModalToAddPost;
+
