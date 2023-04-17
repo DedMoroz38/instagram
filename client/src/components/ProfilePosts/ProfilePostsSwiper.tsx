@@ -42,7 +42,7 @@ const ProfilePostsSwiper: React.FC<Swiper> = ({
         {
           attachmentsArray.map((attachment) => (
             <SwiperSlide key={attachment.attachmentId}>
-              <PostImage src={`${config.serverFilesUrl}postImages/${attachment.fileName}`} alt="postImage"/>
+              <PostImage src={`${process.env.REACT_APP_IMAGES_URL}postImages/${attachment.fileName}`} alt="postImage"/>
             </SwiperSlide>
           ))
         }

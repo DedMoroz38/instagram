@@ -1,13 +1,11 @@
-import React, { useRef, useState } from 'react';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
-import ReactDOM from 'react-dom';
-import { BackgoundBlur } from '../../AddNewPostComponents/ModalWindow';
 import Emoji from '../../Emoji/EmojiPicker';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import sendMessage from '../../../lib/messanger/sendMessage';
-import axios from 'axios';
 import FilesBox from './FilesBox';
+import ModalWindow from '../../ModalWindow/ModalWindow';
+import { useSendFile } from '../../../hooks/fetchHooks/messanger/useSendFile';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { addMessage } from '../../../features/messages/messagesSlice';
 
 const MainContainer = styled.div`
   width: 400px;
@@ -119,7 +117,91 @@ interface AttachedFiles{
   isOpenFileModel: boolean,
   setAttachedFiles: any,
   conversationId: number,
-  sendMessageWithFiles: () => void
+  setFileMessage: React.Dispatch<React.SetStateAction<string>>,
+  fileMessage: string
+}
+
+const AttachedFilesModalComponent: React.FC<AttachedFiles> = ({
+  attachedFiles,
+  setIsOpenFileModel,
+  setAttachedFiles,
+  conversationId,
+  setFileMessage,
+  fileMessage
+}) => {
+  const files: Array<{
+    name: string,
+    type: string,
+    size: number
+  }> = Array.from(attachedFiles);
+  const messagesInput = useRef<HTMLInputElement>(null);
+
+  const {sendFiles} = useSendFile(
+    attachedFiles, 
+    setIsOpenFileModel, 
+    messagesInput, 
+    conversationId,
+  );
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector(state => state.userInfo.id);
+
+
+  const handleKeypress = (e: { key: string; }): void => {
+    if (e.key === "Enter") {
+      send();
+    }
+  }
+
+  const send = () => {
+    sendFiles();
+    let attachments: {file_name: string, size: number} = [];
+      files.forEach(file => {
+        attachments.push({
+          file_name: file.name,
+          size: file.size
+        });
+      });
+      dispatch(addMessage({
+        message_type: 'file',
+        message_id: null,
+        conversation_id: conversationId,
+        created_at: new Date().toISOString(),
+        sender_id: userId,
+        message: messagesInput.current!.value.trim(),
+        attachments: attachments
+      }))
+  }
+
+  const cancel = () => {
+    setAttachedFiles([]);
+    setIsOpenFileModel(false);
+  }
+
+  return (
+    <MainContainer>
+      <Header>
+        <Heading>{files.length} file{files.length === 1 ? '' : 's' } selected</Heading>
+      </Header>
+      <FilesContainer>
+        <FilesBox files={files} />
+      </FilesContainer>
+      <InputBox
+        onKeyPress={handleKeypress}
+      >
+        <MessageInput
+          ref={messagesInput}
+          placeholder='Comment'
+        />
+        <Emoji
+            messagesInput={messagesInput}
+        />
+      </InputBox>
+      <Footer>
+        <Button onClick={() => cancel()}>Cancel</Button>
+        <Button onClick={() => send()}>Send</Button>
+      </Footer>
+    </MainContainer>
+  )
 }
 
 const AttachedFilesModal: React.FC<AttachedFiles> = ({
@@ -128,87 +210,24 @@ const AttachedFilesModal: React.FC<AttachedFiles> = ({
   setAttachedFiles,
   isOpenFileModel,
   conversationId,
-  sendMessageWithFiles
+  setFileMessage,
+  fileMessage
 }) => {
-  const files: Array<{
-    name: string,
-    type: string,
-    size: number
-  }> = Array.from(attachedFiles);
-  const userId = useAppSelector((state) => state.userInfo.id);
-  const messagesInput = useRef(null);
-  const dispatch = useAppDispatch();
-
-  const send = () => {
-    sendMessage(messagesInput, conversationId, userId, dispatch);
-    sendFiles();
-  }
-
-  const cancel = () => {
-    setAttachedFiles([]);
-    setIsOpenFileModel(false);
-  }
-
-  const sendFiles = () => {
-    sendMessageWithFiles();
-    setIsOpenFileModel(false);
-    // const attachedFilesData = new FormData();
-
-    // Object.keys(attachedFiles).forEach(key => {
-    //   const item = attachedFiles.item(key);
-    //   attachedFilesData.append(item.name, item);
-    // });
-
-    // const config = {
-    //   onUploadProgress: (progressEvent: {loaded: number, total: number}) => {
-    //     const loaded = progressEvent.loaded;
-    //     const total = progressEvent.total;
-    //     const percentCompleted = Math.floor((loaded / total) * 100);
-    //     console.log(percentCompleted);
-    //   }
-    // }
-
-    // axios.post(`${process.env.REACT_APP_SERVER_URL}messanger/sendFiles`,
-    //   attachedFilesData,
-    //   config,
-    //   { withCredentials: true }
-    // )
-    // .then(res => {
-    //   closeModal();
-    // })
-    // .catch(err => {
-    //   console.log(err);
-    // })
-  }
 
   if(!isOpenFileModel) return null;
 
-  return ReactDOM.createPortal(
-    <>
-      <BackgoundBlur />
-      <MainContainer>
-        <Header>
-          <Heading>{files.length} file{files.length === 1 ? '' : 's' } selected</Heading>
-        </Header>
-        <FilesContainer>
-          <FilesBox files={files} />
-        </FilesContainer>
-        <InputBox>
-          <MessageInput
-            ref={messagesInput}
-            placeholder='Comment'
-          />
-          <Emoji
-              messagesInput={messagesInput}
-          />
-        </InputBox>
-        <Footer>
-          <Button onClick={() => cancel()}>Cancel</Button>
-          <Button onClick={() => send()}>Send</Button>
-        </Footer>
-      </MainContainer>
-    </>,
-    document.getElementById('portal')!
+  return (
+    <ModalWindow>
+      <AttachedFilesModalComponent
+        attachedFiles={attachedFiles}
+        setIsOpenFileModel={setIsOpenFileModel}
+        isOpenFileModel={isOpenFileModel}
+        setAttachedFiles={setAttachedFiles}
+        conversationId={conversationId}
+        setFileMessage={setFileMessage}
+        fileMessage={fileMessage}
+      />
+    </ModalWindow>
   )
 }
 

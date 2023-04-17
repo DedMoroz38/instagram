@@ -12,7 +12,11 @@ router.get("/getConversationsAndMessages", messangerController.getConversationsA
 router.get("/getPastMessages/:groupNumber/:conversationId", messangerController.getPastMessagesInARange);
 router.post("/sendFiles",
     fileUpload({createParentPath: true}),
-    messangerController.saveFiles
+    messangerController.saveFilesAndSendMessage
   );
+router.get("/getFileNames/:messageId", messangerController.getFileNames);
+router.get("/installFile/:attachment_id", messangerController.installFile);
+router.get('/createConversation/:senderId/:recieverId', messangerController.createConversation);
+router.get('/getConversation/:conversationId/:userId', messangerController.getConversation)
 
 module.exports = router;

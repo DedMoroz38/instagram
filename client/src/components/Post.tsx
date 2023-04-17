@@ -1,19 +1,23 @@
-import { useContext } from "react";
 import styled from "styled-components";
-import config from "../config.json";
-import { ModalWindowContext } from "../routes/Main/MainContainer";
 import { IdentityIcon, LikeBorderIcon, LikeIcon } from "./StyledIcons";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import axios from "axios";
-import { removeLike, addLike } from "../features/posts/followingsPostsSlice";
+import { useLike } from "../lib/likes/like";
+import { useEffect } from "react";
+import ThreeDotsMenu from "./ThreeDotsMenu";
+import { Link } from "react-router-dom";
 
 
 const PostContainer = styled.div`
+  outline: none !important;
+  flex-shrink: 0;
   width: 236px;
   position: relative;
   overflow: hidden;
   margin-bottom: 30px;
   cursor: pointer;
+  @media (max-width: 420px){
+    width: 180px;
+  }
 `;
 
 const PostImage = styled.img`
@@ -36,15 +40,30 @@ const PostOwnerInfo = styled.div`
 const PostOwnerPhoto = styled.img`
   width: 32px;
   border-radius: 50%;
-  margin-right: 10px;
 `;
-const PostOwnerUsername = styled.p`
+const PostOwnerUsername = styled(Link)`
   color: ${({theme}) => theme.color};
-  font-weight: 100;
+  font-weight: 400;
   margin-left: 10px;
+  text-decoration: none;
 `;
 
-const LikeButton = styled.button`
+export const LikeContainer = styled.div`
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  right: 10px;
+`
+export const NumberOfLikes = styled.p`
+  color: ${({theme}) => theme.color};
+  font-weight: 400;
+`;
+
+export const LikeButton = styled.button`
+  &:focus{
+    -webkit-tap-highlight-color: transparent;
+  }
   width: 24px;
   height: 24px;
   display: flex;
@@ -53,80 +72,80 @@ const LikeButton = styled.button`
   background: transparent;
   cursor: pointer;
   border: none;
-  position: absolute;
-  right: 10px;
+  margin-left: 2px;
 `;  
 
 interface Post{
-  userName: string,
-  postId: number,
+  likingProp: any,
+  post: any,
   firstAttachment: {
     attachmentId: number;
     postId: number;
     firstPostAttachment: string;
     userPhoto: string;
   },
+  modalProp: any
 }
 
 
 const Post: React.FC<Post> = ({
-  userName,
-  postId,
+  likingProp,
+  post,
   firstAttachment,
+  modalProp
 }) =>  {
-  const listOfIdsOfLikedPosts = useAppSelector(state => state.followingsPosts).likes;
+  const {likes: listOfIdsOfLikedPosts, numberOfLikes} = useAppSelector(state => state[likingProp.for]);
+  const {postId, userName, userId} = post;
   const dispatch = useAppDispatch();
   const {
     setPostIdForModal,
     setIsOpen,
-  } = useContext(ModalWindowContext);
+  } = modalProp;
 
   const openModal = () => {
+
     setPostIdForModal(postId);
     setIsOpen(true);
   }
 
   const like = (postId: number) => {
-    axios.get(`${process.env.REACT_APP_SERVER_URL}posts/like/${postId}`,
-      { withCredentials: true }
-    )
-    .then(res => {
-      if(listOfIdsOfLikedPosts.includes(postId)){
-        const postIdIndex = listOfIdsOfLikedPosts.indexOf(postId);
-        dispatch(removeLike(postIdIndex));
-      } else {
-        dispatch(addLike(postId));
-      }
-    }).catch(err => {
-      console.log(err);
-    })
+    useLike(postId, likingProp, dispatch, listOfIdsOfLikedPosts);
   }
 
   return (
     <PostContainer key={postId}>
       <PostImage 
         onClick={() => openModal()}
-        src={`${config.serverFilesUrl}postImages/${firstAttachment.firstPostAttachment}`} 
+        src={`${process.env.REACT_APP_IMAGES_URL}postImages/${firstAttachment.firstPostAttachment}`} 
         alt="postsAttachment" 
       />
       <PostOwnerInfo>
         {
           firstAttachment.userPhoto !== null ?
           <PostOwnerPhoto
-            src={`${config.serverFilesUrl}users/${firstAttachment.userPhoto}`}
+            src={`${process.env.REACT_APP_IMAGES_URL}users/${firstAttachment.userPhoto}`}
             alt="owners photo"
           /> :
           <IdentityIcon dimensions="30px" />
         }
-        <PostOwnerUsername>{userName}</PostOwnerUsername>
-        <LikeButton onClick={() => like(postId)}>
-        {
-          listOfIdsOfLikedPosts.includes(postId) ?
-          <LikeIcon dimensions="24px" /> :
-          <LikeBorderIcon dimensions="24px" />
-        }
-        </LikeButton>
+        <PostOwnerUsername
+          to={`/${userId}`}
+        >{userName}</PostOwnerUsername>
+        <LikeContainer>
+          <NumberOfLikes>{numberOfLikes[`${postId}`]}</NumberOfLikes>
+          <LikeButton onClick={() => like(postId)}>
+          {
+            listOfIdsOfLikedPosts.includes(postId) ?
+            <LikeIcon dimensions="24px" /> :
+            <LikeBorderIcon dimensions="24px" />
+          }
+          </LikeButton>
+        </LikeContainer>
       </PostOwnerInfo>
+      {
+        likingProp.for === 'userPosts' &&
+        <ThreeDotsMenu postId={postId} />
+      }
     </PostContainer>
   )
 }

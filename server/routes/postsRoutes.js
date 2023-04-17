@@ -14,8 +14,14 @@ router.route('/')
         postsController.resizePostImages,
         postsController.createPost);
 
-router.route('/getUserFollowingPosts')
-  .get(postsController.getUserFollowingPosts);
+router.route('/delete/:postId')
+    .get(postsController.delete)
+
+router.route('/:isForUser')
+  .get(postsController.getPosts);
+
+router.route('/getByUserId/:userId')
+  .get(postsController.getPostsForAccount);
 
 router.route('/getAttachmentsForPost/:postId')
   .get(postsController.getAttachmentsForPost);
@@ -25,7 +31,7 @@ router.route('/like/:postId')
 
 router.route('/comment/:postId')
   .post(postsController.comment)
-  .get(postsController.getComments);
+  // .get(postsController.getComments);
 
 
 

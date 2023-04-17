@@ -4,6 +4,7 @@ import conversationsReducer from '../features/friends/conversationsSlice';
 import messagesReducer from '../features/messages/messagesSlice';
 import userPostsReducer from '../features/posts/userPostsSlice';
 import followingsPostsReducer from '../features/posts/followingsPostsSlice';
+import accountPostsSlice from '../features/posts/accountPostsSlice';
 
 
 export const store = configureStore({
@@ -12,7 +13,8 @@ export const store = configureStore({
     userConversations: conversationsReducer,
     userMessages: messagesReducer,
     userPosts: userPostsReducer,
-    followingsPosts: followingsPostsReducer
+    followingsPosts: followingsPostsReducer,
+    accountPosts: accountPostsSlice
   },
 })
 

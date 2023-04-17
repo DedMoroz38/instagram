@@ -2,34 +2,37 @@ const nodemailer = require("nodemailer");
 const htmlToText = require("html-to-text");
 const pug = require("pug");
 const AppError = require('../utils/appErrors');
-
+const { google } = require('googleapis');
+const OAtuh2 = google.auth.OAuth2;
+const OAtuh2_client = new OAtuh2(process.env.EMAIL_CLIENT_ID, process.env.EMAIL_CLIENT_SECRET);
+OAtuh2_client.setCredentials({refresh_token:process.env.EMAIL_REFRECH_TOKEN });
 
 module.exports = class Email {
     constructor(user, url) {
         this.to = user.login;
         this.firstName = user.full_name;
         this.url = url;
-        this.from = `Egor Maksimov <${process.env.EMAIL_FROM}>`
+        this.from = `Egor Maksimov <${process.env.EMAIL_FROM}>`;
+    }
+
+    async account() {
+        return await nodemailer.createTestAccount();
     }
 
     newTransport() {
-      if(process.env.NODE_ENV === "production"){
+        const accessToken = OAtuh2_client.getAccessToken();
+
         return nodemailer.createTransport({
-            service: 'SendGrid',
+            service: 'gmail',
             auth: {
-                user: process.env.SENDGRID_USERNAME,
-                pass: process.env.SENDGRID_PASSWORD
+                type: 'OAuth2',
+                user: process.env.EMAIL_USERNAME,
+                clientId: process.env.EMAIL_CLIENT_ID,
+                clientSecret: process.env.EMAIL_CLIENT_SECRET,
+                refreshToken: process.env.EMAIL_REFRECH_TOKEN,
+                accessToken
             }
-        })
-      } 
-      return nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: process.env.EMAIL_POST,
-        auth: {
-            user: process.env.EMAIL_USERNAME,
-            pass: process.env.EMAIL_PASSWORD,
-        }
-      });
+        });
     }
 
     async send(template, subject){
@@ -38,7 +41,6 @@ module.exports = class Email {
           url: this.url,
           subject
       });
-
       const mailOptions = {
           from: this.from,
           to: this.to,
@@ -57,3 +59,4 @@ module.exports = class Email {
         await this.send('passwordReset', "Your password reset token (valid for 10 minutes)");
     }
 }
+

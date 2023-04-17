@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-interface PostsState {
+export interface PostsState {
   posts: Array<{
     postId: number,
-    userName: string
+    userName: string,
+    userId: number
   }>,
   attachments: Array<{
     attachmentId: number,
@@ -12,13 +13,15 @@ interface PostsState {
     firstPostAttachment: string,
     userPhoto: string
   }>,
-  likes: Array<number>
+  likes: Array<number>,
+  numberOfLikes: any
 }
 
 const initialState: PostsState = {
   posts: [],
   attachments: [],
-  likes: []
+  likes: [],
+  numberOfLikes: {}
 }
 
 
@@ -34,12 +37,14 @@ export const followingsPostsSlice = createSlice({
         if(
           !state.posts.includes({
             postId: postId,
-            userName: attachment.userName
+            userName: attachment.userName,
+            userId: attachment.userId
           })
         ){
           state.posts.push({
             postId,
-            userName: attachment.userName
+            userName: attachment.userName,
+            userId: attachment.userId
           })
         }
         state.attachments.push({
@@ -51,10 +56,7 @@ export const followingsPostsSlice = createSlice({
       }
     },
     addLikes: (state, action: PayloadAction<any>) => {
-      const ids = action.payload.map((postId: { postId: any; }) => {
-        return postId.postId
-      })
-      state.likes = [...ids];
+      state.likes = [...action.payload];
     },
     addLike: (state, action: PayloadAction<number>) => {
       state.likes.push(action.payload);
@@ -62,11 +64,22 @@ export const followingsPostsSlice = createSlice({
     removeLike: (state, action: PayloadAction<number>) => {
       state.likes.splice(action.payload, 1);
     },
+    addNumberOfLikes: (state, action: PayloadAction<any>) => {
+      state.numberOfLikes = {...action.payload};
+    },
+    incrementLikeNumber: (state, action: PayloadAction<any>) => {
+      const postId = action.payload;
+      state.numberOfLikes[`${postId}`] += 1;
+    },
+    decrementLikeNumber: (state, action: PayloadAction<any>) => {
+      const postId = action.payload;
+      state.numberOfLikes[`${postId}`] -= 1;
+    },
     resetPosts: () => initialState,
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addPosts, addLikes, resetPosts, removeLike, addLike } = followingsPostsSlice.actions;
+export const { addPosts, addLikes, resetPosts, removeLike, addLike, addNumberOfLikes, incrementLikeNumber, decrementLikeNumber } = followingsPostsSlice.actions;
 
 export default followingsPostsSlice.reducer;

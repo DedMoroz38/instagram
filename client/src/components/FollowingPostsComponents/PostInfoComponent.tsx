@@ -1,130 +1,78 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components';
-import { IdentityIcon } from '../StyledIcons';
+import { IdentityIcon, LikeBorderIcon, LikeIcon } from '../StyledIcons';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import axios from 'axios';
 import Emoji from '../Emoji/EmojiPicker';
 import SendIcon from '@mui/icons-material/Send';
-import { useAppSelector } from '../../app/hooks';
-
-const MainContainer = styled.div`
-  width: 300px;
-  heigth: 100%;
-  border-left: 1px solid black;
-`;
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { LikeButton, LikeContainer, NumberOfLikes } from '../Post';
+import { useLike } from '../../lib/likes/like';
+import { Scrollbar } from '../Theme/globalStyles';
+import Comments from './Comments';
+import { useWidthContext } from '../../ContextProviders/WidthProivder';
+import ModalWindow from '../ModalWindow/ModalWindow';
+import { Errors } from '../../lib/errors/Errors';
+import { useErrorPopUpContext } from '../../ContextProviders/ClienErrorHandlingProvider';
 
 const PostCreatorInfoContainer = styled.div`
+  border-radius: 10px 10px 0 0;
+  background: ${({ theme }) => theme.messageBoxBackground};
+  grid-area: name;
   height: 50px;
-  border-bottom: 1px solid black;
   display: flex;
   align-items: center;
   justify-content: left;
-  padding-left: 5px;
+  padding-left: 10px;
+  border-bottom: 1px solid #96989d;
+  @media (max-width: 420px){
+    border-radius: 0;
+    height: auto;
+    ${props => props.isCommentOpen ? 
+      `display: none`
+       : ``}
+  }
 `;
 
 const PostCreator = styled.p`
   color: ${({theme}) => theme.color };
-  margin-left: 5px;
+  margin-left: 7px;
 `;
 
-const PostCommentsContianer = styled.div`
-  height: calc(100% - 130px);
-  padding: 15px 5px 0;
-  overflow-y: scroll;
-  flex-shrink: 0;
-`;
-const CommentBox = styled.div`
-  display: flex;
-  margin-bottom: 20px;
-`;
 
 const CommentCreatorPhoto = styled.img`
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  margin-right: 18px;
 `;
 
-const CommentTextContianer = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-`;
 
-const CommentCreator = styled.p`
-  color: ${({theme}) => theme.color}
-`;
-const Comment = styled.p`
-  color: ${({theme}) => theme.color};
-  font-weight: 200;
-`;
-
-const LikesContainer = styled.div`
-  height: 40px;
-  border-top: 1px solid black;
-`
-
-const LikesBox = styled.div`
-
-`;
-
-const InputContainer = styled.div`
-  transition: all 0.3s linear;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 40px;
-  margin-bottom: 20px;
-  border-top: 1px solid black;
-  padding: 5px;
-`;
-
-const CommentInput = styled.input`
-  width: 100%;
-  background: transparent;
-  border: none;
-  margin: 0 5px;
-  font-size: 15px;
-  color: ${({ theme }) => theme.color};
-  &::placeholder {
-    padding-left: 5px;
-  }
-`;
-
-const SendCommentButton = styled.button`
-  cursor: pointer;
-  display: flex;
-  alifn-items: center;
-  justify-conter: center;
-  border: none;
-  background: transparent;
-`;
 
 interface PostInfo {
-  postId: number
+  userInfo: any,
+  postId: number,
+  comments: any,
+  setComments: any
+  likingProp: any,
+  commentProp: any
 }
 
 const PostInfoComponent: React.FC<PostInfo> = ({
-  postId
+  userInfo,
+  postId,
+  comments,
+  setComments,
+  likingProp,
+  commentProp
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const userInfo = useAppSelector(state => state.userInfo);
-  const [comments, setComments] = useState<Array<{
-    user_id: number,
-    user_name: string,
-    photo: string | null,
-    comment_id: number | null,
-    comment: string,
-  }>>([]);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.userInfo);
+  const {likes: listOfIdsOfLikedPosts, numberOfLikes} = useAppSelector(state => state[likingProp.for]);
+  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
 
-  const like = (postId: number) => {
-    axios.get(`${process.env.REACT_APP_SERVER_URL}posts/like/${postId}`,
-      { withCredentials: true }
-    )
-    .then(res => {
-    }).catch(err => {
-      console.log(err);
-    })
+  const like = () => {
+    useLike(postId, likingProp, dispatch, listOfIdsOfLikedPosts);
   }
 
   const sendComment = () => {
@@ -137,73 +85,54 @@ const PostInfoComponent: React.FC<PostInfo> = ({
       )
       .then(res => {
         inputRef.current!.value = '';
-        setComments(prev => [...prev, {
-          user_id: userInfo.id,
-          user_name: userInfo.name,
-          photo: userInfo.photo,
-          comment_id: null,
-          comment: comment,
-        }])
+        setComments(prev => [...prev, [
+          comment,
+          user.user_name,
+          user.photo
+        ]])
       }).catch(err => {
-        console.log(err);
+        setErrorMessage(Errors.default);
+        setErrorPopUpIsOpen(true);
       })
     }
   }
 
-  useEffect(() => {
-    axios.get(`${process.env.REACT_APP_SERVER_URL}posts/comment/${postId}`,
-      { withCredentials: true }
-    )
-    .then(res => {
-      setComments([...res.data.comments]);
-    }).catch(err => {
-      console.log(err);
-    })
-  }, []);
+  const handleKeypress = (e: { key: string; }): void => {
+    if (e.key === "Enter") {
+      sendComment();
+    }
+  }
 
   return (
-    <MainContainer>
-      <PostCreatorInfoContainer>
-        <IdentityIcon dimensions={'40px'} />
-        <PostCreator>Name</PostCreator>
+    <>
+      <PostCreatorInfoContainer
+        isCommentOpen={commentProp.isCommentOpen}
+      >
+        {
+          userInfo[1] === null ?
+          <IdentityIcon dimensions={window.innerWidth <= 420 ? '30px' : '40px'} /> :
+          <CommentCreatorPhoto 
+            src={`${process.env.REACT_APP_IMAGES_URL}users/${userInfo[1]}`} 
+            alt="post creator" 
+          />
+        }
+        <PostCreator>{userInfo[0]}</PostCreator>
       </PostCreatorInfoContainer>
-      <PostCommentsContianer>
-      {
-        comments.map((comment, index) => (
-          <CommentBox key={index}>
-            <CommentCreatorPhoto 
-              src={`${process.env.REACT_APP_FILES_URL}/users/${comment.photo}`} 
-              alt="post creator" 
-            />
-            <CommentTextContianer>
-              <CommentCreator>{comment.user_name}</CommentCreator>
-              <Comment>{comment.comment}</Comment>
-            </CommentTextContianer>
-          </CommentBox>
-        ))
-      }
-      </PostCommentsContianer>
-      <LikesContainer>
-        <LikesBox>
-          <FavoriteBorderIcon onClick={() => like(postId)} />
-        </LikesBox>
-      </LikesContainer>
-      <InputContainer>
-        <Emoji 
-          messagesInput={inputRef}
-        />
-        <CommentInput
-          placeholder='Add a comment...'
-          ref={inputRef}
-        />
-        <SendCommentButton
-          onClick={() => sendComment()}
-        >
-          <SendIcon />
-        </SendCommentButton>
-      </InputContainer>
-    </MainContainer>
+      <Comments
+        comments={comments}
+        listOfIdsOfLikedPosts={listOfIdsOfLikedPosts}
+        like={like}
+        numberOfLikes={numberOfLikes}
+        postId={postId}
+        sendComment={sendComment}
+        handleKeypress={handleKeypress}
+        inputRef={inputRef}
+        commentProp={commentProp}
+      /> 
+    </>
   )
 }
 
 export default PostInfoComponent;
+
+

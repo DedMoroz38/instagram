@@ -1,20 +1,21 @@
-import { ButtonBox, ErrorMessage, FormInput, InputBox, RedirectLink, shadowAnimation, SubmitButton } from "./Login/LoginPresentational";
-import { useContext } from "react";
-import { ErrorPopUpContext, ThemeContext } from "../App";
+import { ButtonBox, ErrorMessage, FormInput, InputBox, SubmitButton } from "./Login/LoginPresentational";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import config from '../config.json';
 import {MainContainer, ResetPasswordForm, ResetPasswordMessage} from './PasswordResetRequest';
 import LockIcon from '@mui/icons-material/Lock';
 import { useNavigate } from 'react-router-dom'
+import { useErrorPopUpContext } from "../ContextProviders/ClienErrorHandlingProvider";
+import { useThemeContext } from "../ContextProviders/ThemeContextProvider";
+import { Errors } from "../lib/errors/Errors";
 
 
 
 
 
 const PasswordReset: React.FC = () => {
-  const {themeMode}= useContext(ThemeContext);
-  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useContext(ErrorPopUpContext);
+  const {themeMode}= useThemeContext();
+  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
   const navigate = useNavigate();
 
   const url = window.location.search;
@@ -41,7 +42,7 @@ const PasswordReset: React.FC = () => {
   {
     const { password, passwordConfirm } = data;
     if(password === passwordConfirm){
-      axios.patch(`${config.serverUrl}users/resetPassword`, { 
+      axios.patch(`${process.env.REACT_APP_SERVER_URL}users/resetPassword`, { 
         password,
         passwordResetToken,
         userId
@@ -53,7 +54,7 @@ const PasswordReset: React.FC = () => {
           setErrorMessage(`Password reset token is invalid or has expired. Request a new one`);
           setErrorPopUpIsOpen(true);
         } else {
-          setErrorMessage(`Something went wrong:( Please try later. We will sort the problem out!`);
+          setErrorMessage(Errors.default);
           setErrorPopUpIsOpen(true);
         }
       })
@@ -95,7 +96,7 @@ const PasswordReset: React.FC = () => {
               },
               minLength: {
                 value: 8,
-                message: 'Password must contain at least 8 characters'
+                message: 'At least 8 characters is required'
               }
             })}
           />

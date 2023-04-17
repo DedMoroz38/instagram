@@ -1,74 +1,56 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useEffect, useState } from "react";
 import PostsPresentational from "./MainPresentational";
-import config from "../../config.json";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { addLikes, addPosts } from "../../features/posts/followingsPostsSlice";
-import GridColumn from "../../components/GridColumn";
-import React from "react";
+import { useAppSelector } from "../../app/hooks";
+import { generateMasonryGrid } from "../../lib/main/generateMasonryGrid";
+import { useGetSubscribersPosts } from "../../hooks/fetchHooks/main/useGetSubscribersPosts";
+import { addLike, addLikes, addNumberOfLikes, addPosts, decrementLikeNumber, incrementLikeNumber, removeLike } from "../../features/posts/followingsPostsSlice";
 
-export const ModalWindowContext = React.createContext<any>(null);
+type ModalWindowContext = {
+  setPostIdForModal: Dispatch<SetStateAction<number>>,
+  postIdForModal: number,
+  isOpen: boolean,
+  setIsOpen: Dispatch<SetStateAction<boolean>>,
+  onClose: () => void
+}
+
+export const ModalWindowContext = createContext<ModalWindowContext | null>(null);
 
 const MainContainer: React.FC = () =>  {
   const {posts: followingsPosts, attachments: followingsPostsFirstAttachments} = useAppSelector((state) => state.followingsPosts);
   const [postsColumnState, setPostsColumnState] = useState<Array<JSX.Element>>([]);
-  const dispatch = useAppDispatch();
   //For Modal window
   const [postIdForModal, setPostIdForModal] = useState<number>(0);
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
-  
+  const functions = {addPosts, addLikes, addNumberOfLikes};
+  const likingProp = {
+    for: 'followingsPosts',
+    removeLike,
+    decrementLikeNumber,
+    incrementLikeNumber,
+    addLike
+  }
+  const {loading} = useGetSubscribersPosts(functions, [followingsPosts], `posts/false`);
+
+  const generateGrid = () => generateMasonryGrid(
+    likingProp,
+    setPostsColumnState,
+    followingsPosts,
+    followingsPostsFirstAttachments,
+    {setPostIdForModal, setIsOpen}
+  );
 
   useEffect(() => {
-    if(followingsPosts.length === 0){
-      axios.get(`${config.serverUrl}posts/getUserFollowingPosts`, 
-      { 
-        withCredentials: true
-      })    
-      .then(res => {
-        dispatch(addPosts(res.data.posts));
-        dispatch(addLikes(res.data.idOfLikedPosts))
-      })
-      .catch(err => {
-        console.log(err);
-      })
-    }
-  }, []);
-
-  useEffect(() => {
-
-    const generateMasonryGrid = (columns: any) => {
-      setPostsColumnState([]);
-      let columnWrappers: any = {};
-
-      for (let i = 0; i < columns; i++) {
-        columnWrappers[`column${i}`] = [];
-      }
-
-      for (let i = 0; i < followingsPosts.length; i++) {
-        const column = i % columns;
-        columnWrappers[`column${column}`].push(followingsPosts[i]);
-      }
-      for (let i = 0; i < columns; i++) {
-        let columnPosts: Array<{
-          postId: number;
-          userName: string;
-        }> = columnWrappers[`column${i}`];
-        let postsColumn: JSX.Element = 
-          <GridColumn
-            key={i}
-            columnPosts={columnPosts}
-            followingsPostsFirstAttachments={followingsPostsFirstAttachments}
-          />
-        setPostsColumnState(prev => [...prev, postsColumn]);
-      }
-    }
-
     window.addEventListener("resize", () => {
-      generateMasonryGrid(Math.trunc(window.innerWidth / 256));
+      generateGrid();
     });
-    generateMasonryGrid(Math.trunc(window.innerWidth / 256));
+    generateGrid();
+
+    return () => {
+      window.removeEventListener("resize", generateGrid);
+    }
   }, [followingsPosts]);
+
 
   return (
     <ModalWindowContext.Provider value={{
@@ -80,6 +62,9 @@ const MainContainer: React.FC = () =>  {
     }}>
       <PostsPresentational 
         postsColumnState={postsColumnState}
+        loading={loading}
+        modalProp={{isOpen, onClose, postIdForModal}}
+        likingProp={likingProp}
       />
     </ModalWindowContext.Provider>
   )

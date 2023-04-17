@@ -5,32 +5,25 @@ import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { 
-  MainContainer,
-  SignForm, 
-  FormHeding,
   InputBox,
   FormInput,
   VisabilityToggleBox,
   ButtonBox,
   SubmitButton,
   ErrorMessage,
-  SignBox,
   RedirectLink,
   CircularProgressContainer
  } from '../Login/LoginPresentational';
-import { Link } from 'react-router-dom';
 import { FieldErrorsImpl, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form';
-import { useContext } from 'react';
-import { ThemeContext } from "../../App";
-import styled from 'styled-components';
-import EmailConfirmation from '../EmailConfirmation';
 import CircularProgress from '@mui/material/CircularProgress';
+import { Theme } from '../../components/Theme/Themes';
+import AuthorizationForm from '../../components/AuthorizationForm';
 
 
 interface Registration {
   showPassword: boolean,
   setShowPassword: React.Dispatch<React.SetStateAction<boolean>>,
-  registerFn: (data: {
+  signUp: (data: {
     fullName: string;
     userName: string;
     email: string;
@@ -55,155 +48,146 @@ interface Registration {
     password: string;
   }>,
   isError: boolean,
-  isLoading: boolean
+  loading: boolean,
+  themeMode: Theme
 }
 
 const RegistrationPresentational: React.FC<Registration> = ({
   showPassword,
   setShowPassword,
-  registerFn,
+  signUp,
   register,
   handleSubmit,
   errors,
   isError,
-  isLoading
+  loading,
+  themeMode
 }) =>  {
-  const {themeMode}= useContext(ThemeContext);
 
   return (
-    <MainContainer>
-      <SignBox 
-        style={
-          isError ? 
+    <AuthorizationForm 
+      isError={isError}
+      handleSubmit={handleSubmit}
+      authFunction={signUp}
+      name={'Registration'}
+    >
+      <>
+        <InputBox>
+          <ErrorMessage>{errors.fullName ? errors.fullName.message : ''}</ErrorMessage>
+          <FormInput
+            placeholder='Full Name'
+            {...register('fullName', {
+              required: {
+                value: true,
+                message: 'Provide your full name'
+              }
+            })}
+          />
+          <PersonIcon style={{
+            top: '4px',
+            left: '5px',
+            color: `${themeMode.iconColor}`,
+            position: 'absolute'}} 
+          />
+        </InputBox>
+        <InputBox>
+          <ErrorMessage>{errors.userName ? errors.userName.message : ''}</ErrorMessage>
+          <FormInput
+            placeholder='Username'
+            {...register('userName', {
+              required: {
+                value: true,
+                message: 'Come up with an username'
+              },
+              pattern: {
+                value: /^[a-zA-Z0-9]*$/,
+                message: 'Please use only alphanumeric characters'
+              },
+            })}
+          />
+          <InsertEmoticonIcon style={{
+            top: '4px',
+            left: '5px',
+            color: `${themeMode.iconColor}`,
+            position: 'absolute'}} 
+          />
+        </InputBox>
+        <InputBox>
+          <ErrorMessage>{errors.email ? errors.email.message : ''}</ErrorMessage>
+          <FormInput
+            placeholder='E-mail'
+            {...register('email', {
+              required: {
+                value: true,
+                message: 'Put in your email'
+              },
+              pattern: {
+                value: /^[a-z0-9][a-z0-9-_\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/,
+                message: 'Please provide a valid email address'
+              }
+            })}
+          />
+          <EmailIcon style={{
+            top: '4px',
+            left: '5px',
+            color: `${themeMode.iconColor}`,
+            position: 'absolute'}} 
+          />
+        </InputBox>
+        <InputBox>
+          <ErrorMessage>{errors.password ? errors.password.message : ''}</ErrorMessage>
+          <FormInput
+            placeholder='Password'
+            type={showPassword ? 'text' : "password"} 
+            {...register('password', {
+              required: {
+                value: true,
+                message: 'Put in your password'
+              },
+              minLength: {
+                value: 8,
+                message: 'At least 8 characters is required'
+              }
+            })}
+          />
+          <LockIcon style={{
+            top: '4px',
+            left: '5px',
+            color: `${themeMode.iconColor}`,
+            position: 'absolute'}} 
+          />
+          <VisabilityToggleBox
+            style={{
+              color: `${themeMode.iconColor}`,
+            }}
+            onClick={() => { setShowPassword(!showPassword) }}
+          >
+            {showPassword ? 
+            <VisibilityIcon /> : 
+            <VisibilityOffIcon />}
+          </VisabilityToggleBox>
+        </InputBox>
+        <ButtonBox>
+          <RedirectLink 
+            to="/signin"
+          >Go to login</RedirectLink>
           {
-            boxShadow: "#ff0033 0px 10px 30px",
-            animationName: 'none',
-          } :
-          {}
-        }
-      >
-        <SignForm onSubmit={handleSubmit((data: any) => {
-            registerFn(data);
-          })}
-        >
-          <FormHeding>Registration</FormHeding>
-          <InputBox>
-            <ErrorMessage>{errors.fullName ? errors.fullName.message : ''}</ErrorMessage>
-            <FormInput
-              placeholder='Full Name'
-              {...register('fullName', {
-                required: {
-                  value: true,
-                  message: 'Provide your full name'
-                }
-              })}
+            loading ? 
+            <CircularProgressContainer>
+              <CircularProgress style={{
+                margin: '0 auto',
+                color: 'white',
+                height: '30px',
+                width: '30px'
+              }} />
+            </CircularProgressContainer> :
+            <SubmitButton 
+              value="Register"
             />
-            <PersonIcon style={{
-              top: '4px',
-              left: '5px',
-              color: `${themeMode.iconColor}`,
-              position: 'absolute'}} 
-            />
-          </InputBox>
-          <InputBox>
-            <ErrorMessage>{errors.userName ? errors.userName.message : ''}</ErrorMessage>
-            <FormInput
-              placeholder='Username'
-              {...register('userName', {
-                required: {
-                  value: true,
-                  message: 'Come up with an username'
-                },
-                pattern: {
-                  value: /^[a-zA-Z0-9]*$/,
-                  message: 'Please use only alphanumeric characters'
-                },
-              })}
-            />
-            <InsertEmoticonIcon style={{
-              top: '4px',
-              left: '5px',
-              color: `${themeMode.iconColor}`,
-              position: 'absolute'}} 
-            />
-          </InputBox>
-          <InputBox>
-            <ErrorMessage>{errors.email ? errors.email.message : ''}</ErrorMessage>
-            <FormInput
-              placeholder='E-mail'
-              {...register('email', {
-                required: {
-                  value: true,
-                  message: 'Put in your email'
-                },
-                pattern: {
-                  value: /^[a-z0-9][a-z0-9-_\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/,
-                  message: 'Please provide a valid email address'
-                }
-              })}
-            />
-            <EmailIcon style={{
-              top: '4px',
-              left: '5px',
-              color: `${themeMode.iconColor}`,
-              position: 'absolute'}} 
-            />
-          </InputBox>
-          <InputBox>
-            <ErrorMessage>{errors.password ? errors.password.message : ''}</ErrorMessage>
-            <FormInput
-              placeholder='Password'
-              type={showPassword ? 'text' : "password"} 
-              {...register('password', {
-                required: {
-                  value: true,
-                  message: 'Put in your password'
-                },
-                minLength: {
-                  value: 8,
-                  message: 'Password must contain at least 8 characters'
-                }
-              })}
-            />
-            <LockIcon style={{
-              top: '4px',
-              left: '5px',
-              color: `${themeMode.iconColor}`,
-              position: 'absolute'}} 
-            />
-            <VisabilityToggleBox
-              style={{
-                color: `${themeMode.iconColor}`,
-              }}
-              onClick={() => { setShowPassword(!showPassword) }}
-            >
-              {showPassword ? 
-              <VisibilityIcon /> : 
-              <VisibilityOffIcon />}
-            </VisabilityToggleBox>
-          </InputBox>
-          <ButtonBox>
-            <RedirectLink 
-              to="/signin"
-            >Go to login</RedirectLink>
-            {
-              isLoading ? 
-              <CircularProgressContainer>
-                <CircularProgress style={{
-                  margin: '0 auto',
-                  color: 'white',
-                  height: '30px',
-                  width: '30px'
-                }} />
-              </CircularProgressContainer> :
-              <SubmitButton 
-                value="Register"
-              />
-            }
-          </ButtonBox>
-        </SignForm>
-      </SignBox>
-    </MainContainer>
+          }
+        </ButtonBox>
+      </>
+    </AuthorizationForm>
   )
 }
 

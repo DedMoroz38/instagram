@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import EmailIcon from '@mui/icons-material/Email';
-import { ButtonBox, ErrorMessage, FormInput, InputBox, RedirectLink, shadowAnimation, SubmitButton } from "./Login/LoginPresentational";
-import { useContext, useState } from "react";
-import { ErrorPopUpContext, ThemeContext } from "../App";
+import { ButtonBox, ErrorMessage, FormInput, InputBox, RedirectLink, SubmitButton } from "./Login/LoginPresentational";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import config from '../config.json';
+import { useErrorPopUpContext } from "../ContextProviders/ClienErrorHandlingProvider";
+import { useThemeContext } from "../ContextProviders/ThemeContextProvider";
+import { shadowAnimation } from "../components/AuthorizationForm";
+import { Errors } from "../lib/errors/Errors";
 
 export const MainContainer = styled.div`
   animation: ${shadowAnimation} 4s infinite alternate;
@@ -20,6 +22,7 @@ export const MainContainer = styled.div`
   width: 480px;
   border-radius: 15px 100px;
   padding: 30px 0;
+  color: ${({theme}) => theme.color}
 `;
 
 export const ResetPasswordForm = styled.form`
@@ -34,8 +37,8 @@ export const ResetPasswordMessage = styled.p`
 
 
 const PasswordResetRequest: React.FC = () => {
-  const {themeMode}= useContext(ThemeContext);
-  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useContext(ErrorPopUpContext);
+  const {themeMode}= useThemeContext();
+  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
   const [isSent, setIsSent] = useState<boolean>(false);
 
   const {
@@ -50,7 +53,7 @@ const PasswordResetRequest: React.FC = () => {
 
   const sendEmail = (data: { email: string}): void => {
     const { email } = data;
-    axios.post(`${config.serverUrl}users/forgotPassword`, { 
+    axios.post(`${process.env.REACT_APP_SERVER_URL}users/forgotPassword`, { 
       login: email,
     }, { withCredentials: true })
     .then(res => {
@@ -61,13 +64,14 @@ const PasswordResetRequest: React.FC = () => {
       }
 
     }).catch(err => {
-      console.log(err);
+      setErrorMessage(Errors.default);
+      setErrorPopUpIsOpen(true);
       const status: number = err.response.status;
       if(status === 404){
         setErrorMessage(`No users found registered with ${data.email}`);
         setErrorPopUpIsOpen(true);
       } else {
-        setErrorMessage(`Something went wrong:( Please try later. We will sort the problem out!`);
+        setErrorMessage(Errors.default);
         setErrorPopUpIsOpen(true);
       }
     })

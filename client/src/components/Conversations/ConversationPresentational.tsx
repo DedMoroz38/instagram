@@ -1,35 +1,54 @@
 import styled from "styled-components";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import SendIcon from '@mui/icons-material/Send';
-import React, { RefObject } from "react";
+import React, { RefObject, useState } from "react";
 import CircularProgress from '@mui/material/CircularProgress';
 import Emoji from "../Emoji/EmojiPicker";
 import AttachedFilesModal from "./FilesModal/AttachedFilesModal";
-import FilesBox from "./FilesModal/FilesBox";
-import FileMessage from "./FileMessage";
+import Messages from "./Messages/Messages";
+import WestIcon from '@mui/icons-material/West';
+import { useWidthContext } from "../../ContextProviders/WidthProivder";
+import { Link } from "react-router-dom";
 
 const MainContainer = styled.div`
+  flex-shrink: 0;
   position: relative;
   transition: all 0.3s linear;
-  margin-top: 20px;
   display: flex;
-  flex-grow: 4;
+  flex: 6;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   border-radius: 20px 0 0 0;
   background: ${({ theme }) => theme.messageBoxBackground};
+  @media (max-width: 420px){
+    padding-bottom: 50px;
+  }
 `;
 
 const NameBox = styled.div`
+  position: relative;
   border-radius: 20px 0 0 0;
-  background: #000000;
+  background: ${({ theme }) => theme.conversations.topBar.background};
   display: flex;
   justify-content: center;
   align-items: center;
   height: 55px;
   width: 100%;
-  color: ${({ theme }) => theme.color};
+  color: ${({ theme }) => theme.conversations.topBar.color};
+  @media (max-width: 420px){
+    border-radius: 0;
+    margin-top: 55px;
+  }
+`;
+const Name = styled(Link)`
+  color: ${({ theme }) => theme.conversations.topBar.color};
+  text-decoration: none;
+`;
+
+const GoBack = styled(WestIcon)`
+  position: absolute;
+  left: 10px;
 `;
 
 const MessagesBox = styled.div` 
@@ -38,7 +57,11 @@ const MessagesBox = styled.div`
   overflow-y: scroll;
   display: flex;
   flex-direction: column-reverse;
-  padding: 15px 15px 30px 15px;
+  padding: 15px 15px 5px 15px;
+  @media (max-width: 420px){
+    padding-bottom: 0;
+    height: calc(100vh - 225px);
+  }
   &::-webkit-scrollbar {
     width: 4px;
   }
@@ -72,53 +95,6 @@ const SendButton = styled.button`
   background: transparent;
   cursor: pointer;
 `;
-const MessageBoxUser = styled.div`
-  background: ${({ theme }) => theme.message};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 12px 12px 0 12px;
-  min-height: 44px;
-  padding: 0 8px;
-  margin-bottom: 7px;
-  max-width: 70%;
-  white-space: normal;
-  word-break:break-all;
-  margin-left: auto;
-  flex-shrink: 0;
-  color: white;
-`;
-
-const MessageBoxFriend = styled(MessageBoxUser)`
-  background: ${({ theme }) => theme.messageFriend};
-  margin-left: inherit;
-  margin-right: auto;
-  border-radius: 0 12px 12px 12px;
-  color: ${({ theme }) => theme.messageColor};
-`;
-
-const Message = styled.p`
-  margin-right: 10px;
-  font-size: 16px;
-`;
-
-const MessageTimeContainer = styled.div`
-  display: flex;
-  align-items: end;
-  justify-content: center;
-  height: 100%;
-  padding-bottom: 5px;
-`;
-
-const MessageTimeUser = styled.p`
-  color: white;
-  bottom: 0;
-  font-size: 10px;
-`;
-
-const MessageTimeFriend = styled(MessageTimeUser)`
-  color: #96989d;
-`;
 
 const InputContainer = styled.div`
   transition: all 0.3s linear;
@@ -129,8 +105,13 @@ const InputContainer = styled.div`
   padding: 0 20px;
   height: 70px;
   width: calc(100% - 30px);
-  margin-bottom: 20px;
-  background: ${({ theme }) => theme.textInput};
+  margin-bottom: 10px;
+  margin-top: 10px;
+  background: ${({ theme }) => theme.input.background};
+  @media (max-width: 420px){
+    margin-bottom: 5px;
+    height: 60px;
+  }
 `;
 
 const Input = styled.input`
@@ -142,6 +123,7 @@ const Input = styled.input`
   transition: all 0.3s linear; 
   &::placeholder {
     padding-left: 5px;
+    color: ${({ theme }) => theme.input.placeholderColor};
   }
 `;
 
@@ -152,7 +134,7 @@ const AddFilelabel = styled.label`
 
 interface Conversations{
   filteredMessages: Array<{
-    id: number,
+    message_id: number,
     conversation_id: number,
     message: string,
     created_at: string,
@@ -167,7 +149,7 @@ interface Conversations{
   userId: number,
   lastMessageRef: any,
   filteredPrevMessages: Array<{
-    id: number,
+    message_id: number,
     conversation_id: number,
     message: string,
     created_at: string,
@@ -184,8 +166,7 @@ interface Conversations{
   setIsOpenFileModel: any,
   setAttachedFiles: any,
   conversationId: number,
-  sendMessageWithFiles: () => void,
-  percentCompleted: number
+  goBack: () => void
 }
 
 const ConverationPresentational: React.FC<Conversations> = ({
@@ -206,69 +187,46 @@ const ConverationPresentational: React.FC<Conversations> = ({
     setIsOpenFileModel,
     setAttachedFiles,
     conversationId,
-    sendMessageWithFiles,
-    percentCompleted
+    goBack
   }) => {
+  const [fileMessage, setFileMessage] = useState('');
+  const {isMobile} = useWidthContext();
+  const messages = [...filteredMessages, ...filteredPrevMessages];
+
+  const lastSentFileIndex = 
+    messages
+    .filter((message) => {
+      return message.sender_id == 168 && message.message_type == 'file'
+    }).length;
   
 
   return (
     <MainContainer>
-      <NameBox>{friendName}</NameBox>
+      <NameBox>
+        <Name to={`/${userId}`}>{friendName}</Name>
+        {
+          isMobile &&
+          <GoBack onClick={() => goBack()} />
+        }
+      </NameBox>
       <MessagesBox>
         <div ref={bottomDiv}/>
-        <FileMessage attachedFiles={attachedFiles} percentCompleted={percentCompleted} />
-        {
-          filteredMessages
-          .map((message, index) => {
-            let createdAt = new Date(message.created_at).toLocaleTimeString();
-            createdAt = createdAt.slice(0, 5);
-            if(message.sender_id === userId){
-              return(
-                <MessageBoxUser ref={filteredMessages.length === index + 1 ? lastMessageRef : null} key={index}>
-                  <Message>{message.message}</Message>
-                  <MessageTimeContainer>
-                    <MessageTimeUser>{createdAt}</MessageTimeUser>
-                  </MessageTimeContainer>
-                </MessageBoxUser>
-              )
-            } else { 
-              return(
-                <MessageBoxFriend ref={filteredMessages.length === index + 1 ? lastMessageRef : null} key={index}>
-                  <Message>{message.message}</Message>
-                  <MessageTimeContainer>
-                    <MessageTimeFriend>{createdAt}</MessageTimeFriend>
-                  </MessageTimeContainer>
-                </MessageBoxFriend>
-              )
-            }
-          })
-        }
+        <Messages
+          isPrev={false}
+          lastSentFileIndex={lastSentFileIndex}
+          messages={filteredMessages}
+          userId={userId}
+          lastMessageRef={filteredPrevMessages.length === 0 ? lastMessageRef : null}
+        />
         {
           filteredPrevMessages.length > 0 ?
-          filteredPrevMessages
-          .map((message, index) => {
-            let createdAt = new Date(message.created_at).toLocaleTimeString();
-            createdAt = createdAt.slice(0, 5);
-            if(message.sender_id === userId){
-              return(
-                <MessageBoxUser ref={filteredPrevMessages.length === index + 1 ? lastMessageRef : null} key={index}>
-                  <Message>{message.message}</Message>
-                  <MessageTimeContainer>
-                    <MessageTimeUser>{createdAt}</MessageTimeUser>
-                  </MessageTimeContainer>
-                </MessageBoxUser>
-              )
-            } else { 
-              return(
-                <MessageBoxFriend ref={filteredPrevMessages.length === index + 1 ? lastMessageRef : null} key={index}>
-                  <Message>{message.message}</Message>
-                  <MessageTimeContainer>
-                    <MessageTimeFriend>{createdAt}</MessageTimeFriend>
-                  </MessageTimeContainer>
-                </MessageBoxFriend>
-              )
-            }
-          }) :
+          <Messages
+            isPrev={true}
+            lastSentFileIndex={lastSentFileIndex}
+            messages={filteredPrevMessages}
+            userId={userId}
+            lastMessageRef={lastMessageRef}
+          /> :
           null
         }
         {
@@ -300,7 +258,7 @@ const ConverationPresentational: React.FC<Conversations> = ({
           ><SendIcon /></SendButton>
           <input 
             style={{display: "none"}}
-            onChange={attachFiles}
+            onChange={(e) => attachFiles(e)}
             multiple
             accept=''
             type='file'
@@ -315,7 +273,8 @@ const ConverationPresentational: React.FC<Conversations> = ({
           isOpenFileModel={isOpenFileModel}
           setAttachedFiles={setAttachedFiles}
           conversationId={conversationId}
-          sendMessageWithFiles={sendMessageWithFiles}
+          setFileMessage={setFileMessage}
+          fileMessage={fileMessage}
         />
       }
     </MainContainer>

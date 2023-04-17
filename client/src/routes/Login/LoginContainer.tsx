@@ -1,18 +1,22 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import config from '../../config.json';
-import axios from 'axios';
-import { createUser } from '../../features/user/userSlice';
-import { useAppDispatch } from '../../app/hooks';
+import React, { useEffect, useState } from 'react';
 import LoginPresentational from './LoginPresentational';
 import { useForm } from 'react-hook-form';
-import { ErrorPopUpContext } from '../../App';
+import { useThemeContext } from '../../ContextProviders/ThemeContextProvider';
+import { useSignIn } from '../../hooks/fetchHooks/authorization/useSignIn';
 
+type signInData = {
+  email: string | null,
+    password: string | null
+}
 
 const LoginContainer: React.FC<{}> = () =>  {
-  const {isOpen, setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useContext(ErrorPopUpContext);
+  const {themeMode} = useThemeContext();
   const [isError, setIsError] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [signInData, setSignInData] = useState<signInData>({
+    email: null,
+    password: null
+  });
   const {
     setError,
     register,
@@ -24,48 +28,16 @@ const LoginContainer: React.FC<{}> = () =>  {
       password: "",
     }
   });
-  
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  const loginFn = (data: any) => {
-    const {email, password} = data;
-
-    axios.post(`${config.serverUrl}users/login`, { 
-      login: email,
-      password: password,
-    },
-    { withCredentials: true }
-    )
-    .then(res => {
-      if(res.status === 200){
-        dispatch(createUser({...res.data.user}));
-        navigate('/', {
-          state: {
-            loginStatus: true
-          }
-        });
-      }
-    })
-    .catch(err => {
-      const errorStatusCode: number = err.response.status;
-      showErrorShadow();
-      if(errorStatusCode === 401){
-        setError('email', {
-          message: err.response.data.message
-        });
-      } else {
-        setErrorMessage(err.response.data.message);
-        setErrorPopUpIsOpen(true);
-      }
-    });
-  }
-
   const showErrorShadow = (): void => {
     setIsError(true)
     setTimeout(() => {
       setIsError(false);
     }, 1000);
+  }
+  const {loading} = useSignIn(signInData, setError, showErrorShadow);
+
+  const signIn = (data: signInData) => {
+    setSignInData(data);
   }
 
   useEffect(() => {
@@ -80,11 +52,13 @@ const LoginContainer: React.FC<{}> = () =>  {
     <LoginPresentational
       showPassword={showPassword}
       setShowPassword={setShowPassword}
-      loginFn={loginFn}
+      signIn={signIn}
       register={register}
       handleSubmit={handleSubmit}
       isError={isError}
       errors={errors}
+      themeMode={themeMode}
+      loading={loading}
     />
   )
 }

@@ -1,20 +1,30 @@
 import styled from "styled-components";
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import config from "../../config.json";
-import ProfilePostsContainer from "../../components/ProfilePosts/ProfilePostsContainer";
+import { Scrollbar } from "../../components/Theme/globalStyles";
+import LogoutIcon from '@mui/icons-material/Logout';
 
-const MainContainer = styled.div`
+const MainContainer = styled(Scrollbar)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 auto;
+  overflow-y: scroll;
+  @media (max-width: 420px) {
+    margin-bottom: auto;
+  }
 `;
 
 const ProfileTopContainer = styled.div`
   display: flex;
   padding-top: 30px;
   width: 600px;
+  position: relative;
+  @media (max-width: 420px) {
+    padding: 0;
+    width: auto;
+    margin-bottom: auto;
+    margin-top: 60px;
+  }
 `;
 
 const ProfileIconBox = styled.div`
@@ -52,7 +62,11 @@ const IconBox = styled.div`
   align-items: center;
   position: relative;
   &:hover > label {
-    display: felx;
+    display: flex;
+  }
+  @media (max-width: 420px) {
+    width: 80px;
+    height: 80px;
   }
 `;
 
@@ -71,13 +85,36 @@ const ChangeIconButton = styled.label`
   justify-content: center;
   align-items: center;
   transition: background 0.3s;
+  @media (max-width: 420px) {
+    width: 80px;
+    height: 80px;
+  }
 `;
 const UserName = styled.p`
   font-size: 22px;
   font-weight: 300;
 `;  
 
+const LogOutButton = styled(LogoutIcon)`
+  color: ${({ theme }) => theme.header.linkColor};
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 40px;
+  @media (max-width: 420px) {
+    top: 10px;
+  }
+`;
+
 const Name = styled.p`
+`;
+
+const Icon = styled(PermIdentityIcon)`
+  border: 1px solid ${({theme}) => theme.color};
+  border-radius: 50%;
+  height: 100% !important;
+  color: ${({ theme }) => theme.color};
+  width: 100% !important;
 `;
 
 interface Profile {
@@ -88,14 +125,20 @@ interface Profile {
     photo: string | null,
     id: number
   }
-  changeProfileIconHandler: (event: any) => void,
-  profileInfo: any
+  changeProfileIconHandler: (event: any) => void | null,
+  profileInfo: any,
+  returnValue: (value: string) => string,
+  logout: () => void | null,
+  children: JSX.Element
 }
 
 const ProfilePresentational: React.FC<Profile> = ({
   userInfo,
   changeProfileIconHandler,
-  profileInfo
+  profileInfo,
+  returnValue,
+  logout,
+  children
 }) => {
   return (
     <MainContainer>
@@ -103,19 +146,27 @@ const ProfilePresentational: React.FC<Profile> = ({
         <ProfileIconBox>
           <IconBox>
             {
-              userInfo.photo === null ? 
-              <PermIdentityIcon style={{height: '100%', color: "white", width: '100%'}}/> : 
-              <img style={{height: '100%', width: '100%', borderRadius: "50%"}} src={`${config.serverFilesUrl}users/${userInfo.photo}`} alt="my avatar" />
+              userInfo.photo === null || !userInfo.photo ? 
+              <Icon /> :
+              <img 
+                style={{height: '100%', width: '100%', borderRadius: "50%"}}
+                src={`${process.env.REACT_APP_IMAGES_URL}users/${userInfo.photo}`} 
+              alt="my avatar" />
             }
-            <ChangeIconButton 
-              htmlFor="photo"
-            ><AddAPhotoIcon style={{color: 'white'}} /></ChangeIconButton>
-            <input style={{display: "none"}}
-              onChange={changeProfileIconHandler}
-              accept='image/*'
-              type='file'
-              id='photo'
-            />
+            {
+              changeProfileIconHandler !==  null &&
+              <>
+                <ChangeIconButton 
+                  htmlFor="photo"
+                ><AddAPhotoIcon style={{color: 'white'}} /></ChangeIconButton>
+                <input style={{display: "none"}}
+                  onChange={changeProfileIconHandler}
+                  accept='image/*'
+                  type='file'
+                  id='photo'
+                />
+              </>
+            }
           </IconBox>
         </ProfileIconBox>
         <ProfileInfoBox>
@@ -123,17 +174,21 @@ const ProfilePresentational: React.FC<Profile> = ({
             <UserName>{userInfo.user_name}</UserName>
           </ProfileInfoRow>
           <ProfileInfoRow>
-            <InfoString><span>{profileInfo.number_of_posts}</span> post</InfoString>
-            <InfoString><span>{profileInfo.number_of_subscriptions}</span> followers</InfoString>
-            <InfoString><span>{profileInfo.number_of_subscribers}</span> following</InfoString>
+            <InfoString><span>{returnValue(profileInfo.number_of_posts)}</span> post</InfoString>
+            <InfoString><span>{returnValue(profileInfo.number_of_subscriptions)}</span> followers</InfoString>
+            <InfoString><span>{returnValue(profileInfo.number_of_subscribers)}</span> following</InfoString>
           </ProfileInfoRow>
           <ProfileInfoRow>
             <Name>{userInfo.name}</Name>
           </ProfileInfoRow>
           
         </ProfileInfoBox>
+        {
+          logout !== null &&
+          <LogOutButton onClick={() => logout()} />
+        }
       </ProfileTopContainer>
-      <ProfilePostsContainer />
+      {children}
     </MainContainer>
   )
 }

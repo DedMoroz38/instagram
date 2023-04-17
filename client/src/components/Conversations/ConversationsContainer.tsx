@@ -1,39 +1,62 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ConverationPresentational from './ConversationPresentational';
-import { useParams } from 'react-router-dom';
-import useSocketSetup from '../../hooks/useSocketSetup';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import socket from '../../socket';
-import axios from 'axios';
-import config from "../../config.json";
-import { addMessage, addMessages } from '../../features/messages/messagesSlice';
-import useMessageLoad from '../../hooks/useMessageLoad';
+import useMessageLoad from '../../hooks/fetchHooks/messanger/useMessageLoad';
 import { sendMessage } from '../../lib/messanger/sendMessage';
+import FileLoadProvider from '../../ContextProviders/FileLoadProvider';
+import { useCreateConversation } from '../../hooks/fetchHooks/messanger/useCreateConversation';
+import { addConversation } from '../../features/friends/conversationsSlice';
+import { useGetConversationsAndMessages } from '../../hooks/fetchHooks/messanger/useGetConversationsAndMessages';
+import { useWidthContext } from '../../ContextProviders/WidthProivder';
+import useSocketSetup from '../../hooks/useSocketSetup';
 
+type LocationState = {
+  state: {
+    conversation: {
+        user_id: number;
+        conversation_id: number | null;
+        full_name: string;
+        photo: string | null;
+    },
+  }
+}
 
 const ConversationsContainer: React.FC<{}> = () => {
-  const { friend } = useParams();
+  useSocketSetup();
+  const {isMobile} = useWidthContext()
+  if(isMobile){
+    const userConversations = useAppSelector((state) => state.userConversations);
+    useGetConversationsAndMessages(userConversations);
+  }
+  // const userConversations = useAppSelector((state) => state.userConversations);
+  // useGetConversationsAndMessages(userConversations);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { state } = location as LocationState;
+  const conversation = state.conversation;
+  const { userId } = useParams();
+  const [recieverId, setRecieverId] = useState<number | null>(null);
+  const [conversationId, setConverationId] = useState<number | null>(null);
+  const senderId = useAppSelector(state => state.userInfo.id);
+  
   const dispatch = useAppDispatch();
   const userMessages = useAppSelector((state) => state.userMessages);
   const user = useAppSelector((state) => state.userInfo);
   const messagesInput = useRef<HTMLInputElement>(null);
   const bottomDiv = useRef<HTMLDivElement>(null);
   const [messagesGroupNumber, setMessagesGroupNumber] = useState(0);
-  const [friendName, conversationId] = friend!.split('&');
-  const conversation_id = +conversationId;
-  const observer = useRef<HTMLDivElement>(null!);
+  const observer = useRef();
   const {
     loading,
     hasMore,
     prevMessages
-  } = useMessageLoad(messagesGroupNumber, conversation_id);
-  const filteredPrevMessages = prevMessages.filter(msg => msg.conversation_id === conversation_id)
-  const filteredMessages = userMessages.messages.filter(msg => msg.conversation_id === conversation_id);
+  } = useMessageLoad(messagesGroupNumber, conversationId);
+  const filteredPrevMessages = prevMessages.filter(msg => msg.conversation_id === conversationId)
+  const filteredMessages = userMessages.messages.filter(msg => msg.conversation_id === conversationId);
   const [isOpenFileModel, setIsOpenFileModel] = useState<boolean>(false);
   const [attachedFiles, setAttachedFiles] = useState([]);
-  const [percentCompleted, setPercentCompleted] = useState(0);
-  useSocketSetup();
-
+  // useSocketSetup();
 
   const lastMessageRef = useCallback((node: any) => {
     if(loading) return;
@@ -46,11 +69,36 @@ const ConversationsContainer: React.FC<{}> = () => {
     if(node) observer.current.observe(node);
   }, [loading, hasMore]);
 
+  useEffect(() => {
+    if(!conversation.conversation_id) return;
+    setConverationId(conversation.conversation_id);
+  }, [conversation.conversation_id]);
+
+  useEffect(() => {
+    setRecieverId(+userId);
+  }, [userId]);
+
+  const {isLoading, converationIdFromDb} = useCreateConversation(senderId, recieverId, conversation.conversation_id);
+
+  useEffect(() => {
+    if(!converationIdFromDb) return;
+    setConverationId(converationIdFromDb);
+  }, [converationIdFromDb])
+
+  useEffect(() => {
+    if(converationIdFromDb !== null){
+      dispatch(addConversation({
+        ...conversation,
+        conversation_id: converationIdFromDb
+      }));
+    }
+  }, [converationIdFromDb])
+
   const inputFocus = () => {
     messagesInput.current!.focus();
   }
 
-  const send = () => sendMessage(messagesInput, conversation_id, user.id, dispatch);
+  const send = () => sendMessage(messagesInput, conversationId, user.id, dispatch);
   
   const handleKeypress = (e: { key: string; }): void => {
     if (e.key === "Enter") {
@@ -67,64 +115,43 @@ const ConversationsContainer: React.FC<{}> = () => {
     setIsOpenFileModel(true);
   }
 
-  const sendMessageWithFiles = () => {
-    const attachedFilesData = new FormData();
-
-    Object.keys(attachedFiles).forEach(key => {
-      const item = attachedFiles.item(key);
-      attachedFilesData.append(item.name, item);
-    });
-
-    const config = {
-      onUploadProgress: (progressEvent: {loaded: number, total: number}) => {
-        const loaded = progressEvent.loaded;
-        const total = progressEvent.total;
-        setPercentCompleted(Math.floor((loaded / total) * 100));
-      },
-      withCredentials: true
-    }
-
-    axios.post(`${process.env.REACT_APP_SERVER_URL}messanger/sendFiles`,
-      attachedFilesData,
-      config
-    )
-    .then(res => {
-      console.log(res);
-    })
-    .catch(err => {
-      console.log(err);
-    })
-  }
-
-
-
   useEffect(() => {
     bottomDiv.current?.scrollIntoView({ block: "start", behavior: "smooth" });
   }, [userMessages]);
 
+  if(isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  const friendName = conversation.full_name;
+
+  const goBack = () => {
+    navigate('/messanger');
+  }
 
   return (
-    <ConverationPresentational 
-      friendName={friendName}
-      filteredMessages={filteredMessages}
-      handleBlur={handleBlur}
-      messagesInput={messagesInput}
-      handleKeypress={handleKeypress}
-      send={send}
-      bottomDiv={bottomDiv}
-      userId={user.id}
-      lastMessageRef={lastMessageRef}
-      filteredPrevMessages={filteredPrevMessages}
-      loading={loading}
-      attachFiles={attachFiles}
-      isOpenFileModel={isOpenFileModel}
-      attachedFiles={attachedFiles}
-      setIsOpenFileModel={setIsOpenFileModel}
-      setAttachedFiles={setAttachedFiles}
-      conversationId={conversation_id}
-      sendMessageWithFiles={sendMessageWithFiles}
-      percentCompleted={percentCompleted}
-    />
+    <FileLoadProvider>
+      <ConverationPresentational 
+        friendName={friendName}
+        filteredMessages={filteredMessages}
+        handleBlur={handleBlur}
+        messagesInput={messagesInput}
+        handleKeypress={handleKeypress}
+        send={send}
+        bottomDiv={bottomDiv}
+        userId={user.id}
+        lastMessageRef={lastMessageRef}
+        filteredPrevMessages={filteredPrevMessages}
+        loading={loading}
+        attachFiles={attachFiles}
+        isOpenFileModel={isOpenFileModel}
+        attachedFiles={attachedFiles}
+        setIsOpenFileModel={setIsOpenFileModel}
+        setAttachedFiles={setAttachedFiles}
+        conversationId={conversationId}
+        goBack={goBack}
+      />
+    </FileLoadProvider>
   )
 }
 export default ConversationsContainer;

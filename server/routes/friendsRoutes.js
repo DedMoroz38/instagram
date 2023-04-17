@@ -6,8 +6,9 @@ const router = express.Router();
 
 router.use(authController.protect);
 
-router.post('/getAccount', friendsRoutes.getAccount);
-router.post('/follow', friendsRoutes.addFriend);
+router.get('/getAccounts/:query/:groupNumber/:areIdsNeeded', friendsRoutes.getAccounts);
+router.get('/follow/:userId', friendsRoutes.followUser);
 router.get('/getFollowings', friendsRoutes.getFollowings);
+
 
 module.exports = router;

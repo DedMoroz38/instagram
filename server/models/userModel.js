@@ -76,38 +76,72 @@ exports.findByIdAndUpdate = async (userId, filteredBody) => {
     [photo, userId]
   );
 }
-exports.addToFriends = async (userId, friendUName) => {
-  console.log(userId, friendUName);
+exports.subscribeToUser = async (userId, friendId) => {
 
   return await pool.query(
-    `INSERT INTO subscriptions
-    (
-        sender,
-        getter
-    )
-    VALUES 
-    (
-     $1,
-     (SELECT id from users WHERE user_name = $2)
-    );`,
-    [userId, friendUName]
+    `
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT FROM subscriptions
+            WHERE sender = ${userId} AND getter = ${friendId}
+      ) THEN
+          INSERT INTO subscriptions
+            (sender, getter)
+            VALUES (${userId}, ${friendId});
+      ELSE
+          DELETE FROM subscriptions
+          WHERE sender = ${userId} AND getter = ${friendId};
+      END IF;
+    END $$;
+    `,
   );
 }
 
-exports.getFriendByName = async (friendUName) => {
-  return await pool.query(
-    `SELECT * FROM users WHERE user_name = $1`,
-    [friendUName]
+exports.getUserByNameOrUserName = async (query, groupNumber, userId) => {
+
+  return await pool.query(`
+    SELECT CAST(id AS INT) AS user_id,
+      user_name,
+      full_name,
+      photo
+    FROM users 
+      WHERE users.id != ${userId}
+      AND user_name ~* '${query}'
+      OR full_name ~* '${query}'
+      AND users.id != ${userId}
+    LIMIT 10 OFFSET ${groupNumber * 10}
+  `
   );
+}
+
+exports.getIdOfSubscribedUsers = async (query, userId) => {
+
+  return await pool.query(`
+    SELECT 
+      accounts.id
+    FROM
+      (SELECT 
+      CAST(id AS INT),
+      user_name,
+      full_name,
+      photo
+      FROM users 
+      WHERE user_name ~* '${query}'
+      OR full_name ~* '${query}') accounts
+    INNER JOIN subscriptions
+      ON subscriptions.getter = accounts.id
+      WHERE subscriptions.sender = ${userId};
+  `)
 }
 
 exports.getFriendsByUserId = async (userId) => {
   return await pool.query(
     `
     SELECT users.full_name, users.id
-    FROM subscriptions, users
-    WHERE sender = $1
-    AND users.id = subscriptions.getter
+      FROM subscriptions, users
+      WHERE sender = $1
+      AND users.id = subscriptions.getter
     `,
     [userId]
   );
@@ -125,7 +159,6 @@ exports.submitEmailByUserId = async (userId) => {
 }
 
 exports.getProfileInfoById = async (userId) => {
-  console.log(userId);
   return await pool.query(
     `
     SELECT 

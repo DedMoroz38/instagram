@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react';
 import styled from "styled-components";
-import { ThemeContext } from '../App';
 import BedtimeIcon from '@mui/icons-material/Bedtime';
 import LightModeIcon from '@mui/icons-material/LightMode';
+import { useThemeContext } from "../ContextProviders/ThemeContextProvider";
 
 const Button = styled.button`
   border: none;
@@ -17,17 +16,23 @@ const Button = styled.button`
   background: transparent;
 `;
 
-interface ToggleInterface{
-}
+const SunIcon = styled(LightModeIcon)`
+  color: ${({ theme }) => theme.header.linkColor};
+`;
 
-const Toggle: React.FC<ToggleInterface> = () => {
-  const { themeToggler, theme } = useContext(ThemeContext);
+const MoonIcon = styled(BedtimeIcon)`
+  color: ${({ theme }) => theme.header.linkColor};
+`
+
+const Toggle: React.FC = () => {
+  const { themeToggler, theme } = useThemeContext();
+
   return (
       <Button onClick={themeToggler} >
         {
           theme === 'light' ? 
-          <LightModeIcon style={{color: 'black'}} /> :
-          <BedtimeIcon style={{color: 'white'}} /> 
+          <SunIcon /> :
+          <MoonIcon/> 
         }
       </Button>
   );

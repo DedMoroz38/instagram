@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import File from '../File';
+import File from '../FileMessage/File';
 
 const ImageFile = styled.img`
   width: 100%;
@@ -19,7 +19,6 @@ interface FileBox {
 const FilesBox: React.FC<FileBox> = ({
   files
 }) => {
-
 
   return (
     <>
