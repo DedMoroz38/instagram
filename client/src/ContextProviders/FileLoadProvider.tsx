@@ -21,7 +21,7 @@ export const useFileLoadContext = () => {
 const FileLoadProvider: React.FC<{
   children: JSX.Element
 }> = ({children}) => {
-  const [percentCompleted, setPercentCompleted] = useState<number>(0);
+  const [percentCompleted, setPercentCompleted] = useState<number>(-1);
 
   return (
     <FileLoadContext.Provider value={{

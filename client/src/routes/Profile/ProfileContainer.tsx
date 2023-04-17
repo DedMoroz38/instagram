@@ -1,9 +1,8 @@
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import axios from "axios";
 import { resetUser, updateUser } from '../../features/user/userSlice';
-import config from "../../config.json";
 import ProfilePresentational from './ProfilePresentational';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { resetFriends } from '../../features/friends/conversationsSlice';
 import { resetMessages } from '../../features/messages/messagesSlice';
 import { resetPosts as resetUserPosts } from '../../features/posts/userPostsSlice';
@@ -19,7 +18,6 @@ const ProfileContainer: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
-
 
   const [profileInfo, setProfileInfo] = useState({});
   

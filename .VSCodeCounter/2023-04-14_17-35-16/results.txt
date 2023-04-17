@@ -1,0 +1,66 @@
+Date : 2023-04-14 17:35:16
+Directory : /Users/egormaksimov/Documents/PROGRAMMING/instagram/server
+Total : 32 files,  8867 codes, 22 comments, 282 blanks, all 9171 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          2 |      6,967 |          0 |          2 |      6,969 |
+| JavaScript |         26 |      1,570 |         17 |        270 |      1,857 |
+| Pug        |          4 |        330 |          5 |         10 |        345 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                          | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                             |         32 |      8,867 |         22 |        282 |      9,171 |
+| . (Files)                                                                                     |          6 |      7,058 |          1 |         29 |      7,088 |
+| controllers                                                                                   |          8 |        606 |         14 |        115 |        735 |
+| libs                                                                                          |          2 |         30 |          0 |          2 |         32 |
+| models                                                                                        |          4 |        697 |          1 |         80 |        778 |
+| routes                                                                                        |          4 |         71 |          1 |         31 |        103 |
+| utils                                                                                         |          4 |         75 |          0 |         15 |         90 |
+| views                                                                                         |          4 |        330 |          5 |         10 |        345 |
+| views/email                                                                                   |          4 |        330 |          5 |         10 |        345 |
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                      | language   | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/app.js                             | JavaScript |         38 |          0 |          8 |         46 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/authController.js      | JavaScript |        129 |          6 |         22 |        157 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/errorController.js     | JavaScript |         47 |          0 |          6 |         53 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/friendsController.js   | JavaScript |         41 |          1 |          7 |         49 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/handlerFactory.js      | JavaScript |         14 |          0 |          2 |         16 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/messangerController.js | JavaScript |        108 |          1 |         20 |        129 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/postsController.js     | JavaScript |        140 |          4 |         28 |        172 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/socketController.js    | JavaScript |         27 |          0 |          7 |         34 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/controllers/userController.js      | JavaScript |        100 |          2 |         23 |        125 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/db.js                              | JavaScript |         11 |          0 |          2 |         13 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/libs/generateValuesForSQL.js       | JavaScript |         27 |          0 |          2 |         29 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/libs/jsArrayToSQLArrayConverter.js | JavaScript |          3 |          0 |          0 |          3 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/models/messangerModel.js           | JavaScript |        224 |          1 |         20 |        245 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/models/passwordResetTokensModel.js | JavaScript |         70 |          0 |         16 |         86 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/models/postsModel.js               | JavaScript |        239 |          0 |         18 |        257 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/models/userModel.js                | JavaScript |        164 |          0 |         26 |        190 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/package-lock.json                  | JSON       |      6,925 |          0 |          1 |      6,926 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/package.json                       | JSON       |         42 |          0 |          1 |         43 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/routes/friendsRoutes.js            | JavaScript |          9 |          0 |          5 |         14 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/routes/messangerRoutes.js          | JavaScript |         17 |          0 |          5 |         22 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/routes/postsRoutes.js              | JavaScript |         23 |          1 |         15 |         39 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/routes/userRoutes.js               | JavaScript |         22 |          0 |          6 |         28 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/server.js                          | JavaScript |         26 |          1 |         10 |         37 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/socket.js                          | JavaScript |         16 |          0 |          7 |         23 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/utils/appErrors.js                 | JavaScript |         10 |          0 |          3 |         13 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/utils/catchAsync.js                | JavaScript |          5 |          0 |          0 |          5 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/utils/emailSender.js               | JavaScript |         54 |          0 |          9 |         63 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/utils/serverConfig.js              | JavaScript |          6 |          0 |          3 |          9 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/views/email/_style.pug             | Pug        |        264 |          2 |          2 |        268 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/views/email/baseEmail.pug          | Pug        |         36 |          3 |          5 |         44 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/views/email/passwordReset.pug      | Pug        |         16 |          0 |          2 |         18 |
+| /Users/egormaksimov/Documents/PROGRAMMING/instagram/server/views/email/welcome.pug            | Pug        |         14 |          0 |          1 |         15 |
+| Total                                                                                         |            |      8,867 |         22 |        282 |      9,171 |
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

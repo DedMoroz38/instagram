@@ -141,8 +141,6 @@ const AttachedFilesModalComponent: React.FC<AttachedFiles> = ({
     setIsOpenFileModel, 
     messagesInput, 
     conversationId,
-    setFileMessage,
-    fileMessage
   );
   const dispatch = useAppDispatch();
   const userId = useAppSelector(state => state.userInfo.id);

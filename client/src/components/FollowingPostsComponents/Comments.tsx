@@ -144,7 +144,7 @@ const Comments = ({
     >
       <PostCommentsContianer>
         {
-          (!isMobile || isCommentOpen) ?
+          (isMobile || isCommentOpen) ?
           <CloseButton onClick={() => setCommentOpen(false)} /> :
           null
         }

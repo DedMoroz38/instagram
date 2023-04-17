@@ -25,7 +25,7 @@ const InstallButton = styled.button`
   border: none;
   background: transparent;
   position: absolute;
-  right: -62px;
+  right: -55px;
   top: 5px;
   color: white;
   cursor: pointer;
@@ -56,9 +56,8 @@ const RecievedFileMessage: React.FC<RecievedFileMessage> = ({attachments, text})
         const [percentCompleted, setPercentCompleted] = useState<number | null>(null);
 
         return (
-          <FileBox>
+          <FileBox key={attachment.attachment_id}>
             <File
-              key={attachment.attachment_id}
               file={{
                 size: attachment.size,
                 name: attachment.file_name

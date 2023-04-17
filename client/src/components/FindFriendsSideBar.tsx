@@ -71,7 +71,7 @@ const LoadingBox = styled.div`
   margin-top: 50px;
 `;
 
-const UserBox = styled(Link)`
+const UserBox = styled.div`
   color: ${({theme}) => theme.color};
   text-decoration: none;
   flex-shrink: 0;
@@ -98,7 +98,9 @@ const UserInfoBox = styled.div`
   margin-left: 10px;
 `;
 
-const UserName = styled.div`
+const UserName = styled(Link)`
+  color: ${({theme}) => theme.color};
+  text-decoration: none;
   font-weight: 600; 
 `;
 
@@ -232,8 +234,6 @@ const FindFriendsSideBar: React.FC = () => {
                 <UserBox 
                   key={user.user_id}
                   ref={foundUsers.length === index + 1 ? lastUserRef : null}
-                  to={`${user.user_id}`}
-                  onClick={() => setOpen(false)}
                 >
                   { 
                     user.photo === null ?
@@ -244,7 +244,9 @@ const FindFriendsSideBar: React.FC = () => {
                     />
                   }
                   <UserInfoBox>
-                    <UserName>{user.user_name}</UserName>
+                    <UserName
+                      to={`${user.user_id}`} onClick={() => setOpen(false)}
+                    >{user.user_name}</UserName>
                     <Name>{user.full_name}</Name>
                   </UserInfoBox>
                   {

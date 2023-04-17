@@ -6,7 +6,7 @@ import ContactsPresentaional from './ContactsPresentaional';
 
 
 export const ContactsContainer: React.FC = () => {
-  useSocketSetup();
+  // useSocketSetup();
   const userConversations = useAppSelector((state) => state.userConversations);
   const userMessages = useAppSelector((state) => state.userMessages);
   const [query, setQuery] = useState<string>('');

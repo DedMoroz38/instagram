@@ -33,8 +33,9 @@ export const useGetSubscribersPosts = (
       }
     })
     .catch(err => {
-      setErrorMessage(Errors.default);
-      setErrorPopUpIsOpen(true);
+      console.log(err);
+      // setErrorMessage(Errors.default);
+      // setErrorPopUpIsOpen(true);
     })
     .finally(() => {
       setLoading(false);

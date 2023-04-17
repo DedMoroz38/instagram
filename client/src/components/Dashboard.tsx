@@ -8,7 +8,6 @@ import LoginContainer from '../routes/Login/LoginContainer';
 import RegistrationContainer from '../routes/Registration/RegistrationContainer';
 import PrivateRoute from '../hocs/PrivateRoute';
 import NotFound from '../routes/NotFound';
-import FriendsContainer from '../routes/Friends/FriendsContainer';
 import MainContainer from '../routes/Main/MainContainer';
 import ErrorPopUp from './ErrorPopUp';
 import EmailConfirmation from '../routes/EmailConfirmation';
@@ -17,7 +16,6 @@ import PasswordReset from '../routes/PasswordReset';
 import Toggle from './Toggler';
 import ConversationsContainer from './Conversations/ConversationsContainer';
 import { useWidthContext } from '../ContextProviders/WidthProivder';
-import useSocketSetup from '../hooks/useSocketSetup';
 import Account from '../routes/Account/Account';
 
 const Container = styled.div`

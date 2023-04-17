@@ -29,6 +29,9 @@ export const MainContainer = styled.div`
   color: ${({ theme }) => theme.color};
   font-weight: 250;
   z-index: 2;
+  @media (max-width: 420px){
+    width: 300px;
+  }
 `;
 
 const ErrorPopUp: React.FC = () => {

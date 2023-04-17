@@ -1,3 +1,4 @@
+import uuid from "react-uuid";
 import styled from "styled-components";
 import { MessagesState } from "../../../features/messages/messagesSlice";
 import RecievedFileMessage from "../FileMessage/RecievedFileMessage";
@@ -64,22 +65,24 @@ const MessageTimeFriend = styled(MessageTimeUser)`
 `;
 
 interface Messages extends MessagesState {
+  isPrev: boolean,
   userId: number,
   lastMessageRef: any,
 }
 
-const Messages: React.FC<Messages> = ({messages, userId, lastMessageRef}) => {
+const Messages: React.FC<Messages> = ({messages, userId, lastMessageRef, isPrev}) => {
   var sentFileCounter = 0;
 
   return(
     <>
       {messages.map((message, index) => {
+        const key = isPrev ? index + 21 : index;
         let createdAt = new Date(message.created_at).toLocaleTimeString();
         createdAt = createdAt.slice(0, 5);
         if(message.sender_id === userId){
           if(message.message_type !== 'file'){
             return(
-              <MessageBoxUser ref={messages.length === index + 1 ? lastMessageRef : null} key={index}>
+              <MessageBoxUser ref={messages.length === index + 1 ? lastMessageRef : null} key={key}>
                 <Message>{message.message}</Message>
                 <MessageTimeContainer>
                   <MessageTimeUser>{createdAt}</MessageTimeUser>
@@ -90,7 +93,7 @@ const Messages: React.FC<Messages> = ({messages, userId, lastMessageRef}) => {
             sentFileCounter++;
             return (
               <MessageBoxUser 
-                ref={messages.length === index + 1 ? lastMessageRef : null} key={index}
+                ref={messages.length === index + 1 ? lastMessageRef : null} key={key}
               >
                 <SentFileMessages 
                   isLast={sentFileCounter === 1 ? true : false}
@@ -106,7 +109,7 @@ const Messages: React.FC<Messages> = ({messages, userId, lastMessageRef}) => {
         } else { 
           if(message.message_type === 'file'){
             return (
-              <MessageBoxFriend ref={messages.length === index + 1 ? lastMessageRef : null} key={index}>
+              <MessageBoxFriend ref={messages.length === index + 1 ? lastMessageRef : null} key={key}>
                 <RecievedFileMessage 
                   attachments={message.attachments}
                   text={message.message}
@@ -118,7 +121,7 @@ const Messages: React.FC<Messages> = ({messages, userId, lastMessageRef}) => {
             )
           }
           return(
-            <MessageBoxFriend ref={messages.length === index + 1 ? lastMessageRef : null} key={index}>
+            <MessageBoxFriend ref={messages.length === index + 1 ? lastMessageRef : null} key={key}>
               <Message>{message.message}</Message>
               <MessageTimeContainer>
                 <MessageTimeFriend>{createdAt}</MessageTimeFriend>

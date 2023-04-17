@@ -11,7 +11,7 @@ export const useLike = (
   dispatch: any,
   listOfIdsOfLikedPosts: number[]
 ) => {
-  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
+  // const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
 
   axios.get(`${process.env.REACT_APP_SERVER_URL}posts/like/${postId}`,
     { withCredentials: true }
@@ -26,7 +26,7 @@ export const useLike = (
       dispatch(likingFunctions.incrementLikeNumber(postId))
     }
   }).catch(err => {
-    setErrorMessage(Errors.default);
-    setErrorPopUpIsOpen(true);
+    // setErrorMessage(Errors.default);
+    // setErrorPopUpIsOpen(true);
   })
 }

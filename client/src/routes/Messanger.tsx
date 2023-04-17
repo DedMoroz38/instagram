@@ -4,14 +4,11 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Route, Routes } from 'react-router-dom';
 import axios from 'axios';
-import config from "../config.json";
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { addMessages, MessagesState } from '../features/messages/messagesSlice';
-import { addConversations } from '../features/friends/conversationsSlice';
 import DefaultConversation from '../components/Conversations/DefaultConversation';
-import PrivateMessageRoute from '../hocs/PrivateMessageRoute';
 import { useWidthContext } from '../ContextProviders/WidthProivder';
 import { useGetConversationsAndMessages } from '../hooks/fetchHooks/messanger/useGetConversationsAndMessages';
+import useSocketSetup from '../hooks/useSocketSetup';
 
 
 const MainContainer = styled.div`

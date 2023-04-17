@@ -57,7 +57,7 @@ const MessagesBox = styled.div`
   overflow-y: scroll;
   display: flex;
   flex-direction: column-reverse;
-  padding: 15px 15px 30px 15px;
+  padding: 15px 15px 5px 15px;
   @media (max-width: 420px){
     padding-bottom: 0;
     height: calc(100vh - 225px);
@@ -105,7 +105,8 @@ const InputContainer = styled.div`
   padding: 0 20px;
   height: 70px;
   width: calc(100% - 30px);
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   background: ${({ theme }) => theme.input.background};
   @media (max-width: 420px){
     margin-bottom: 5px;
@@ -211,6 +212,7 @@ const ConverationPresentational: React.FC<Conversations> = ({
       <MessagesBox>
         <div ref={bottomDiv}/>
         <Messages
+          isPrev={false}
           lastSentFileIndex={lastSentFileIndex}
           messages={filteredMessages}
           userId={userId}
@@ -219,6 +221,7 @@ const ConverationPresentational: React.FC<Conversations> = ({
         {
           filteredPrevMessages.length > 0 ?
           <Messages
+            isPrev={true}
             lastSentFileIndex={lastSentFileIndex}
             messages={filteredPrevMessages}
             userId={userId}

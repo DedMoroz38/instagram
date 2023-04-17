@@ -14,6 +14,7 @@ export const userPostsSlice = createSlice({
   initialState,
   reducers: {
     addPosts: (state, action: PayloadAction<any>) => {
+      if(!action.payload) return;
       for(let attachment of action.payload){
         let postId: number = +attachment.postId;
         if(
@@ -38,6 +39,7 @@ export const userPostsSlice = createSlice({
       }
     },
     addLikes: (state, action: PayloadAction<any>) => {
+      if(!action.payload) return;
       state.likes = [...action.payload];
     },
     addLike: (state, action: PayloadAction<number>) => {

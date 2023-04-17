@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useFileLoadContext } from '../../../ContextProviders/FileLoadProvider';
 import File from './File';
 import { MainContainer } from './RecievedFileMessage';
 
@@ -42,11 +43,12 @@ interface SentFileMessages {
 
 const SentFileMessages: React.FC<SentFileMessages> = ({attachments, text, isLast}) => {
   const {percentCompleted} = useFileLoadContext();
+  console.log(percentCompleted);
 
   return (
     <MainContainer>
       {
-        isLast && percentCompleted !== 100 &&
+        isLast && percentCompleted !== 100 && percentCompleted !== -1 &&
         <ProgressBarOuter>
           <ProgressBarInner style={{
             width: `calc(${percentCompleted}% - 2px)`
@@ -55,9 +57,8 @@ const SentFileMessages: React.FC<SentFileMessages> = ({attachments, text, isLast
       }
       {
         attachments.map((attachment, index) => (
-            <FileBox>
+            <FileBox key={index}>
               <File
-                key={index}
                 file={{
                   size: attachment.size,
                   name: attachment.file_name

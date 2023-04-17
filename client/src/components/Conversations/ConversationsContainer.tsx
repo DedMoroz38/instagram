@@ -9,6 +9,7 @@ import { useCreateConversation } from '../../hooks/fetchHooks/messanger/useCreat
 import { addConversation } from '../../features/friends/conversationsSlice';
 import { useGetConversationsAndMessages } from '../../hooks/fetchHooks/messanger/useGetConversationsAndMessages';
 import { useWidthContext } from '../../ContextProviders/WidthProivder';
+import useSocketSetup from '../../hooks/useSocketSetup';
 
 type LocationState = {
   state: {
@@ -22,6 +23,7 @@ type LocationState = {
 }
 
 const ConversationsContainer: React.FC<{}> = () => {
+  useSocketSetup();
   const {isMobile} = useWidthContext()
   if(isMobile){
     const userConversations = useAppSelector((state) => state.userConversations);

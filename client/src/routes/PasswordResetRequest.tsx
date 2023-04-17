@@ -52,12 +52,12 @@ const PasswordResetRequest: React.FC = () => {
   });
 
   const sendEmail = (data: { email: string}): void => {
-    const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
     const { email } = data;
     axios.post(`${process.env.REACT_APP_SERVER_URL}users/forgotPassword`, { 
       login: email,
     }, { withCredentials: true })
     .then(res => {
+      console.log(res);
       const status: number = res.status;
       if(status === 200){
         setIsSent(true);

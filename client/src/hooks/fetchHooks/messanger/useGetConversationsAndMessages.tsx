@@ -37,8 +37,8 @@ export const useGetConversationsAndMessages = (
         setMessagesFromDB(res.data.messages)
       })
       .catch(err => {
-        setErrorMessage(Errors.default);
-        setErrorPopUpIsOpen(true);
+        // setErrorMessage(Errors.default);
+        // setErrorPopUpIsOpen(true);
       });
     }
   }, []);

@@ -11,7 +11,7 @@ export const useCreateOrGetConversation = (
     conversations: any,
     userId: any
   ) => {
-  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
+  // const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
   const conversation = conversations.filter(conv => conv.conversation_id === conversationId);
   if(conversation.length === 0){
     axios.get(`messanger/getConversation/${conversationId}/${userId}`, 
@@ -24,8 +24,8 @@ export const useCreateOrGetConversation = (
       }))
     })
     .catch(err => {
-      setErrorMessage(Errors.default);
-      setErrorPopUpIsOpen(true);
+      // setErrorMessage(Errors.default);
+      // setErrorPopUpIsOpen(true);
     })
     .finally(() => {
     })

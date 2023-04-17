@@ -11,16 +11,10 @@ export const useSendFile = (
   setIsOpenFileModel: any,
   messagesInput: RefObject<HTMLInputElement>,
   conversationId: number,
-  setFileMessage: React.Dispatch<React.SetStateAction<string>>,
-  fileMessage: string
 ): {sendFiles: () => void} => {
   const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
   const {setPercentCompleted} = useFileLoadContext();
   const sendFiles = () => {
-    setFileMessage(messagesInput.current!.value.trim());
-  }
-  useEffect(() => {
-    if(fileMessage === '') return;
     setIsOpenFileModel(false);
     const attachedFilesData = new FormData();
 
@@ -46,7 +40,6 @@ export const useSendFile = (
       config
     )
     .then(res => {
-      setFileMessage('');
       socket.emit('fm', {
         messageId: res.data.messageId,
       });
@@ -55,7 +48,6 @@ export const useSendFile = (
       setErrorMessage(Errors.default);
       setErrorPopUpIsOpen(true);
     })
-  }, [fileMessage]);
-
+  }
   return {sendFiles}
 }

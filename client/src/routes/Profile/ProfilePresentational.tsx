@@ -1,10 +1,8 @@
 import styled from "styled-components";
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import ProfilePostsContainer from "../../components/ProfilePosts/ProfilePostsContainer";
 import { Scrollbar } from "../../components/Theme/globalStyles";
 import LogoutIcon from '@mui/icons-material/Logout';
-import { IdentityIcon } from "../../components/StyledIcons";
 
 const MainContainer = styled(Scrollbar)`
   display: flex;
