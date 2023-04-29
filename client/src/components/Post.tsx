@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import { IdentityIcon, LikeBorderIcon, LikeIcon } from "./StyledIcons";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { useLike } from "../lib/likes/like";
-import { useEffect } from "react";
+import { likePost } from "../lib/likes/like";
 import ThreeDotsMenu from "./ThreeDotsMenu";
 import { Link } from "react-router-dom";
 
@@ -46,6 +45,12 @@ const PostOwnerUsername = styled(Link)`
   font-weight: 400;
   margin-left: 10px;
   text-decoration: none;
+  @media (max-width: 420px){
+    width: 50%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 `;
 
 export const LikeContainer = styled.div`
@@ -109,7 +114,7 @@ const Post: React.FC<Post> = ({
   }
 
   const like = (postId: number) => {
-    useLike(postId, likingProp, dispatch, listOfIdsOfLikedPosts);
+    likePost(postId, likingProp, dispatch, listOfIdsOfLikedPosts);
   }
 
   return (

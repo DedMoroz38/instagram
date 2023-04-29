@@ -1,12 +1,10 @@
 import axios from "axios";
-import fileDownload from "js-file-download";
 import {  useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useErrorPopUpContext } from "../ContextProviders/ClienErrorHandlingProvider";
-import { addConversation } from "../features/friends/conversationsSlice";
 import { addMessage } from "../features/messages/messagesSlice";
 import { Errors } from "../lib/errors/Errors";
-import { useCreateOrGetConversation } from "../lib/messanger/useCreateOrGetConversation";
+import { createOrGetConversation } from "../lib/messanger/useCreateOrGetConversation";
 import socket from "../socket";
 
 const useSocketSetup = () => {
@@ -25,7 +23,7 @@ const useSocketSetup = () => {
 
 
     socket.on('dm', message => {
-      useCreateOrGetConversation(
+      createOrGetConversation(
         message.conversation_id,
         dispatch,
         conversations,
@@ -48,7 +46,7 @@ const useSocketSetup = () => {
       )
       .then(res => {
         const {files, messageData} = res.data;
-        useCreateOrGetConversation(
+        createOrGetConversation(
           +messageData.conversation_id,
           dispatch,
           conversations,

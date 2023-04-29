@@ -166,7 +166,8 @@ interface Conversations{
   setIsOpenFileModel: any,
   setAttachedFiles: any,
   conversationId: number,
-  goBack: () => void
+  goBack: () => void,
+  clearInput: (event: any) => void
 }
 
 const ConverationPresentational: React.FC<Conversations> = ({
@@ -187,7 +188,8 @@ const ConverationPresentational: React.FC<Conversations> = ({
     setIsOpenFileModel,
     setAttachedFiles,
     conversationId,
-    goBack
+    goBack,
+    clearInput
   }) => {
   const [fileMessage, setFileMessage] = useState('');
   const {isMobile} = useWidthContext();
@@ -258,6 +260,7 @@ const ConverationPresentational: React.FC<Conversations> = ({
           ><SendIcon /></SendButton>
           <input 
             style={{display: "none"}}
+            onClick={(e) => clearInput(e)}
             onChange={(e) => attachFiles(e)}
             multiple
             accept=''

@@ -4,6 +4,7 @@ import File from './File';
 import DownloadIcon from '@mui/icons-material/Download';
 import { installFile } from '../../../lib/messanger/installFile';
 import ProgressCircle from '../../ProgressCircle';
+import RecievedFilesBox from './RecievedFilesBox/RecievedFilesBox';
 
 export const MainContainer = styled.div`
   display: flex;
@@ -52,30 +53,31 @@ const RecievedFileMessage: React.FC<RecievedFileMessage> = ({attachments, text})
   return (
     <MainContainer>
     {
-      attachments.map((attachment, index) => {
-        const [percentCompleted, setPercentCompleted] = useState<number | null>(null);
+      attachments.map((attachment, index) => (
+        <RecievedFilesBox attachment={attachment}/>
+        // const [percentCompleted, setPercentCompleted] = useState<number | null>(null);
 
-        return (
-          <FileBox key={attachment.attachment_id}>
-            <File
-              file={{
-                size: attachment.size,
-                name: attachment.file_name
-              }}
-            />
-              <InstallButton
-                onClick={() => installFile(attachment, setPercentCompleted)}
-              >
-                <DownloadIcon />
-              </InstallButton>
-            {
-              percentCompleted !== null ?
-              <ProgressCircle percentCompleted={percentCompleted} /> :
-              null
-            }
-          </FileBox>
-        )
-      })
+        // return (
+        //   <FileBox key={attachment.attachment_id}>
+        //     <File
+        //       file={{
+        //         size: attachment.size,
+        //         name: attachment.file_name
+        //       }}
+        //     />
+        //       <InstallButton
+        //         onClick={() => installFile(attachment, setPercentCompleted)}
+        //       >
+        //         <DownloadIcon />
+        //       </InstallButton>
+        //     {
+        //       percentCompleted !== null ?
+        //       <ProgressCircle percentCompleted={percentCompleted} /> :
+        //       null
+        //     }
+        //   </FileBox>
+        
+      ))
     }
     <MessageText>{text}</MessageText>
     </MainContainer>

@@ -1,15 +1,10 @@
 import styled, { keyframes } from 'styled-components';
 import FollowingPostsSwiper from './FollowingPostsSwiper';
 import { useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { ModalWindowContext } from '../../routes/Main/MainContainer';
-import config from "../../config.json";
 import axios from 'axios';
 import PostInfoComponent from './PostInfoComponent';
 import ModalWindow from '../ModalWindow/ModalWindow';
-import { useWatch } from 'react-hook-form';
-import { ContactsOutlined } from '@mui/icons-material';
 import { useOutsideAlerter } from '../../hooks/useOutsideAlerter';
-import { findDOMNode } from 'react-dom';
 import { Errors } from '../../lib/errors/Errors';
 import { useErrorPopUpContext } from '../../ContextProviders/ClienErrorHandlingProvider';
 
@@ -105,14 +100,11 @@ const ModalWindowForPosts: React.FC<{modalProp: any, likingProp: any}> = ({modal
     isOpen,
     onClose
   } = modalProp;
-
+  const [isCommentOpen, setCommentOpen] = useState(false);
 
 
 
   if(!isOpen) return null;
-
-  const [isCommentOpen, setCommentOpen] = useState(false);
-
   return (
     <ModalWindow 
       onClose={() => onClose()}

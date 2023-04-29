@@ -1,12 +1,25 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { useGetUsers } from '../../hooks/fetchHooks/users/useGetUsers';
-import useSocketSetup from '../../hooks/useSocketSetup';
 import ContactsPresentaional from './ContactsPresentaional';
+import useSocketSetup from '../../hooks/useSocketSetup';
 
 
 export const ContactsContainer: React.FC = () => {
-  // useSocketSetup();
+  useSocketSetup();
+
+  const [matchedConversations, setMatchedConversations] = useState<Array<{
+    user_id: number;
+    conversation_id: number;
+    full_name: string;
+    photo: string | null;
+  } | {
+    id: number,
+    full_name: string,
+    user_name: string,
+    photo: string
+  }>>([]);
+
   const userConversations = useAppSelector((state) => state.userConversations);
   const userMessages = useAppSelector((state) => state.userMessages);
   const [query, setQuery] = useState<string>('');
@@ -21,21 +34,10 @@ export const ContactsContainer: React.FC = () => {
     query,
     usersGroupNumber,
     setUsersGroupNumber,
-    false
+    false,
+    matchedConversations.length === 0
   );
   
-  const [matchedConversations, setMatchedConversations] = useState<Array<{
-    user_id: number;
-    conversation_id: number;
-    full_name: string;
-    photo: string | null;
-  } | {
-    id: number,
-    full_name: string,
-    user_name: string,
-    photo: string
-  }>>([]);
-
   const observer = useRef();
   const inputRef = useRef(null);
 
@@ -51,7 +53,7 @@ export const ContactsContainer: React.FC = () => {
   }, [loading, hasMore]);
 
   const findUsers = (event: any): void => {
-    setQuery(event.target.value) 
+    setQuery(event.target.value);
     const correctRegex = new RegExp(event.target.value, 'i');
     const filteredUsers = userConversations.conversations.filter((conversation) => correctRegex.test(conversation.full_name));
     setMatchedConversations(filteredUsers);

@@ -57,7 +57,6 @@ const PasswordResetRequest: React.FC = () => {
       login: email,
     }, { withCredentials: true })
     .then(res => {
-      console.log(res);
       const status: number = res.status;
       if(status === 200){
         setIsSent(true);

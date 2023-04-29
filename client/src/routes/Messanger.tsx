@@ -9,6 +9,7 @@ import DefaultConversation from '../components/Conversations/DefaultConversation
 import { useWidthContext } from '../ContextProviders/WidthProivder';
 import { useGetConversationsAndMessages } from '../hooks/fetchHooks/messanger/useGetConversationsAndMessages';
 import useSocketSetup from '../hooks/useSocketSetup';
+import MobileInterlayer from '../components/MobileInterlayer';
 
 
 const MainContainer = styled.div`
@@ -27,11 +28,18 @@ const Messanger: React.FC = () => {
   return (
     <MainContainer>
       <ContactsContainer />
-      {!isMobile &&
-        <Routes>
-          <Route path="/:userId" element={<ConversationsContainer/>} />
-          <Route path="/" element={<DefaultConversation />} />
-        </Routes >
+      {!isMobile ?
+        <>
+          {/* <ContactsContainer /> */}
+          <Routes>
+            <Route path="/:userId" element={<ConversationsContainer/>} />
+            <Route path="/" element={<DefaultConversation />} />
+          </Routes >
+        </> :
+        null
+        // <MobileInterlayer>
+        //   <ContactsContainer />
+        // </MobileInterlayer>
       }
     </MainContainer>
   )

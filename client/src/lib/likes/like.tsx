@@ -1,11 +1,8 @@
 import axios from "axios";
-import React from "react";
-import { useErrorPopUpContext } from "../../ContextProviders/ClienErrorHandlingProvider";
-import { Errors } from "../errors/Errors";
 
 
 
-export const useLike = (
+export const likePost = (
   postId: number,
   likingFunctions: any,
   dispatch: any,

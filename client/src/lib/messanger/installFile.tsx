@@ -10,7 +10,6 @@ export const installFile = (attachment: {
 },
 setPercentCompleted: React.Dispatch<React.SetStateAction<number | null>>,
 ) => {
-  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
   setPercentCompleted(0);
   const {attachment_id, file_name} = attachment;
   axios.get(`messanger/installFile/${attachment_id}`,
@@ -31,7 +30,5 @@ setPercentCompleted: React.Dispatch<React.SetStateAction<number | null>>,
     fileDownload(res.data, file_name);
   })
   .catch(err => {
-    setErrorMessage(Errors.default);
-    setErrorPopUpIsOpen(true);
   });
 }

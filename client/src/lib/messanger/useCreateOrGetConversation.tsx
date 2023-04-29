@@ -5,7 +5,7 @@ import { useErrorPopUpContext } from "../../ContextProviders/ClienErrorHandlingP
 import { addConversation } from "../../features/friends/conversationsSlice";
 import { Errors } from "../errors/Errors";
 
-export const useCreateOrGetConversation = (
+export const createOrGetConversation = (
     conversationId: number,
     dispatch: any,
     conversations: any,

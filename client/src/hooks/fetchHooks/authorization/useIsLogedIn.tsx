@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../app/hooks";
 import { useErrorPopUpContext } from "../../../ContextProviders/ClienErrorHandlingProvider";
 import { createUser } from "../../../features/user/userSlice";
@@ -9,6 +9,7 @@ import { Errors } from "../../../lib/errors/Errors";
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 
 export const useIsLogedIn = (): {loading: boolean} => {
+  const { pathname } = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -47,7 +48,7 @@ export const useIsLogedIn = (): {loading: boolean} => {
     .finally(() => {
       setLoading(false);
     })
-  }, [loading]);
+  }, [loading, pathname]);
 
   return {loading};
 }
