@@ -43,7 +43,6 @@ interface SentFileMessages {
 
 const SentFileMessages: React.FC<SentFileMessages> = ({attachments, text, isLast}) => {
   const {percentCompleted} = useFileLoadContext();
-  console.log(percentCompleted);
 
   return (
     <MainContainer>

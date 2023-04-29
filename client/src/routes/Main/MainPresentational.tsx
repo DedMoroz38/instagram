@@ -20,6 +20,12 @@ const Box = styled.div`
     margin-bottom: auto;
     margin-top: 60px;
   }
+`;
+
+const Message = styled.p`
+  color: ${({theme}) => theme.color};
+  font-size: 20px;
+  margin-top: 20px;
 `
 
 interface Main {
@@ -35,7 +41,7 @@ const MainPresentational: React.FC<Main> = ({
   modalProp,
   likingProp
 }) =>  {
-
+  const isPosts = postsColumnState[0]?.props.columnPosts.length > 0;
 
   return (
     <>
@@ -44,10 +50,12 @@ const MainPresentational: React.FC<Main> = ({
             {
               loading && <CircularLoaidng dimensions="40px" />
             }
-            {         
+            {
+              isPosts ?
               postsColumnState.map(column => (
                 column
-              ))
+              )) :
+              <Message>Start following other people to see their posts</Message>
             }
         </Box>
       </MainContainer>

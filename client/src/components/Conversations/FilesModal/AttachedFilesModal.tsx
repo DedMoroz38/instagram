@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Emoji from '../../Emoji/EmojiPicker';
 import FilesBox from './FilesBox';
@@ -126,8 +126,6 @@ const AttachedFilesModalComponent: React.FC<AttachedFiles> = ({
   setIsOpenFileModel,
   setAttachedFiles,
   conversationId,
-  setFileMessage,
-  fileMessage
 }) => {
   const files: Array<{
     name: string,

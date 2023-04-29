@@ -23,14 +23,11 @@ type LocationState = {
 }
 
 const ConversationsContainer: React.FC<{}> = () => {
-  useSocketSetup();
-  const {isMobile} = useWidthContext()
-  if(isMobile){
-    const userConversations = useAppSelector((state) => state.userConversations);
-    useGetConversationsAndMessages(userConversations);
-  }
-  // const userConversations = useAppSelector((state) => state.userConversations);
-  // useGetConversationsAndMessages(userConversations);
+  // const {isMobile} = useWidthContext()
+  // if(isMobile){
+  //   const userConversations = useAppSelector((state) => state.userConversations);
+  //   useGetConversationsAndMessages(userConversations);
+  // }
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location as LocationState;
@@ -56,7 +53,6 @@ const ConversationsContainer: React.FC<{}> = () => {
   const filteredMessages = userMessages.messages.filter(msg => msg.conversation_id === conversationId);
   const [isOpenFileModel, setIsOpenFileModel] = useState<boolean>(false);
   const [attachedFiles, setAttachedFiles] = useState([]);
-  // useSocketSetup();
 
   const lastMessageRef = useCallback((node: any) => {
     if(loading) return;
@@ -115,6 +111,10 @@ const ConversationsContainer: React.FC<{}> = () => {
     setIsOpenFileModel(true);
   }
 
+  const clearInput = (event: any): void => {
+    event.target.value = null
+  }
+
   useEffect(() => {
     bottomDiv.current?.scrollIntoView({ block: "start", behavior: "smooth" });
   }, [userMessages]);
@@ -134,6 +134,7 @@ const ConversationsContainer: React.FC<{}> = () => {
       <ConverationPresentational 
         friendName={friendName}
         filteredMessages={filteredMessages}
+        clearInput={clearInput}
         handleBlur={handleBlur}
         messagesInput={messagesInput}
         handleKeypress={handleKeypress}

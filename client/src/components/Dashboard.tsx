@@ -17,6 +17,7 @@ import Toggle from './Toggler';
 import ConversationsContainer from './Conversations/ConversationsContainer';
 import { useWidthContext } from '../ContextProviders/WidthProivder';
 import Account from '../routes/Account/Account';
+import MobileInterlayer from './MobileInterlayer';
 
 const Container = styled.div`
   display: flex; 
@@ -95,7 +96,9 @@ const Dashboard: React.FC = () => {
           isMobile && 
           <Route path="/messanger/:userId" element={
             <PrivateRoute>
-              <ConversationsContainer />
+              <MobileInterlayer>
+                <ConversationsContainer />
+              </MobileInterlayer>
             </PrivateRoute>
             }
           />

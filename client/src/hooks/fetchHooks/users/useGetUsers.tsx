@@ -9,7 +9,8 @@ export const useGetUsers = (
   query: string,
   usersGroupNumber: number,
   setUsersGroupNumber: React.Dispatch<React.SetStateAction<number>>,
-  areIdsNeeded: boolean
+  areIdsNeeded: boolean,
+  extraCheck: boolean = true
   ) => {
   const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
   const [loading, setLoading] = useState<boolean>(false);
@@ -35,6 +36,7 @@ export const useGetUsers = (
       resetState();
       return;
     };
+    if (!extraCheck) return;
     setLoading(true);
     axios.get(`friends/getAccounts/${query}/${usersGroupNumber}/${areIdsNeeded}`, 
     { 

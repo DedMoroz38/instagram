@@ -16,12 +16,9 @@ type signUpData = {
 }
 
 const RegistrationContainer: React.FC = () =>  {
-  const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
   const {themeMode}= useThemeContext();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate()
   const [signUpData, setSignUpData] = useState<signUpData>({
     fullName: null,
     userName: null,

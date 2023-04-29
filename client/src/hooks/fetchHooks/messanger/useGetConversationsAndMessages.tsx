@@ -44,7 +44,7 @@ export const useGetConversationsAndMessages = (
   }, []);
 
   useEffect(() => {
-    if(messagesFromDB.length > 0){
+    if(messagesFromDB && messagesFromDB.length > 0){
       const result: MessagesState = [];
       messagesFromDB.forEach(message => {
         if(message.message_type === 'file'){

@@ -1,17 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components';
 import { IdentityIcon, LikeBorderIcon, LikeIcon } from '../StyledIcons';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import axios from 'axios';
-import Emoji from '../Emoji/EmojiPicker';
-import SendIcon from '@mui/icons-material/Send';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { LikeButton, LikeContainer, NumberOfLikes } from '../Post';
-import { useLike } from '../../lib/likes/like';
-import { Scrollbar } from '../Theme/globalStyles';
+import { likePost } from '../../lib/likes/like';
 import Comments from './Comments';
-import { useWidthContext } from '../../ContextProviders/WidthProivder';
-import ModalWindow from '../ModalWindow/ModalWindow';
 import { Errors } from '../../lib/errors/Errors';
 import { useErrorPopUpContext } from '../../ContextProviders/ClienErrorHandlingProvider';
 
@@ -72,7 +65,7 @@ const PostInfoComponent: React.FC<PostInfo> = ({
   const {setIsOpen: setErrorPopUpIsOpen, setErrorMessage} = useErrorPopUpContext();
 
   const like = () => {
-    useLike(postId, likingProp, dispatch, listOfIdsOfLikedPosts);
+    likePost(postId, likingProp, dispatch, listOfIdsOfLikedPosts);
   }
 
   const sendComment = () => {
