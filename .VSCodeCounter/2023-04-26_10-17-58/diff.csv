@@ -1,0 +1,6 @@
+"filename", "language", "TypeScript JSX", "comment", "blank", "total"
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Contacts/ContactsContainer.tsx", "TypeScript JSX", 1, -1, 0, 0
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Conversations/ConversationsContainer.tsx", "TypeScript JSX", 0, -3, 0, -3
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/components/Conversations/FileMessage/SentFileMessages.tsx", "TypeScript JSX", -1, 0, 0, -1
+"/Users/egormaksimov/Documents/PROGRAMMING/instagram/client/src/hooks/fetchHooks/users/useGetUsers.tsx", "TypeScript JSX", 2, 0, 0, 2
+"Total", "-", 2, -4, 0, -2

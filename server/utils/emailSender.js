@@ -4,8 +4,8 @@ const pug = require("pug");
 const AppError = require('../utils/appErrors');
 const { google } = require('googleapis');
 const OAtuh2 = google.auth.OAuth2;
-const OAtuh2_client = new OAtuh2(process.env.EMAIL_CLIENT_ID, process.env.EMAIL_CLIENT_SECRET);
-OAtuh2_client.setCredentials({refresh_token:process.env.EMAIL_REFRECH_TOKEN });
+// const OAtuh2_client = new OAtuh2(process.env.EMAIL_CLIENT_ID, process.env.EMAIL_CLIENT_SECRET);
+// OAtuh2_client.setCredentials({refresh_token:process.env.EMAIL_REFRECH_TOKEN });
 
 module.exports = class Email {
     constructor(user, url) {
@@ -20,19 +20,29 @@ module.exports = class Email {
     }
 
     newTransport() {
-        const accessToken = OAtuh2_client.getAccessToken();
+        // const accessToken = OAtuh2_client.getAccessToken();
 
         return nodemailer.createTransport({
-            service: 'gmail',
+            service: "gmail",
+            port: 11,
+            secure: true,
             auth: {
-                type: 'OAuth2',
-                user: process.env.EMAIL_USERNAME,
-                clientId: process.env.EMAIL_CLIENT_ID,
-                clientSecret: process.env.EMAIL_CLIENT_SECRET,
-                refreshToken: process.env.EMAIL_REFRECH_TOKEN,
-                accessToken
+              user: process.env.EMAIL_USERNAME, // generated ethereal user
+              pass: process.env.EMAIL_PASSWORD // generated ethereal password
             }
-        });
+          })
+
+        // return nodemailer.createTransport({
+        //     service: 'gmail',
+        //     auth: {
+        //         type: 'OAuth2',
+        //         user: process.env.EMAIL_USERNAME,
+        //         clientId: process.env.EMAIL_CLIENT_ID,
+        //         clientSecret: process.env.EMAIL_CLIENT_SECRET,
+        //         refreshToken: process.env.EMAIL_REFRECH_TOKEN,
+        //         accessToken
+        //     }
+        // });
     }
 
     async send(template, subject){
