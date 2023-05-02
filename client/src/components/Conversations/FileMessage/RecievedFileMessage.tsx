@@ -54,28 +54,7 @@ const RecievedFileMessage: React.FC<RecievedFileMessage> = ({attachments, text})
     <MainContainer>
     {
       attachments.map((attachment, index) => (
-        <RecievedFilesBox attachment={attachment}/>
-        // const [percentCompleted, setPercentCompleted] = useState<number | null>(null);
-
-        // return (
-        //   <FileBox key={attachment.attachment_id}>
-        //     <File
-        //       file={{
-        //         size: attachment.size,
-        //         name: attachment.file_name
-        //       }}
-        //     />
-        //       <InstallButton
-        //         onClick={() => installFile(attachment, setPercentCompleted)}
-        //       >
-        //         <DownloadIcon />
-        //       </InstallButton>
-        //     {
-        //       percentCompleted !== null ?
-        //       <ProgressCircle percentCompleted={percentCompleted} /> :
-        //       null
-        //     }
-        //   </FileBox>
+        <RecievedFilesBox key={index} attachment={attachment}/>
         
       ))
     }

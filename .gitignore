@@ -1,3 +1,7 @@
 server/config.env
 client/.env
 */node_modules
+pintogram.sql
+server/public/img/users/*
+server/public/files/*
+server/public/img/postImages/*

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import RegistrationPresentational from './RegistrationPresentational';
-import axios from 'axios';
-import config from '../../config.json';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { useErrorPopUpContext } from '../../ContextProviders/ClienErrorHandlingProvider';
 import { useThemeContext } from '../../ContextProviders/ThemeContextProvider';
 import { useSignUp } from '../../hooks/fetchHooks/authorization/useSignUp';
 

@@ -56,6 +56,7 @@ exports.getPostsByUserId = async (userId) => {
 };
 
 exports.getUserFollowingPostsByUserId = async (dataFor) => {
+
   return await pool.query(
     `
     SELECT

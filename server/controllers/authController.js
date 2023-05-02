@@ -27,7 +27,7 @@ const createSendToken = (user, statusCode, req, res) => {
       expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
       httpOnly: true, //no way to be modified by the client
       // TODO make it work
-      // secure:  req.secure || req.headers["x-forwarded-proto"] === 'https' //only works with https to encrypt it
+      secure:  req.secure || req.headers["x-forwarded-proto"] === 'https' //only works with https to encrypt it
   });
   user.password = undefined;
   user.password_confirm = undefined;

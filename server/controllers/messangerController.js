@@ -4,18 +4,26 @@ const AppError = require("../utils/appErrors");
 
 exports.getConversationsAndBelongingMessages = catchAsync(async (req, res) => {
   const userId = req.user.id;
-
   const conversations = await Messanger.getConversationsByUserId(userId);
   const conversationIds = conversations.rows.map(conversation => conversation.conversation_id);
-  const messages = await Messanger.getMessagesByConversationIds(conversationIds);
-  const fileMessageIds = messages.rows.filter(message => message.message_type).map(message => message.message_id);
-  const messageAttachments = await Messanger.getMessageAttachments(fileMessageIds);
+
+  let messages = [];
+  let fileMessageIds = [];
+  if (conversationIds.length > 0){
+    messages = await Messanger.getMessagesByConversationIds(conversationIds);
+    fileMessageIds = messages.rows.filter(message => message.message_type === 'file').map(message => message.message_id);
+  }
+
+  let messageAttachments = [];
+  if (fileMessageIds.length > 0){
+    messageAttachments = await Messanger.getMessageAttachments(fileMessageIds);
+  }
 
   res.status(200).json({
     status: "success",
     conversations: conversations.rows,
     messages: messages.rows,
-    messageAttachments: messageAttachments.rows
+    messageAttachments: messageAttachments?.rows
   });
 });
 

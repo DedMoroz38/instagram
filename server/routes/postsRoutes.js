@@ -31,8 +31,6 @@ router.route('/like/:postId')
 
 router.route('/comment/:postId')
   .post(postsController.comment)
-  // .get(postsController.getComments);
-
 
 
 

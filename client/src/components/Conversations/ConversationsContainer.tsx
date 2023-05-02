@@ -23,11 +23,7 @@ type LocationState = {
 }
 
 const ConversationsContainer: React.FC<{}> = () => {
-  // const {isMobile} = useWidthContext()
-  // if(isMobile){
-  //   const userConversations = useAppSelector((state) => state.userConversations);
-  //   useGetConversationsAndMessages(userConversations);
-  // }
+  
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location as LocationState;
@@ -36,7 +32,7 @@ const ConversationsContainer: React.FC<{}> = () => {
   const [recieverId, setRecieverId] = useState<number | null>(null);
   const [conversationId, setConverationId] = useState<number | null>(null);
   const senderId = useAppSelector(state => state.userInfo.id);
-  
+
   const dispatch = useAppDispatch();
   const userMessages = useAppSelector((state) => state.userMessages);
   const user = useAppSelector((state) => state.userInfo);
@@ -141,6 +137,7 @@ const ConversationsContainer: React.FC<{}> = () => {
         send={send}
         bottomDiv={bottomDiv}
         userId={user.id}
+        inerculatorId={userId}
         lastMessageRef={lastMessageRef}
         filteredPrevMessages={filteredPrevMessages}
         loading={loading}

@@ -30,6 +30,7 @@ exports.create = async (newUserData) => {
 }
 
 exports.findById = async (userId) => {
+
   return await pool.query(
     `SELECT *,
       CAST(id AS INT)
@@ -123,9 +124,6 @@ exports.getIdOfSubscribedUsers = async (query, userId) => {
     FROM
       (SELECT 
       CAST(id AS INT),
-      user_name,
-      full_name,
-      photo
       FROM users 
       WHERE user_name ~* '${query}'
       OR full_name ~* '${query}') accounts
@@ -159,6 +157,7 @@ exports.submitEmailByUserId = async (userId) => {
 }
 
 exports.getProfileInfoById = async (userId) => {
+
   return await pool.query(
     `
     SELECT 

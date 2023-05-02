@@ -147,6 +147,7 @@ interface Conversations{
   friendName: string,
   bottomDiv: RefObject<HTMLDivElement>,
   userId: number,
+  inerculatorId: number,
   lastMessageRef: any,
   filteredPrevMessages: Array<{
     message_id: number,
@@ -189,7 +190,8 @@ const ConverationPresentational: React.FC<Conversations> = ({
     setAttachedFiles,
     conversationId,
     goBack,
-    clearInput
+    clearInput,
+    inerculatorId
   }) => {
   const [fileMessage, setFileMessage] = useState('');
   const {isMobile} = useWidthContext();
@@ -201,11 +203,10 @@ const ConverationPresentational: React.FC<Conversations> = ({
       return message.sender_id == 168 && message.message_type == 'file'
     }).length;
   
-
   return (
     <MainContainer>
       <NameBox>
-        <Name to={`/${userId}`}>{friendName}</Name>
+        <Name to={`/${inerculatorId}`}>{friendName}</Name>
         {
           isMobile &&
           <GoBack onClick={() => goBack()} />
